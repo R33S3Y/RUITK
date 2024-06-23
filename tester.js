@@ -1,4 +1,5 @@
-import { Tile } from "./tileWin/tile.js";
+
+import { TileWin } from "./tileWin/tileWin.js";
 
 let colors = {
     // Highlights
@@ -43,15 +44,17 @@ app.style.zIndex = "-1";
 
 document.querySelector("body").appendChild(app);
 
-Tile.create(0, "50px", "20px", "200px", "100px", style);
 
-Tile.create(1, "200px", "300px", "500px", "300px", style);
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowRight') {
-        Tile.create(2, "850px", "650px", 0, 0, style);
-        setTimeout(() => {
-            Tile.transform(2, "800px", "600px", "100px", "100px");
-        }, 0); // Delay in milliseconds
-    }
-});
+let tileWin = new TileWin();
+
+tileWin.tileStyle = style;
+
+tileWin.createTile("leftSideTop", "left", -1, "top", -1, null);
+tileWin.createTile("leftSideBottom", "left", -1, "bottom", 1, null);
+tileWin.createTile("Centre", "centre", 0, "centre", 0, null);
+tileWin.createTile("rightSide", "right", 1, "centre", 0, null);
+
+console.log(tileWin.tiles);
+
+tileWin.initTiles();
