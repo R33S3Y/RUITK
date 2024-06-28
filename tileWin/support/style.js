@@ -1,5 +1,6 @@
 export class Style {
-    static style(tile, style) {
+    static style(element, style) {
+        style = JSON.parse(JSON.stringify(style));
         // Subdict extract
         // hover
         let hoverStyle = null;
@@ -22,23 +23,45 @@ export class Style {
 
 
         for (let property in style) {
-            tile.style[property] = style[property];
+            element.style[property] = style[property];
         }
 
         if (hoverStyle !== null) {
-            tile.addEventListener("mouseover", () => {
+            element.addEventListener("mouseover", () => {
                 for (let property in hoverStyle) {
-                    tile.style[property] = hoverStyle[property];
+                    element.style[property] = hoverStyle[property];
                 }
             });
     
-            tile.addEventListener("mouseout", () => {
+            element.addEventListener("mouseout", () => {
                 for (let property in style) {
-                    tile.style[property] = style[property];
+                    element.style[property] = style[property];
                 }
             });
         }
         
-        return tile;
+        return element;
+    }
+
+    static query(value, style) {
+        if (!style) {
+            console.error("style input not valid on doesn't exist")
+            return
+        }
+        //should have hover_ support
+        let element = Style.style(document.createElement("div"), style);
+        // Append the element to the document body to ensure styles are applied
+        document.body.appendChild(element);
+
+        // Get the computed styles of the element
+        let computedStyles = getComputedStyle(element);
+
+        // Retrieve the value of the specified CSS property
+        let result = computedStyles[value];
+
+        // Clean up: remove the temporary element from the document
+        document.body.removeChild(element);
+        
+        return result;
     }
 }

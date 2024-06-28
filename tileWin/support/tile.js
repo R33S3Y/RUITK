@@ -2,16 +2,11 @@ import { Style } from "./style.js";
 
 export class Tile {
     static create(id, x = "100px", y = "100px", w = "100px", h = "100px", style, p = "body") {
-        style = JSON.parse(JSON.stringify(style));
 
         let tile = document.createElement("div");
         tile.id = id;
 
         tile = Style.style(tile, style);
-
-        // needed values
-        tile.style.position = "absolute";
-        tile.style.overflow = "hidden";
 
         // sizing and pos
         tile.style.left = x;
@@ -35,10 +30,6 @@ export class Tile {
     static restyle(id, style) {
         let tile = document.getElementById(id);
         Style.style(tile, style);
-
-        // needed values
-        tile.style.position = "absolute";
-        tile.style.overflow = "hidden";
     }
     static getInfo(id) {
         let tile = document.getElementById(id);
