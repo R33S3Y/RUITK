@@ -1,5 +1,5 @@
 
-import { TileWin } from "./tileWin/tileWin.js";
+import { TileWin } from "/hyprsite/tileWin/tileWin.js";
 
 let colors = {
     // Highlights

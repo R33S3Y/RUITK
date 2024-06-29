@@ -1,7 +1,7 @@
-import { Tile } from "./support/tile.js";
-import { List2D } from "./support/list2D.js";
-import { Merge } from "./support/merger.js";
-import { Style } from "./support/style.js";
+import { Tile } from "../support/tile.js";
+import { List2D } from "../support/list2D.js";
+import { Merge } from "../support/merger.js";
+import { Style } from "../support/style.js";
 
 export class TileWin {
     constructor() {
@@ -17,7 +17,9 @@ export class TileWin {
             tileSnapFirst : "y",
             tileGap : "0",
             compensateForBorders : true,
-            parent : "body"
+            parent : "body",
+            defaultScrollSize : "100px",
+            animateOnCreateTile : true
         }
     }
 
@@ -35,17 +37,23 @@ export class TileWin {
         return;
     }
 
-    createTile(name, xSnap, xNudge, ySnap, yNudge, content = null) {
-
+    createTile(name, xSnap, xNudge, ySnap, yNudge, content = null, type = "box", scrollSize = this.config.defaultScrollSize) {
         for (let tile of this.tiles) {
             if (tile.name === name) {
-                console.error(`tile name ${name} is already in use by tile id ${tile.id}`);
+                console.error(`tile name ${name} is already in use by tile id: ${tile.id}`);
+                return;
+            }
+            if (tile.xSnap === xSnap && tile.xNudge === xNudge && tile.ySnap === ySnap && tile.yNudge === yNudge) {
+                console.warn(`tile ${name} is in the same location as ${tile.name} please change Nudge`);
             }
         }
         let newTile = {
             name : name,
             id : this.idCounter,
             status : "unrendered",
+
+            type : type, //types: "box" , "scrollX", "scrollY"
+            scrollSize : scrollSize,
 
             xSnap : xSnap,
             xNudge : xNudge,
@@ -77,11 +85,17 @@ export class TileWin {
         }
 
         let insideStyles = {
-            transition : this.tileStyle.transition,
+            transition : Style.query("transition", this.tileStyle),
             backgroundColor : "rgba(0, 0, 0, 0)",
             borderColor : "rgba(0, 0, 0, 0)",
             position : "absolute",
-            overflow : "visible"
+            overflow : "hidden",
+        }
+        let scrollStyles = {
+            transition : Style.query("transition", this.tileStyle),
+            backgroundColor : "rgba(0, 0, 0, 0)",
+            borderColor : "rgba(0, 0, 0, 0)",
+            position : "absolute"
         }
 
         let tileLayout = List2D.create(3, 3, false);
@@ -136,7 +150,6 @@ export class TileWin {
 
             return itemSize;
         }
-
         if (this.config.tileSnapFirst === "y") {
             // Snap Major axis
             for (let x in tileLayout) {
@@ -191,6 +204,7 @@ export class TileWin {
         console.debug(snapResize);
         // Make tiles
 
+        // nudge code
         for (let x = 0; x < tileLayoutLength.length; x++) {
             for (let y = 0; y < tileLayoutLength[x].length; y++) {
                 if (tileLayoutLength[x][y] <= 1) {
@@ -248,9 +262,46 @@ export class TileWin {
                 }
             }
         }
-        console.debug(this.tiles);
+        
+        //render code
+        function makeBoxTile(tile, id, x, y, w, h, p, content, tilePstyle, t) {
+
+            if (t.config.animateOnCreateTile === true) {
+                Tile.create(`tileP${id}`, `calc(${x} + (${w} / 2))`, `calc(${y} + (${h} / 2))`, 0, 0, tilePstyle, p);
+                setTimeout(() => {
+                    Tile.transform(`tileP${id}`, x, y, w, h);
+                }, 0);
+            } else {
+                Tile.create(`tileP${id}`, x, y, w, h, tilePstyle, p);
+            }
+            
+            if (t.config.compensateForBorders === true) {
+                Tile.create(
+                    `tile${id}`, // id 
+                    t.config.tileGap, t.config.tileGap, //x,y
+                    `calc(100% - ((${t.config.tileGap} * 2) + (${Style.query("borderLeftWidth", t.tileStyle)} + ${Style.query("borderRightWidth", t.tileStyle)})))`, // w
+                    `calc(100% - ((${t.config.tileGap} * 2) + (${Style.query("borderTopWidth", t.tileStyle)} + ${Style.query("borderBottomWidth", t.tileStyle)})))`, // h
+                    t.tileStyle, `#tileP${id}`// style, p
+                );
+            } else {
+                Tile.create(`tile${id}`, t.config.tileGap, t.config.tileGap, `calc(100% - (${t.config.tileGap} * 2))`, `calc(100% - (${t.config.tileGap} * 2))`, t.tileStyle, `#tileP${tile.id}`);
+            }
+            if (tile.content !== null) {
+                Tile.append(`tile${id}`, content);
+            }
+            
+        }
+
+
+
         for (let i in this.tiles) {
             let tile = this.tiles[i];
+
+            let styles = insideStyles;
+            if (tile.type === "scrollX") {
+                styles = JSON.parse(JSON.stringify(scrollStyles));
+                styles.overflowX = "auto";
+            }
 
             let xSnap = snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][0][0]*100/3;
             let ySnap = snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][0][1]*100/3;
@@ -265,29 +316,34 @@ export class TileWin {
             tile.h = hSnap * (tile.snapShare[1][1] - tile.snapShare[0][1]);
 
             if (tile.status === "unrendered") {
-
-                Tile.create(`tileP${tile.id}`, `${tile.x + (tile.w/2)}%`, `${tile.y + (tile.h/2)}%`, 0, 0, insideStyles, this.config.parent);
-                if (this.config.compensateForBorders === true) {
-                    Tile.create(
-                        `tile${tile.id}`, // id 
-                        this.config.tileGap, this.config.tileGap, //x,y
-                        `calc(100% - ((${this.config.tileGap} * 2) + (${Style.query("borderLeftWidth", this.tileStyle)} + ${Style.query("borderRightWidth", this.tileStyle)})))`, // w
-                        `calc(100% - ((${this.config.tileGap} * 2) + (${Style.query("borderTopWidth", this.tileStyle)} + ${Style.query("borderBottomWidth", this.tileStyle)})))`, // h
-                        this.tileStyle, `#tileP${tile.id}`// style, p
-                    );
-                } else {
-                    Tile.create(`tile${tile.id}`, this.config.tileGap, this.config.tileGap, `calc(100% - (${this.config.tileGap} * 2))`, `calc(100% - (${this.config.tileGap} * 2))`, this.tileStyle, `#tileP${tile.id}`);
+                if (tile.type === "box") {
+                    makeBoxTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, insideStyles, this);
                 }
-                if (tile.content !== null) {
-                    Tile.append(`tile${tile.id}`, tile.content);
+                if (tile.type === "scrollY") {
+                    let styles = JSON.parse(JSON.stringify(scrollStyles));
+                    styles.overflowY = "auto";
+                    
+                    Tile.create(`tileSP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, styles, this.config.parent);
+                    if (Array.isArray(tile.content) === true) {
+                        for (let i = 0; i < tile.content.length; i++) {
+                            makeBoxTile(tile, `${tile.id}-${i}`, "0%", `calc(${tile.scrollSize} * ${i})`, "100%", tile.scrollSize, `#tileSP${tile.id}`, tile.content[i], insideStyles, this);
+                        }
+                    } else {
+                        makeBoxTile(tile, tile.id, "0%", "0%", "100%", "100%", `#tileSP${tile.id}`, tile.content, insideStyles, this);
+                    }
                 }
-                setTimeout(() => {
-                    Tile.transform(`tileP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`);
-                }, 0);
-
+                
                 tile.status = "rendered";
             } else {
                 Tile.transform(`tileP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`);
+            }
+        }
+    }
+
+    append(name, content) {
+        for (let tile of this.tiles) {
+            if (tile.name === name) {
+                Tile.append(`tile${tile.id}`, content);
             }
         }
     }

@@ -14,7 +14,13 @@ export class Tile {
         tile.style.width = w;
         tile.style.height = h;
 
-        document.querySelector(p).appendChild(tile);
+        // Append to parent
+        let parent = document.querySelector(p);
+        if (parent) {
+            parent.appendChild(tile);
+        } else {
+            console.error(`Parent element "${p}" not found.`);
+        }
     }
     static transform(id, x, y, w, h) {
         let tile = document.getElementById(id);
@@ -24,6 +30,10 @@ export class Tile {
         tile.style.height = h;
     }
     static append(id, item) {
+        if (!item) {
+            console.error(`item (${item}) is falsely`);
+            return;
+        }
         let tile = document.getElementById(id);
         tile.appendChild(item);
     }
