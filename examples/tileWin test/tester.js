@@ -53,18 +53,17 @@ let tileWin = new TileWin();
 tileWin.updateStyle(style);
 tileWin.updateConfig({
     tileGap : "10px",
-    defaultScrollSize : "200px",
     animateOnCreateTile : true
 });
 
-tileWin.createTile("leftSideTop", "left", -1, "top", -1);
-tileWin.createTile("leftSideBottom", "left", -1, "bottom", 1);
-tileWin.createTile("Centre", "centre", 0, "centre", 0);
-tileWin.createTile("rightSide", "right", 1, "centre", 0);
+tileWin.createTile("leftSideTop", 0, -1, 0, -1);
+tileWin.createTile("leftSideBottom", 0, -1, 2, 1);
+tileWin.createTile("Centre", 1, 0, 1, 0);
+tileWin.createTile("rightSide", 2, 1, 1, 0);
 
-tileWin.createTile("CentreTop", "centre", 0, "top", 0);
-tileWin.createTile("righterSide", "right", 2, "centre", 0);
-tileWin.createTile("righterdownerSide", "right", 2, "centre", 1);
+tileWin.createTile("CentreTop", 1, 0, 0, 0);
+tileWin.createTile("righterSide", 2, 2, 1, 0);
+tileWin.createTile("righterdownerSide", 2, 2, 1, 1);
 
 console.log(tileWin.tiles);
 
@@ -72,15 +71,9 @@ tileWin.renderTiles();
 
 
 setTimeout(function() {
-    let stuff = [];
-    stuff.push(document.createElement("h1"));
-    stuff.push(document.createElement("h1"));
-    stuff.push(document.createElement("h1"));
-
-    stuff[0].innerHTML = "Hi mum";
-    stuff[1].innerHTML = "love you!";
-    stuff[2].innerHTML = "boots and cats";
+    let stuff = document.createElement("h1")
+    stuff.innerHTML = "boots and cats";
     
-    tileWin.createTile("CentreD", "centre", 0, "bottom", 0, stuff, "scrollY");
+    tileWin.createTile("CentreD", 1, 0, 2, 0, stuff);
     tileWin.renderTiles();
 }, 1000);

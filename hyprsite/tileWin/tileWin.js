@@ -11,22 +11,30 @@ export class TileWin {
 
         this.tileStyle = {};
         this.config = {
-            tileMethod : "ticTacToe",
-            tileNudgeFirst : "y",
-            tileNudgeSwap : true,
-            tileSnapFirst : "y",
+            tilePercentageX : [20,40,40],
+            tilePercentageY : [20,40,40],
+            tileDirection : "y",
             tileGap : "0",
             compensateForBorders : true,
             parent : "body",
-            defaultScrollSize : "100px",
             animateOnCreateTile : true
         }
+        this.updateConfig(); // run to make this.configStore
     }
 
     updateConfig(config = {}) {
         config = Merge.dicts(this.config, config, [0, "", [], null]);
 
         this.config = config;
+
+        this.configStore = {
+            tileSnapFirst : this.config.tileDirection,
+            tileNudgeFirst : this.config.tileDirection,
+            tileNudgeSwap : true,
+            maxX : this.config.tilePercentageX.length,
+            maxY : this.config.tilePercentageY.length,
+        }
+
         return;
     }
 
@@ -37,7 +45,7 @@ export class TileWin {
         return;
     }
 
-    createTile(name, xSnap, xNudge, ySnap, yNudge, content = null, type = "box", scrollSize = this.config.defaultScrollSize) {
+    createTile(name, xSnap, xNudge, ySnap, yNudge, content = null) {
         for (let tile of this.tiles) {
             if (tile.name === name) {
                 console.error(`tile name ${name} is already in use by tile id: ${tile.id}`);
@@ -51,9 +59,6 @@ export class TileWin {
             name : name,
             id : this.idCounter,
             status : "unrendered",
-
-            type : type, //types: "box" , "scrollX", "scrollY"
-            scrollSize : scrollSize,
 
             xSnap : xSnap,
             xNudge : xNudge,
@@ -75,15 +80,6 @@ export class TileWin {
     }
 
     renderTiles() {
-        
-        let locMap = { // needed as a const to translate str to int
-            left : 0,
-            top : 0,
-            centre : 1,
-            right : 2,
-            bottom : 2
-        }
-
         let insideStyles = {
             transition : Style.query("transition", this.tileStyle),
             backgroundColor : "rgba(0, 0, 0, 0)",
@@ -91,19 +87,14 @@ export class TileWin {
             position : "absolute",
             overflow : "hidden",
         }
-        let scrollStyles = {
-            transition : Style.query("transition", this.tileStyle),
-            backgroundColor : "rgba(0, 0, 0, 0)",
-            borderColor : "rgba(0, 0, 0, 0)",
-            position : "absolute"
-        }
 
-        let tileLayout = List2D.create(3, 3, false);
-        let tileLayoutLength = List2D.create(3, 3, 0);
+
+        let tileLayout = List2D.create(this.configStore.maxX, this.configStore.maxY, false);
+        let tileLayoutLength = List2D.create(this.configStore.maxX, this.configStore.maxY, 0);
         // add items to layout
         for (let tile of this.tiles) {
-            tileLayout[locMap[tile.xSnap]][locMap[tile.ySnap]] = true;
-            tileLayoutLength[locMap[tile.xSnap]][locMap[tile.ySnap]]++;
+            tileLayout[tile.xSnap][tile.ySnap] = true;
+            tileLayoutLength[tile.xSnap][tile.ySnap]++;
         }
 
         // [[x1,y1],[x2,y2]]
@@ -150,7 +141,7 @@ export class TileWin {
 
             return itemSize;
         }
-        if (this.config.tileSnapFirst === "y") {
+        if (this.configStore.tileSnapFirst === "y") {
             // Snap Major axis
             for (let x in tileLayout) {
                 let resizeValues = resizeRow(List2D.getListY(x, tileLayout));
@@ -161,7 +152,7 @@ export class TileWin {
             }
 
             // Snap Minor axis
-            let xList = Array(3).fill(false);
+            let xList = Array(this.configStore.maxX).fill(false);
             for (let x in tileLayout) {
                 if(List2D.getListY(x, tileLayout).some(item => item === true)) {
                     xList[x] = true;
@@ -185,7 +176,7 @@ export class TileWin {
             }
 
             // Snap Minor axis
-            let yList = Array(3).fill(false);
+            let yList = Array(this.configStore.maxY).fill(false);
             for (let y in tileLayout[0]) {
                 if(List2D.getListX(y, tileLayout).some(item => item === true)) {
                     yList[y] = true;
@@ -200,10 +191,6 @@ export class TileWin {
             }
         }
 
-        
-        console.debug(snapResize);
-        // Make tiles
-
         // nudge code
         for (let x = 0; x < tileLayoutLength.length; x++) {
             for (let y = 0; y < tileLayoutLength[x].length; y++) {
@@ -214,12 +201,12 @@ export class TileWin {
                 let overLappingTiles = [];
                 for (let i in this.tiles) {
                     let tile = this.tiles[i];
-                    if (locMap[tile.xSnap] === x && locMap[tile.ySnap] === y) {
+                    if (tile.xSnap === x && tile.ySnap === y) {
                         overLappingTiles.push(tile);
                     }
                 }
         
-                let currentSplit = this.config.tileNudgeFirst;
+                let currentSplit = this.configStore.tileNudgeFirst;
                 let leftOverSpace = [[0,0],[1,1]];
 
                 while (overLappingTiles.length > 0) {
@@ -256,14 +243,14 @@ export class TileWin {
                     }
                     overLappingTiles.shift();
         
-                    if (this.config.tileNudgeSwap === true) {
+                    if (this.configStore.tileNudgeSwap === true) {
                         currentSplit = currentSplit === "y" ? "x" : "y";
                     }
                 }
             }
         }
         
-        //render code
+        // render code
         function makeBoxTile(tile, id, x, y, w, h, p, content, tilePstyle, t) {
 
             if (t.config.animateOnCreateTile === true) {
@@ -292,47 +279,58 @@ export class TileWin {
             
         }
 
+        // this block of code converts how much of the screen a snap should take up to how far it is from 0,0
+        let tileDistanceX = [0];
+        for (let i = 0; i < this.config.tilePercentageX.length; i++) {
+            tileDistanceX.push(tileDistanceX[i] + this.config.tilePercentageX[i]);
+        }
+        if (tileDistanceX[tileDistanceX.length - 1] !== 100) {
+            console.warn("the total of tilePercentageX is not 100 meaning tileWin will ether overflow or underflow");
+        }
+        let tileDistanceY = [0];
+        for (let i = 0; i < this.config.tilePercentageY.length; i++) {
+            tileDistanceY.push(tileDistanceY[i] + this.config.tilePercentageY[i]);
+        }
+        if (tileDistanceY[tileDistanceX.length - 1] !== 100) {
+            console.warn("the total of tilePercentageY is not 100 meaning tileWin will ether overflow or underflow");
+        }
 
+        /**
+         * The tilePercentageX & Y values and tileDistanceX & Y[-1] = 100 are necessary for calculating wSnap and hSnap.
+         * These calculations work by determining the x or y value at the end of the tile and subtracting the actual x or y value, leaving the difference.
+         * Since there is technically no border between tiles, when calculating the end x and y values, it will reference the next row or column.
+         * However, at the last row or column, you can't reference the next one, which would cause an error.
+         * To prevent this, we add an extra value.
+         * For tilePercentage, it just needs to be a number to avoid errors.
+         * For tileDistance, it needs to be equal to 100.
+         */
+        let tilePercentageX = [...this.config.tilePercentageX];
+        tilePercentageX.push(0);
+        let tilePercentageY = [...this.config.tilePercentageY];
+        tilePercentageY.push(0);
 
+        // Make tiles
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            let styles = insideStyles;
-            if (tile.type === "scrollX") {
-                styles = JSON.parse(JSON.stringify(scrollStyles));
-                styles.overflowX = "auto";
-            }
+            let xSnap = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])]+
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])]*(snapResize[tile.xSnap][tile.ySnap][0][0]%1));
+            let ySnap = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])]+
+                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])]*(snapResize[tile.xSnap][tile.ySnap][0][1]%1));
 
-            let xSnap = snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][0][0]*100/3;
-            let ySnap = snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][0][1]*100/3;
+            let wSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])]+
+            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])]*(snapResize[tile.xSnap][tile.ySnap][1][0]%1))) - xSnap;
+            let hSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])]+
+            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])]*(snapResize[tile.xSnap][tile.ySnap][1][1]%1))) - ySnap;
 
-            let wSnap = (snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][1][0]-snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][0][0])*100/3;
-            let hSnap = (snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][1][1]-snapResize[locMap[tile.xSnap]][locMap[tile.ySnap]][0][1])*100/3;
-
-            tile.x = xSnap + (wSnap * tile.snapShare[0][0]);
-            tile.y = ySnap + (hSnap * tile.snapShare[0][1]);
+            tile.x = xSnap + (wSnap * tile.snapShare[0][0]); // snapShare is for applying nudge to tiles
+            tile.y = ySnap + (hSnap * tile.snapShare[0][1]); // snapShare is relative value therefore the Snap vars just need to state how big the snap should be
 
             tile.w = wSnap * (tile.snapShare[1][0] - tile.snapShare[0][0]);
             tile.h = hSnap * (tile.snapShare[1][1] - tile.snapShare[0][1]);
 
             if (tile.status === "unrendered") {
-                if (tile.type === "box") {
-                    makeBoxTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, insideStyles, this);
-                }
-                if (tile.type === "scrollY") {
-                    let styles = JSON.parse(JSON.stringify(scrollStyles));
-                    styles.overflowY = "auto";
-                    
-                    Tile.create(`tileSP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, styles, this.config.parent);
-                    if (Array.isArray(tile.content) === true) {
-                        for (let i = 0; i < tile.content.length; i++) {
-                            makeBoxTile(tile, `${tile.id}-${i}`, "0%", `calc(${tile.scrollSize} * ${i})`, "100%", tile.scrollSize, `#tileSP${tile.id}`, tile.content[i], insideStyles, this);
-                        }
-                    } else {
-                        makeBoxTile(tile, tile.id, "0%", "0%", "100%", "100%", `#tileSP${tile.id}`, tile.content, insideStyles, this);
-                    }
-                }
-                
+                makeBoxTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, insideStyles, this);
                 tile.status = "rendered";
             } else {
                 Tile.transform(`tileP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`);
