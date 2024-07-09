@@ -30,7 +30,7 @@ let style = {
     borderRadius : "15px",
     borderColor : colors.inactiveH2,
     boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
-    hover_boxShadow: "0 0 10px 2px rgba(0, 0, 0, 1)",
+    hover_boxShadow: "0 0 5px 2px rgba(0, 0, 0, 1)",
     hover_borderColor : colors.activeH2,
 }
 
@@ -53,7 +53,7 @@ let tileWin = new TileWin();
 tileWin.updateStyle(style);
 tileWin.updateConfig({
     tileGap : "10px",
-    animateOnCreateTile : true
+    animateOnCreateTile : false
 });
 
 tileWin.createTile("leftSideTop", 0, -1, 0, -1);

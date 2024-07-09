@@ -11,6 +11,7 @@ export class TileWin {
 
         this.tileStyle = {};
         this.config = {
+            tileRowtype : ["fixed", "fixed", "fixed"],
             tilePercentageX : [20,40,40],
             tilePercentageY : [20,40,40],
             tileDirection : "y",
@@ -30,10 +31,12 @@ export class TileWin {
         this.configStore = {
             tileSnapFirst : this.config.tileDirection,
             tileNudgeFirst : this.config.tileDirection,
+            tileRowDirection : this.config.tileDirection,
             tileNudgeSwap : true,
             maxX : this.config.tilePercentageX.length,
             maxY : this.config.tilePercentageY.length,
         }
+        this.configStore.tileRowDirection = this.config.tileDirection === "y" ? "x" : "y";
 
         return;
     }
@@ -329,11 +332,26 @@ export class TileWin {
             tile.w = wSnap * (tile.snapShare[1][0] - tile.snapShare[0][0]);
             tile.h = hSnap * (tile.snapShare[1][1] - tile.snapShare[0][1]);
 
-            if (tile.status === "unrendered") {
-                makeBoxTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, insideStyles, this);
-                tile.status = "rendered";
+            if (this.config.tileRowtype[tile[`${this.configStore.tileRowDirection}Snap`]] === "fixed") {
+                if (tile.status === "unrendered") {
+                    makeBoxTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, insideStyles, this);
+                    tile.status = "rendered";
+                } else {
+                    Tile.transform(`tileP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`);
+                }
             } else {
-                Tile.transform(`tileP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`);
+                // create row manager
+                if (document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`) === undefined || document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`) === null) {
+                    if (this.configStore.tileRowDirection === "x") {
+                        Tile.create(`ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, `${xSnap}%`, 0, `${wSnap}%`, "auto", insideStyles, this.config.parent);
+                    } else {
+                        Tile.create(`ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, 0, `${ySnap}%`, "auto", `${hSnap}%`, insideStyles, this.config.parent);
+                    }
+                }
+                if (this.configStore.tileRowDirection === "x") {
+                    makeBoxTile(tile, tile.id, "auto", "auto", "100%", "auto", `#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, tile.content, insideStyles, this);
+                }
+                
             }
         }
     }
