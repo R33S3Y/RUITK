@@ -53,7 +53,7 @@ let tileWin = new TileWin();
 tileWin.updateStyle(style);
 tileWin.updateConfig({
     tileGap : "10px",
-    animateOnCreateTile : false
+    animateOnCreateTile : true
 });
 
 tileWin.createTile("leftSideTop", 0, -1, 0, -1);
