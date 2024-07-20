@@ -77,7 +77,10 @@ export class Style {
             }
             return cssStyles;
         }
-
+        if (Object.keys(style).length === 0) {
+            console.warn("style dict = {}");
+            return;
+        }
         style = JSON.stringify(sortObjectKeys(style), null, 1);
         let className = hashCode(style);
         className = mapNumbersToLetters(className);
@@ -85,10 +88,10 @@ export class Style {
 
         element.className = className;
 
-        let styleElement = document.getElementById("reallyCoolHyprsiteStyles");
+        let styleElement = document.getElementById("RUITKStyles");
         if (styleElement === null) {
             styleElement = document.createElement("style");
-            styleElement.id = "reallyCoolHyprsiteStyles";
+            styleElement.id = "RUITKStyles";
             styleElement.textContent = "\n";
             document.querySelector("body").append(styleElement);
         }

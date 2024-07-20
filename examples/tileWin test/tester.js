@@ -1,5 +1,5 @@
 
-import { TileWin } from "/hyprsite/tileWin/tileWin.js";
+import { TileWin } from "/ruitk/tileWin/tileWin.js";
 
 let colors = {
     // Highlights
@@ -53,7 +53,8 @@ let tileWin = new TileWin();
 tileWin.updateStyle(style);
 tileWin.updateConfig({
     tileGap : "10px",
-    animateOnCreateTile : true
+    animateOnCreateTile : true,
+    createInnerTile : true,
 });
 
 tileWin.createTile("leftSideTop", 0, -1, 0, -1);

@@ -1,5 +1,5 @@
-import { Style } from "../support/style";
-
+import { Merge } from "../support/merger.js";
+import { Style } from "../support/style.js";
 export class Elements {
     constructor() {
         this.elements = [];
@@ -56,9 +56,9 @@ export class Elements {
             // Test the string against the regex
             return regex.test(str);
         }
-        let currentStr = str;
-        let output = null;
-        while(currentStr.length >= 0) {
+        let currentStr = str.trim();
+        let output = [];
+        while(currentStr.length > 0) {
             let currentElement = {};
 
             currentElement.nameStart = currentStr.indexOf("<");
@@ -92,17 +92,20 @@ export class Elements {
                 continue;
             }
 
-            currentElement.str = currentStr.slice(currentElement.nameStart, currentElement.dictEnd);
-            currentStr = currentStr.replace(currentElement.str, "");
-        
-            let dict = JSON.parse(currentElement.str.slice(currentElement.str.indexOf("{"), currentElement.str.indexOf("}")+1));
+            currentElement.str = currentStr.slice(currentElement.nameStart, currentElement.dictEnd+1);
+            
+            
+            let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd+1);
+            let dict = JSON.parse(dictStr);
             let name = currentElement.str.slice(currentElement.str.indexOf("<")+1, currentElement.str.indexOf(">"));
-
-            for (let item of dict) {
-                if(typeof item === 'string' && isElement(item)) {
-                    item = this.makeElements(item); // shouldn't need protection against infinte loop as it is protected by the srinking of str
+            if (Object.keys(dict).length !== 0) {
+                for (let item in dict) {
+                    if(typeof item === 'string' && isElement(item)) {
+                        item = this.makeElements(item); // shouldn't need protection against infinte loop as it is protected by the srinking of str
+                    }
                 }
             }
+            
 
             let elementInfo;
             for(let element of this.elements) {
@@ -112,15 +115,12 @@ export class Elements {
                 }
             }
             
-            currentElement.element = elementInfo.function(dict, elementInfo);
-            Style.style(currentElement.element, elementInfo.style);
+            let element = elementInfo.function(dict, elementInfo);
+            Style.style(element, elementInfo.style);
             
-            if (!output) {
-                output = currentElement.element;
-                continue;
-            }
-            output.insertAdjacentElement('afterend', currentElement.element);
-            output = currentElement.element;
+            currentStr = currentStr.replace(currentElement.str, "").trim();
+            
+            output.push(element);
         }
         return output;
     }

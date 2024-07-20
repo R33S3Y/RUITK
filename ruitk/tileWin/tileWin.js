@@ -18,7 +18,9 @@ export class TileWin {
             tileGap : "0",
             compensateForBorders : true,
             parent : "body",
-            animateOnCreateTile : true
+            animateOnCreateTile : true,
+            createInnerTile : false,
+            transition : "all 0.2s ease-in-out",
         }
         this.updateConfig(); // run to make this.configStore
     }
@@ -84,7 +86,7 @@ export class TileWin {
 
     renderTiles() {
         let insideStyles = {
-            transition : Style.query("transition", this.tileStyle),
+            transition : this.config.transition,
             backgroundColor : "rgba(0, 0, 0, 0)",
             borderColor : "rgba(0, 0, 0, 0)",
             position : "absolute",
@@ -265,21 +267,21 @@ export class TileWin {
                 Tile.create(`tileP${id}`, x, y, w, h, tilePstyle, p);
             }
             
-            if (t.config.compensateForBorders === true) {
-                Tile.create(
-                    `tile${id}`, // id 
-                    t.config.tileGap, t.config.tileGap, //x,y
-                    `calc(100% - ((${t.config.tileGap} * 2) + (${Style.query("borderLeftWidth", t.tileStyle)} + ${Style.query("borderRightWidth", t.tileStyle)})))`, // w
-                    `calc(100% - ((${t.config.tileGap} * 2) + (${Style.query("borderTopWidth", t.tileStyle)} + ${Style.query("borderBottomWidth", t.tileStyle)})))`, // h
-                    t.tileStyle, `#tileP${id}`// style, p
-                );
-            } else {
-                Tile.create(`tile${id}`, t.config.tileGap, t.config.tileGap, `calc(100% - (${t.config.tileGap} * 2))`, `calc(100% - (${t.config.tileGap} * 2))`, t.tileStyle, `#tileP${tile.id}`);
+            if (t.config.createInnerTile === true) {
+                if (t.config.compensateForBorders === true) {
+                    Tile.create(
+                        `tile${id}`, // id 
+                        t.config.tileGap, t.config.tileGap, //x,y
+                        `calc(100% - ((${t.config.tileGap} * 2) + (${Style.query("borderLeftWidth", t.tileStyle)} + ${Style.query("borderRightWidth", t.tileStyle)})))`, // w
+                        `calc(100% - ((${t.config.tileGap} * 2) + (${Style.query("borderTopWidth", t.tileStyle)} + ${Style.query("borderBottomWidth", t.tileStyle)})))`, // h
+                        t.tileStyle, `#tileP${id}`// style, p
+                    );
+                } else {
+                    Tile.create(`tile${id}`, t.config.tileGap, t.config.tileGap, `calc(100% - (${t.config.tileGap} * 2))`, `calc(100% - (${t.config.tileGap} * 2))`, t.tileStyle, `#tileP${tile.id}`);
+                }
             }
-            if (tile.content !== null) {
-                Tile.append(`tile${id}`, content);
-            }
-            
+
+            t.append(tile.name, tile.content);
         }
 
         // this block of code converts how much of the screen a snap should take up to how far it is from 0,0
@@ -357,9 +359,21 @@ export class TileWin {
     }
 
     append(name, content) {
+        if (content === null) {
+            return;
+        }
+        if (Array.isArray(content) === false) {
+            content = [content];
+        }
         for (let tile of this.tiles) {
             if (tile.name === name) {
-                Tile.append(`tile${tile.id}`, content);
+                for (let item of content) {
+                    if (this.config.createInnerTile === true) {
+                        Tile.append(`tile${tile.id}`, item);
+                    } else {
+                        Tile.append(`tileP${tile.id}`, item);
+                    }
+                }
             }
         }
     }
