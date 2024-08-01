@@ -10,6 +10,7 @@ export class TileWin {
         this.idCounter = 0;
 
         this.tileStyle = {};
+        this.fixedTileStyle = {};
         this.config = {
             tileRowType : ["fixed", "fixed", "fixed"],
             tilePercentageX : [20,40,40],
@@ -46,6 +47,9 @@ export class TileWin {
         style.position = "absolute";
         style.boxSizing = "border-box";
         this.tileStyle = style;
+        style = JSON.parse(JSON.stringify(style));
+        style.position = "fixed";
+        this.fixedTileStyle = style;
         return;
     }
 
@@ -260,31 +264,51 @@ export class TileWin {
         }
         
         // render code
-        function makeBoxTile(tile, id, x, y, w, h, p, content, tilePstyle, t) {
-
-            if (t.config.animateOnCreateTile === true) {
-                Tile.create(`tileP${id}`, `calc(${x} + (${w} / 2))`, `calc(${y} + (${h} / 2))`, 0, 0, tilePstyle, p);
-                setTimeout(() => {
-                    Tile.transform(`tileP${id}`, x, y, w, h);
-                }, 0);
+        function makeBoxTile(tile, id, x, y, w, h, p, content, insideStyles, t) {
+            if (t.config.createInnerTile === false) {
+                if (t.config.animateOnCreateTile === true) {
+                    Tile.create(`tile${id}`, `calc(${x} + (${w} / 2))`, `calc(${y} + (${h} / 2))`, 0, 0, insideStyles, p);
+                    setTimeout(() => {
+                        Tile.transform(`tile${id}`, x, y, w, h);
+                    }, 0);
+                } else {
+                    Tile.create(`tile${id}`, x, y, w, h, insideStyles, p);
+                }
             } else {
-                Tile.create(`tileP${id}`, x, y, w, h, tilePstyle, p);
-            }
-            
-            if (t.config.createInnerTile === true) {
-                let wInner = `calc(100% - (${Style.query("marginLeft", t.tileStyle)} + ${Style.query("marginRight", t.tileStyle)}))`;
-                let hInner = `calc(100% - (${Style.query("marginTop", t.tileStyle)} + ${Style.query("marginBottom", t.tileStyle)}))`;
-                if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] !== "fixed") {
-                    if(t.config.tileDirection === "y") {
-                        hInner = "auto";
+                let { wInner, hInner } = calcWInnerAndHInner(tile, w, h, t);
+
+                if (t.config.animateOnCreateTile === true) {
+                    if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
+                        Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.fixedTileStyle, p);
                     } else {
-                        wInner = "auto";
+                        Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.tileStyle, p);
+                    }
+                    setTimeout(() => {
+                        Tile.transform(`tile${id}`, x, y, wInner, hInner);
+                    }, 0);
+                } else {
+                    if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
+                        Tile.create(`tile${id}`, x, y, wInner, hInner, t.fixedTileStyle, p);
+                    } else {
+                        Tile.create(`tile${id}`, x, y, wInner, hInner, t.tileStyle, p);
                     }
                 }
-                Tile.create(`tile${id}`, 0, 0, wInner, hInner, t.tileStyle, `#tileP${id}`);
             }
 
             t.append(tile.name, tile.content);
+        }
+        function calcWInnerAndHInner(tile, w, h, t) {
+            let wInner = `calc(${w} - (${Style.query("marginLeft", t.tileStyle)} + ${Style.query("marginRight", t.tileStyle)}))`;
+            let hInner = `calc(${h} - (${Style.query("marginTop", t.tileStyle)} + ${Style.query("marginBottom", t.tileStyle)}))`;
+            if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] !== "fixed") {
+                if(t.config.tileDirection === "y") {
+                    hInner = "auto";
+                } else {
+                    wInner = "auto";
+                }
+            }
+
+            return { wInner, hInner };
         }
 
         // this block of code converts how much of the screen a snap should take up to how far it is from 0,0
@@ -357,7 +381,10 @@ export class TileWin {
                 tile.status = "rendered";
             } else {
                 if (this.config.tileRowType[tile[`${this.configStore.tileRowDirection}Snap`]] === "fixed") {
-                    Tile.transform(`tileP${tile.id}`, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`);
+
+                    let { wInner, hInner } = calcWInnerAndHInner(tile, `${tile.w}%`, `${tile.h}%`, this);
+                    
+                    Tile.transform(`tile${tile.id}`, `${tile.x}%`, `${tile.y}%`, wInner, hInner);
                 }
             }
         }
@@ -376,7 +403,7 @@ export class TileWin {
                     if (this.config.createInnerTile === true) {
                         Tile.append(`tile${tile.id}`, item);
                     } else {
-                        Tile.append(`tileP${tile.id}`, item);
+                        Tile.append(`tile${tile.id}`, item);
                     }
                 }
             }
