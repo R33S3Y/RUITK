@@ -77,6 +77,10 @@ export class Style {
             }
             return cssStyles;
         }
+        if (typeof style !== "object" || style === null) {
+            console.error("style is not dict");
+            return;
+        }
         if (Object.keys(style).length === 0) {
             console.warn("style dict = {}");
             return;

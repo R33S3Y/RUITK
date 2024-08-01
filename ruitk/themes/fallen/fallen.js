@@ -4,7 +4,7 @@ import { Style } from "../../support/style.js";
 // color scheme syntax from https://github.com/chriskempson/base16/tree/main
 // V0 colors from https://github.com/gitmalet/base16-purpledream-scheme/tree/master
 let colors = {
-    base00: "rgba(61, 61, 61, 0.5)", // Default Background
+    base00: "rgba(15, 15, 15, 0.65)", // Default Background
     base01: "rgba(70, 70, 70, 1)", // Lighter Background (Used for status bars, line number and folding marks)
     base02: "#403040", // Selection Background
     base03: "#605060", // Comments, Invisibles, Line Highlighting
@@ -14,92 +14,103 @@ let colors = {
     base07: "#fff0ff", // Light Background (Not often used)
     base08: "#FF1D0D", // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
     base09: "#CCAE14", // Integers, Boolean, Constants, XML Attributes, Markup Link Url
-    base0A: "#F000A0", // Classes, Markup Bold, Search Text Background
-    base0B: "#14CC64", // Strings, Inherited Class, Markup Code, Diff Inserted
-    base0C: "#0075B0", // Support, Regular Expressions, Escape Characters, Markup Quotes
-    base0D: "#00A0F0", // Functions, Methods, Attribute IDs, Headings
-    base0E: "#B000D0", // Keywords, Storage, Selector, Markup Italic, Diff Changed
-    base0F: "#6A2A3C", // Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+    base0A: "rgba(87, 82, 108, 0.8)", // h1
+    base0B: "rgba(87, 82, 108, 0.8)", // h2
+    base0C: "rgba(87, 82, 108, 0.8)", // h3
+    base0D: "rgba(87, 82, 108, 0.8)", // p1
+    base0E: "rgba(87, 82, 108, 0.8)", // p2
+    base0F: "rgba(87, 82, 108, 0.8)", // p3
 };
 let config = {
     transition : "all 0.2s ease-in-out",
+
+    font : "Arial, Helvetica, sans-serif",
     
+    fontSizeH1 : "1em",
+    fontSizeH2 : "1em",
+    fontSizeH3 : "1em",
+    fontSizeP1 : "1em",
+    fontSizeP2 : "1em",
+    fontSizeP3 : "1em",
+
     backgroundTile :{
-        tileGap : "10px",
-        compensateForBorders : true,
+        margin : "10px",
+        padding : "10px"
     }
 };
 export class Theme {
     getElements() {
         return [
             {
-                name : "backgroundTile",
-                function : (info, element) => {
+                name : "base",
+                generate : (info, element) => {
                     info = Merge.dicts({
                         id : element.name, // id 
-                        tileGap : config.backgroundTile.tileGap,
-                        compensateForBorders : config.backgroundTile.compensateForBorders,
+                        content : "",
+                        x : "",
+                        y : "",
+                        w : "auto",
+                        h : "auto",
+                        xAline : "",
+                        yAline : "",
                     }, info);
-        
-                    let x = info.tileGap;
-                    let y = info.tileGap;
-                    let w;
-                    let h;
-        
-                    if (info.compensateForBorders === true) {
-                        w = `calc(100% - ((${info.tileGap} * 2) + (${Style.query("borderLeftWidth", element.style)} + ${Style.query("borderRightWidth", element.style)})))`;
-                        h = `calc(100% - ((${info.tileGap} * 2) + (${Style.query("borderTopWidth", element.style)} + ${Style.query("borderBottomWidth", element.style)})))`;
+                    
+                    let e = document.createElement(element.element);
+                    if (typeof info.content === "String") {
+                        e.innerText = info.content;
                     } else {
-                        w = `calc(100% - (${info.tileGap} * 2))`;
-                        h = `calc(100% - (${info.tileGap} * 2))`;
+                        e.innerHTML = info.content;
                     }
-        
-                    let tile = document.createElement("div");
-                    tile.id = info.id;
-            
-                    // sizing and pos
-                    tile.style.left = x;
-                    tile.style.top = y;
-                    tile.style.width = w;
-                    tile.style.height = h;
-                    
-                    return tile;
-                },
-                style : {
-                    transition: config.transition,
-                    position : "absolute",
-                    overflow : "hidden",
-                    zIndex : "-1", // breaks hover_
 
-                    // background
-                    backgroundColor : colors.base00,
-                    backdropFilter: "blur(4px)",
-                    
-                    // border
-                    borderStyle : "solid",
-                    borderWidth : "3px",
-                    borderRadius : "15px",
-                    borderColor : colors.base04,
-                    boxShadow: "0 0 5px 2px rgba(0, 0, 0, 1)",
-                }
+                    e.style.left = info.x;
+                    e.style.top = info.y;
+                    e.style.width = info.w;
+                    e.style.height = info.h;
+
+                    let convert = {
+                        left : 0,
+                        top : 0,
+                        center : 50,
+                        right : 100,
+                        bottom : 100
+                    };
+                    if (info.xAline !== "") {
+                        let xPercent = convert[info.xAline];
+                        e.style.left = `${xPercent}%`;
+                        e.style.transform = `translateX(-${xPercent}%)`;
+                    }
+                    if (info.yAline !== "") {
+                        let yPercent = convert[info.xAline];
+                        e.style.top = `${yPercent}%`;
+                        e.style.transform += ` translateY(-${yPercent}%)`;
+                    }
+
+                    return e;
+                },
             }, {
-                name : "text1",
+                name : "p1",
                 function : (info, element) => {
                     info = Merge.dicts({
                         id : element.name, // id 
                         text : "",
+                        content : info.text,
                     }, info);
-                    
-                    let p = document.createElement("p");
-                    p.innerText = info.text;
 
-                    return p
-                },
+                    let p = element.generate(info, element);
+
+                    return p;
+                }, 
+                generate : "<base>",
                 style : {
-                    transition: config.transition,
-                    color : colors.base04,
-                }
+                    padding : "10px",
+                    margin : "0",
+                    fontFamily : config.font,
+                    fontSize : config.fontSizeP1,
+                    color : colors.base0D,
+                },
+                element : "p"
             }
         ];
     }
 }
+

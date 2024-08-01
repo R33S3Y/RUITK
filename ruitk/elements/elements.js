@@ -56,6 +56,20 @@ export class Elements {
             // Test the string against the regex
             return regex.test(str);
         }
+        function resolve(item, dictName, t) {
+            let regex = /^<[\w\d]+>$/;
+            if (typeof item === "string" && regex.test(item)) {
+                item = item.replace("<", "");
+                item = item.replace(">", "");
+
+                for(let element of t.elements) {
+                    if (element.name === item) {
+                        return element[dictName];
+                    }
+                }
+            }
+            return item;
+        }
         let currentStr = str.trim();
         let output = [];
         while(currentStr.length > 0) {
@@ -113,6 +127,10 @@ export class Elements {
                     elementInfo = element;
                     break;
                 }
+            }
+            let keys = Object.keys(elementInfo);
+            for (let key of keys) {
+                elementInfo[key] = resolve(elementInfo[key], key, this);
             }
             
             let element = elementInfo.function(dict, elementInfo);

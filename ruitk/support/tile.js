@@ -29,13 +29,19 @@ export class Tile {
         tile.style.width = w;
         tile.style.height = h;
     }
-    static append(id, item) {
-        if (!item) {
-            console.error(`item (${item}) is falsely`);
+    static append(id, content) {
+        if (!content) {
+            console.error(`item (${content}) is falsely`);
             return;
         }
+        if (Array.isArray(content) === false) {
+            content = [content];
+        }
         let tile = document.getElementById(id);
-        tile.appendChild(item);
+        
+        for (let item of content) {
+            tile.appendChild(item);
+        }
     }
     static restyle(id, style) {
         let tile = document.getElementById(id);

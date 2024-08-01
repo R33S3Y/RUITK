@@ -21,8 +21,7 @@ let theme = new Theme();
 
 elements.addElements(theme.getElements());
 
-tileWin.createTile("404Window", 1, 0, 1, 0, elements.makeElements(`
-    <backgroundTile>{}
-    <text1>{"text" : "You fall deeper and deeper into the abyss. Searching... But unfortunely, your efforts seem futile."}
+tileWin.createTile("TextWindow", 1, 0, 1, 0, elements.makeElements(`
+    <p1>{"text" : "p1 p1 p1 p1 p1 p1 p1"}
     `));
 tileWin.renderTiles();
