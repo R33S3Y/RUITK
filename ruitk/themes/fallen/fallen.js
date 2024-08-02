@@ -74,10 +74,11 @@ export class Theme {
                         right : 100,
                         bottom : 100
                     };
+                    e.style.transform = "";
                     if (info.xAline !== "") {
                         let xPercent = convert[info.xAline];
                         e.style.left = `${xPercent}%`;
-                        e.style.transform = `translateX(-${xPercent}%)`;
+                        e.style.transform += `translateX(-${xPercent}%)`;
                     }
                     if (info.yAline !== "") {
                         let yPercent = convert[info.xAline];

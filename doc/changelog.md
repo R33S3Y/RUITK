@@ -1,3 +1,7 @@
+## 0.3.2
+#### style.js changes
+ - Added `forceOnFlags` to the style function as a optional argument
+ - Added support for flags in the query function 
 ## 0.3.1
 #### tileWin.js Changes
  - When making tiles tileWin.js will no longer make the tileP div element as it is no longer needed

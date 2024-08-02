@@ -1,5 +1,5 @@
 export class Style {
-    static style(element, style) {
+    static style(element, style, forceOnFlags = "") {
         function sortObjectKeys(obj) {
             // Sort keys alphabetically
             const sortedKeys = Object.keys(obj).sort();
@@ -85,8 +85,18 @@ export class Style {
             console.warn("style dict = {}");
             return;
         }
+
+        // forceOnFlags processing
+        if (Array.isArray(forceOnFlags) === false) {
+            if (typeof forceOnFlags !== "string") {
+                console.warn("forceOnFlags invaild! ignoring");
+                forceOnFlags = "";
+            }
+            forceOnFlags = [forceOnFlags];
+        }
+
         style = JSON.stringify(sortObjectKeys(style), null, 1);
-        let className = hashCode(style);
+        let className = hashCode(`${style}${JSON.stringify(forceOnFlags)}`);
         className = mapNumbersToLetters(className);
         style = JSON.parse(style);
 
@@ -106,38 +116,72 @@ export class Style {
         
         let styleText = "";
 
-        // landscape
-        if(this.isLandscape() === true) {
-            Object.assign(style, getFlageditems(style, "landscape"));
-            getFlageditems(style, "portart");
-        }
+        
 
-        // portart
-        if(this.isPortart() === true) {
-            Object.assign(style, getFlageditems(style, "portart"));
+        // landscape true
+        if(this.isLandscape() === true || forceOnFlags.includes("landscape") === true) {
+            Object.assign(style, getFlageditems(style, "landscape"));
+        }
+        // landscape false
+        if(this.isLandscape() === false && forceOnFlags.includes("landscape") === false) {
             getFlageditems(style, "landscape");
         }
 
-        // hover
-        let hoverStyle = getFlageditems(style, "hover");
-        if (hoverStyle !== null) {
-            styleText += `.${className}:hover {\n${compileStyles(hoverStyle)}}\n\n`;
+        // portart true
+        if(this.isPortart() === true || forceOnFlags.includes("portart") === true) {
+            Object.assign(style, getFlageditems(style, "portart"));
         }
+        // portart false
+        if(this.isPortart() === false && forceOnFlags.includes("portart") === false) {
+            getFlageditems(style, "portart");
+        }
+
+        /**
+         * The reason why we have a seprate get & apply phases for flags like hover is because when:
+         * 
+         * forceOnFlags.includes("hover") === true
+         * 
+         * we need to overwrite the flagless css. CSS will set the style to be whatever was stated last, 
+         * meaning we can overwrite just by apply the hover styles last. 
+         * But we need to remove all styles with flags before we can apply the main styles, so we do get first.
+         * 
+         * To all one person who will read this, your welcome future r33s3y.
+         */
+
+        // get hover
+        let hoverStyle = getFlageditems(style, "hover");
 
         // everything else
         styleText += `.${className} {\n${compileStyles(style)}}\n\n`;
-        styleElement.textContent += styleText;
+        
+        // apply hover
+        if (hoverStyle !== null) {
+            if(forceOnFlags.includes("hover") === false) {
+                styleText += `.${className}:hover {\n${compileStyles(hoverStyle)}}\n\n`;
+            } else {
+                styleText += `.${className} {\n${compileStyles(hoverStyle)}}\n\n`;
+            }
+            
+        }
 
+        styleElement.textContent += styleText;
         return element;
     }
 
     static query(value, style) {
         if (!style) {
             console.error("style input not valid on doesn't exist")
-            return
+            return;
         }
-        //should have hover_ support
-        let element = Style.style(document.createElement("div"), style);
+
+        let forceOnFlags = value.split("_");
+        
+        if (forceOnFlags.length === 0) {
+            forceOnFlags.push("");
+        }
+
+        // should have hover support - Has hover support now!!!
+        let element = Style.style(document.createElement("div"), style, forceOnFlags);
         // Append the element to the document body to ensure styles are applied
         document.body.appendChild(element);
 
