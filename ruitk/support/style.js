@@ -127,13 +127,13 @@ export class Style {
             getFlageditems(style, "landscape");
         }
 
-        // portart true
-        if(this.isPortart() === true || forceOnFlags.includes("portart") === true) {
-            Object.assign(style, getFlageditems(style, "portart"));
+        // portrait true
+        if(this.isPortrait() === true || forceOnFlags.includes("portrait") === true) {
+            Object.assign(style, getFlageditems(style, "portrait"));
         }
-        // portart false
-        if(this.isPortart() === false && forceOnFlags.includes("portart") === false) {
-            getFlageditems(style, "portart");
+        // portrait false
+        if(this.isPortrait() === false && forceOnFlags.includes("portrait") === false) {
+            getFlageditems(style, "portrait");
         }
 
         /**
@@ -175,7 +175,8 @@ export class Style {
         }
 
         let forceOnFlags = value.split("_");
-        
+        value = forceOnFlags[forceOnFlags.length-1];
+        forceOnFlags.splice(forceOnFlags.length-1, 1);
         if (forceOnFlags.length === 0) {
             forceOnFlags.push("");
         }
@@ -197,7 +198,7 @@ export class Style {
         return result;
     }
 
-    static isPortart() {
+    static isPortrait() {
         return window.innerHeight > window.innerWidth;
     }
     

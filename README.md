@@ -13,4 +13,5 @@ You can see the change log [Here](doc/ChangeLog.md).
  - [changelog](tileWin/doc/changelog.md)
  - [element.js](element.js.md)
  - [tileWin.js](tileWin.js.md)
+ - [style.js](style.js.md)
  - [support Library's Explanation](support%20Library's%20Explanation.md)

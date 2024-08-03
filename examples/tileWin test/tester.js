@@ -12,7 +12,7 @@ let colors = {
     // Background
     activeB1 : "rgba(70, 70, 70, 1)",
     inactiveB1 : "rgba(61, 61, 61, 0.5)",
-}
+};
 
 let style = {
     transition: "all 0.2s ease-in-out",
@@ -35,7 +35,7 @@ let style = {
     boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
     hover_boxShadow: "0 0 5px 2px rgba(0, 0, 0, 1)",
     hover_borderColor : colors.activeH2,
-}
+};
 
 let app = document.createElement("img");
 app.src = "wallpaper.jpg";

@@ -1,3 +1,9 @@
+## 0.3.3
+#### style.js changes
+ - Renamed the flag from `portrat` to `portrait` to fix a spelling mistake
+#### documentation Changes
+ - Added documentation about [Syntax](support/style.js.md#Syntax) and the [Style](support/style.js.md#Style) function from style.js
+
 ## 0.3.2
 #### style.js changes
  - Added `forceOnFlags` to the style function as a optional argument
