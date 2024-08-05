@@ -7,7 +7,7 @@ RUITK is a simple and crude project made by 1 person who is simply trying to fig
 RUITK is a simple ui library/toolkit for websites. Providing a wrapper for premade website components which can be generated with a js function and our dict to css converter style.js.
 
 ## Change Log
-You can see the change log [Here](/doc/changeLog.md).
+You can see the change log [Here](/doc/changelog.md).
 
 ## Docs
  - [changelog](/doc/changelog.md)
