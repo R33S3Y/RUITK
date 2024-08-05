@@ -1,3 +1,10 @@
+## 0.3.4
+#### Fallen
+ - Moved `favicon.ico` into the fallen folder
+#### style.js changes
+ - Added 16 new flags to style.js - [Full list](support/style.js.md######All%20Flags)
+ - 
+
 ## 0.3.3
 #### style.js changes
  - Renamed the flag from `portrat` to `portrait` to fix a spelling mistake
@@ -26,7 +33,7 @@
  - Added a new folder called support in doc to hold all support libs documentation
  - Added a guide on what makes a support library a support library in [support Library's Explanation](support%20Library's%20Explanation.md)
  - Added documentation about [MakeElements](element.js.md#MakeElements) and [AddElements](element.js.md#AddElements) from element.js
-#### fallen.js
+#### Fallen
  - Removed the `backgroundTile` element
  - Renamed the element `text1` to `p1`
 #### element.js Changes

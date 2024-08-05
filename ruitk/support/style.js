@@ -148,21 +148,97 @@ export class Style {
          * To all one person who will read this, your welcome future r33s3y.
          */
 
-        // get hover
-        let hoverStyle = getFlageditems(style, "hover");
+        
+        let flagInfo = [{
+            name : "active",
+            prefix : ":",
+            style : null
+        },{
+            name : "after",
+            prefix : "::",
+            style : null
+        },{
+            name : "before",
+            prefix : "::",
+            style : null
+        },{
+            name : "checked",
+            prefix : ":",
+            style : null
+        },{
+            name : "default",
+            prefix : ":",
+            style : null
+        },{
+            name : "disabled",
+            prefix : ":",
+            style : null
+        },{
+            name : "empty",
+            prefix : ":",
+            style : null
+        },{
+            name : "enabled",
+            prefix : ":",
+            style : null
+        },{
+            name : "focus",
+            prefix : ":",
+            style : null
+        },{
+            name : "hover",
+            prefix : ":",
+            style : null
+        },{
+            name : "indeterminate",
+            prefix : ":",
+            style : null
+        },{
+            name : "invalid",
+            prefix : ":",
+            style : null
+        },{
+            name : "link",
+            prefix : ":",
+            style : null
+        },{
+            name : "optional",
+            prefix : ":",
+            style : null
+        },{
+            name : "required",
+            prefix : ":",
+            style : null
+        },{
+            name : "valid",
+            prefix : ":",
+            style : null
+        },{
+            name : "visited",
+            prefix : ":",
+            style : null
+        }];
+
+        // get flags
+        for (let flag of flagInfo) {
+            flag.style = getFlageditems(style, flag.name);
+        }
 
         // everything else
         styleText += `.${className} {\n${compileStyles(style)}}\n\n`;
         
-        // apply hover
-        if (hoverStyle !== null) {
-            if(forceOnFlags.includes("hover") === false) {
-                styleText += `.${className}:hover {\n${compileStyles(hoverStyle)}}\n\n`;
-            } else {
-                styleText += `.${className} {\n${compileStyles(hoverStyle)}}\n\n`;
+        // apply flags
+        for (let flag of flagInfo) {
+            if (flag.style !== null) {
+                if(forceOnFlags.includes(flag.name) === false) {
+                    styleText += `.${className}${flag.prefix}${flag.name} {\n${compileStyles(flag.style)}}\n\n`;
+                } else {
+                    styleText += `.${className} {\n${compileStyles(flag.style)}}\n\n`;
+                }
+                
             }
-            
         }
+        
 
         styleElement.textContent += styleText;
         return element;

@@ -43,7 +43,26 @@ CSS:
 ```
 
 Well then you can use flags. Here's a list of all current flags:
- - **hover** - same as the `:hover` selector - [mdn web docs_](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover)
+###### All Flags
+**Selectors** - A list of currently supported css selectors - [List of css selectors - mdn web docs_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors)
+ - **active**
+ - **after**
+ - **before**
+ - **checked**
+ - **default**
+ - **disabled**
+ - **empty**
+ - **enabled**
+ - **focus**
+ - **hover**
+ - **indeterminate**
+ - **invalid**
+ - **link**
+ - **optional**
+ - **required**
+ - **valid**
+ - **visited**
+**Other**
  - **portrait** - only apply this style when `window.innerHeight > window.innerWidth === true`
  - **landscape** - only apply this style when `window.innerWidth >= window.innerHeight === true`
 
