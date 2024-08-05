@@ -3,7 +3,8 @@
  - Moved `favicon.ico` into the fallen folder
 #### style.js changes
  - Added 16 new flags to style.js - [Full list](support/style.js.md######All%20Flags)
- - 
+#### documentation Changes 
+ - Fixed links in [README](README.md)
 
 ## 0.3.3
 #### style.js changes
