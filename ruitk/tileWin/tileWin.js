@@ -100,7 +100,53 @@ export class TileWin {
             borderColor : "rgba(0, 0, 0, 0)",
             position : "fixed",
         }
+        function makeBoxTile(tile, id, x, y, w, h, p, content, insideStyles, t) {
+            if (t.config.createInnerTile === false) {
+                if (t.config.animateOnCreateTile === true) {
+                    Tile.create(`tile${id}`, `calc(${x} + (${w} / 2))`, `calc(${y} + (${h} / 2))`, 0, 0, insideStyles, p);
+                    setTimeout(() => {
+                        Tile.transform(`tile${id}`, x, y, w, h);
+                    }, 0);
+                } else {
+                    Tile.create(`tile${id}`, x, y, w, h, insideStyles, p);
+                }
+            } else {
+                let { wInner, hInner } = calcWInnerAndHInner(tile, w, h, t);
 
+                if (t.config.animateOnCreateTile === true) {
+                    if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
+                        Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.fixedTileStyle, p);
+                    } else {
+                        Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.tileStyle, p);
+                    }
+                    setTimeout(() => {
+                        Tile.transform(`tile${id}`, x, y, wInner, hInner);
+                    }, 0);
+                } else {
+                    if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
+                        Tile.create(`tile${id}`, x, y, wInner, hInner, t.fixedTileStyle, p);
+                    } else {
+                        Tile.create(`tile${id}`, x, y, wInner, hInner, t.tileStyle, p);
+                    }
+                }
+            }
+
+            Tile.append(`tile${tile.id}`, tile.content);
+        }
+        function calcWInnerAndHInner(tile, w, h, t) {
+            let wInner = `calc(${w} - (${Style.query("marginLeft", t.tileStyle)} + ${Style.query("marginRight", t.tileStyle)}))`;
+            let hInner = `calc(${h} - (${Style.query("marginTop", t.tileStyle)} + ${Style.query("marginBottom", t.tileStyle)}))`;
+            if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] !== "fixed") {
+                if(t.config.tileDirection === "y") {
+                    hInner = "auto";
+                } else {
+                    wInner = "auto";
+                }
+            }
+
+            return { wInner, hInner };
+        }
+        
 
         let tileLayout = List2D.create(this.configStore.maxX, this.configStore.maxY, false);
         let tileLayoutLength = List2D.create(this.configStore.maxX, this.configStore.maxY, 0);
@@ -264,52 +310,7 @@ export class TileWin {
         }
         
         // render code
-        function makeBoxTile(tile, id, x, y, w, h, p, content, insideStyles, t) {
-            if (t.config.createInnerTile === false) {
-                if (t.config.animateOnCreateTile === true) {
-                    Tile.create(`tile${id}`, `calc(${x} + (${w} / 2))`, `calc(${y} + (${h} / 2))`, 0, 0, insideStyles, p);
-                    setTimeout(() => {
-                        Tile.transform(`tile${id}`, x, y, w, h);
-                    }, 0);
-                } else {
-                    Tile.create(`tile${id}`, x, y, w, h, insideStyles, p);
-                }
-            } else {
-                let { wInner, hInner } = calcWInnerAndHInner(tile, w, h, t);
-
-                if (t.config.animateOnCreateTile === true) {
-                    if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
-                        Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.fixedTileStyle, p);
-                    } else {
-                        Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.tileStyle, p);
-                    }
-                    setTimeout(() => {
-                        Tile.transform(`tile${id}`, x, y, wInner, hInner);
-                    }, 0);
-                } else {
-                    if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
-                        Tile.create(`tile${id}`, x, y, wInner, hInner, t.fixedTileStyle, p);
-                    } else {
-                        Tile.create(`tile${id}`, x, y, wInner, hInner, t.tileStyle, p);
-                    }
-                }
-            }
-
-            t.append(tile.name, tile.content);
-        }
-        function calcWInnerAndHInner(tile, w, h, t) {
-            let wInner = `calc(${w} - (${Style.query("marginLeft", t.tileStyle)} + ${Style.query("marginRight", t.tileStyle)}))`;
-            let hInner = `calc(${h} - (${Style.query("marginTop", t.tileStyle)} + ${Style.query("marginBottom", t.tileStyle)}))`;
-            if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] !== "fixed") {
-                if(t.config.tileDirection === "y") {
-                    hInner = "auto";
-                } else {
-                    wInner = "auto";
-                }
-            }
-
-            return { wInner, hInner };
-        }
+        
 
         // this block of code converts how much of the screen a snap should take up to how far it is from 0,0
         let tileDistanceX = [0];
@@ -386,6 +387,10 @@ export class TileWin {
                     
                     Tile.transform(`tile${tile.id}`, `${tile.x}%`, `${tile.y}%`, wInner, hInner);
                 }
+                if (tile.status === "contentChanged") {
+                    Tile.remove(`tile${tile.id}`);
+                    Tile.append(`tile${tile.id}`, tile.content);
+                }
             }
         }
     }
@@ -399,13 +404,16 @@ export class TileWin {
         }
         for (let tile of this.tiles) {
             if (tile.name === name) {
-                for (let item of content) {
-                    if (this.config.createInnerTile === true) {
-                        Tile.append(`tile${tile.id}`, item);
-                    } else {
-                        Tile.append(`tile${tile.id}`, item);
-                    }
-                }
+                tile.status = "contentChanged";
+                tile.content = tile.content.concat(content);
+            }
+        }
+    }
+    remove(name) {
+        for (let tile of this.tiles) {
+            if (tile.name === name) {
+                tile.status = "contentChanged";
+                tile.content = [];
             }
         }
     }

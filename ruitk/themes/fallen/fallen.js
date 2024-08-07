@@ -4,20 +4,20 @@ import { Style } from "../../support/style.js";
 // color scheme syntax from https://github.com/chriskempson/base16/tree/main
 // V0 colors from https://github.com/gitmalet/base16-purpledream-scheme/tree/master
 let colors = {
-    base00: "rgba(15, 15, 15, 0.65)", // Default Background
-    base01: "rgba(70, 70, 70, 1)", // Lighter Background (Used for status bars, line number and folding marks)
-    base02: "#403040", // Selection Background
+    base00: "rgba(8, 8, 8, 0.5)", // Default Background
+    base01: "#FF0000", // Lighter Background (Used for status bars, line number and folding marks)
+    base02: "rgba(0, 0, 0, 0.7)", // Selection / Focus Background The back ground for the thing there using
     base03: "#605060", // Comments, Invisibles, Line Highlighting
-    base04: "rgba(87, 82, 108, 0.8)", // Dark Foreground (Used for status bars)
-    base05: "rgba(193, 143, 179, 1)", // Default Foreground, Caret, Delimiters, Operators
+    base04: "#150141", // Dark Foreground (Used for status bars)
+    base05: "#250282", // Default Foreground, Caret, Delimiters, Operators
     base06: "#eee0ee", // Light Foreground (Not often used)
     base07: "#fff0ff", // Light Background (Not often used)
     base08: "#FF1D0D", // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
     base09: "#CCAE14", // Integers, Boolean, Constants, XML Attributes, Markup Link Url
-    base0A: "rgba(87, 82, 108, 0.8)", // h1
+    base0A: "rgba(120, 100, 128, 0.8)", // h1
     base0B: "rgba(87, 82, 108, 0.8)", // h2
     base0C: "rgba(87, 82, 108, 0.8)", // h3
-    base0D: "rgba(87, 82, 108, 0.8)", // p1
+    base0D: "#FDBBF2", // p1
     base0E: "rgba(87, 82, 108, 0.8)", // p2
     base0F: "rgba(87, 82, 108, 0.8)", // p3
 };
@@ -39,6 +39,30 @@ let config = {
     }
 };
 export class Theme {
+    getTileWinStyle() {
+        return {
+            transition: "all 0.2s ease-in-out",
+            position : "absolute",
+            overflow : "hidden",
+            boxSizing : "border-box",
+            margin : "10px",
+            padding : "10px",
+            
+            // background
+            backgroundColor : colors.base00,
+            hover_backgroundColor : colors.base02,
+            backdropFilter: "blur(2px)",
+            
+            // border
+            borderStyle : "solid",
+            borderWidth : "3px",
+            borderRadius : "15px",
+            borderColor : colors.base04,
+            boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
+            hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
+            hover_borderColor : colors.base05,
+        };
+    }
     getElements() {
         return [
             {

@@ -19,9 +19,17 @@ let tileWin = new TileWin();
 let elements = new Elements();
 let theme = new Theme();
 
+
+tileWin.updateConfig({
+    animateOnCreateTile : true,
+    createInnerTile : true,
+});
+
+tileWin.updateStyle(theme.getTileWinStyle());
 elements.addElements(theme.getElements());
 
 tileWin.createTile("TextWindow", 1, 0, 1, 0, elements.makeElements(`
     <p1>{"text" : "p1 p1 p1 p1 p1 p1 p1"}
     `));
-tileWin.renderTiles();
+tileWin.createTile("help",2,0,1,0);
+tileWin.update();

@@ -56,5 +56,8 @@ export class Tile {
             h : tile.style.height
         }
     }
-
+    static remove(id) {
+        let tile = document.getElementById(id);
+        tile.innerHTML = "";
+    }
 }

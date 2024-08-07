@@ -1,3 +1,13 @@
+# 0.4
+#### tileWin.js Changes
+ - Added a new function called `remove` that removes all content from a tile.
+ - Changed the append function to only append things when update is called
+#### Fallen
+ - Added a new function called `getTileWinStyle` to store style info for `tileWin.js`
+#### tile.js
+ - Added a new function called `remove` that removes all content from a tile.
+
+
 ## 0.3.4
 #### Fallen
  - Moved `favicon.ico` into the fallen folder
