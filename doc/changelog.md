@@ -1,3 +1,13 @@
+## 0.4.1
+#### tileWin.js Changes
+ - Fixed a issue with scroll elements overlapping when there are multiple in the same row 
+ - Remove the config option `createInnerTile` as it was made redundant in [V0.3](tileWin/doc/changelog.md#0.3)
+ - Fixed a issue with scroll tiles that were animated not starting animation in center
+ - Fixed a issue causing `tile.js`  to throw errors during expected behavior
+ - Fixed a issue with scroll tiles ordering based off when they were made instead of there actual position (sorta)
+#### Fallen
+ - Renamed `fallen.js` to `main.js` as it is where the main/base components for the fallen theme will be stored.
+
 # 0.4
 #### tileWin.js Changes
  - Added a new function called `remove` that removes all content from a tile.
@@ -29,7 +39,7 @@
 ## 0.3.1
 #### tileWin.js Changes
  - When making tiles tileWin.js will no longer make the tileP div element as it is no longer needed
- - Fixed issue with fixed tiles positions being absolute as apposed to fixed when `innertile = true` in config
+ - Fixed issue with fixed tiles positions being absolute as apposed to fixed when `createInnerTile = true` in config
 
 # 0.3
 #### tileWin.js Changes
@@ -54,8 +64,8 @@
 # 0.2
  - Started new theme fallen
  - Added new example page
- - Added config option createInnerTile : false to tilewin.js
- - Added config option transition : "all 0.2s ease-in-out", to tilewin.js
+ - Added config option `createInnerTile = false` to tilewin.js
+ - Added config option `transition : "all 0.2s ease-in-out"` to tilewin.js
  - Bugfixed element.js
  - Renamed the style element made my style.js to RUITKStyles
 ## 0.1.7

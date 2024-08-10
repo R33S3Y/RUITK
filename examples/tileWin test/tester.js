@@ -62,7 +62,7 @@ tileWin.updateConfig({
 
 tileWin.createTile("leftSideTop", 0, -1, 0, -1);
 tileWin.createTile("leftSideBottom", 0, -1, 2, 1);
-tileWin.createTile("Centre", 1, 0, 1, 0);
+tileWin.createTile("CentreD", 1, 0, 2, 0);
 
 let text = document.createElement("h1")
 text.innerHTML = `In the heart of an ancient forest, where the trees whispered secrets and shadows danced beneath the moonlight, there was a figure known as the Keeper of the Keys. Cloaked in a tattered robe of deep midnight blue, the Keeper moved with an uncanny grace, slipping through the forest like a wisp of smoke. No one knew where the Keeper came from, nor did they know the true purpose behind the keys he guarded.
@@ -103,8 +103,8 @@ tileWin.update();
 
 setTimeout(function() {
     let stuff = document.createElement("h1")
-    stuff.innerHTML = "boots and cats";
+    stuff.innerHTML = "This Should Be in the Centre tile";
     
-    tileWin.createTile("CentreD", 1, 0, 2, 0, stuff);
+    tileWin.createTile("Centre", 1, 0, 1, 0, stuff);
     tileWin.update();
 }, 1000);
