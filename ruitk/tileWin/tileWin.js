@@ -144,18 +144,6 @@ export class TileWin {
 
             return { wInner, hInner };
         }
-        function calcSnapValues(tile) {
-            let xSnap = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] +
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] * (snapResize[tile.xSnap][tile.ySnap][0][0] % 1));
-            let ySnap = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] +
-                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] * (snapResize[tile.xSnap][tile.ySnap][0][1] % 1));
-            let wSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] +
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] * (snapResize[tile.xSnap][tile.ySnap][1][0] % 1))) - xSnap;
-            let hSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] +
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] * (snapResize[tile.xSnap][tile.ySnap][1][1] % 1))) - ySnap;
-        
-            return { xSnap, ySnap, wSnap, hSnap };
-        }
         
 
         let tileLayout = List2D.create(this.configStore.xMax, this.configStore.yMax, false);
@@ -339,7 +327,7 @@ export class TileWin {
         }
 
         /**
-         * The tilePercentageX & Y values and tileDistanceX & Y[-1] = 100 are necessary for calculating wSnap and hSnap.
+         * The tilePercentageX & Y values and tileDistanceX & Y[-1] = 100 are necessary for calculating wSnapPercent and hSnapPercent.
          * These calculations work by determining the x or y value at the end of the tile and subtracting the actual x or y value, leaving the difference.
          * Since there is technically no border between tiles, when calculating the end x and y values, it will reference the next row or column.
          * However, at the last row or column, you can't reference the next one, which would cause an error.
@@ -352,18 +340,26 @@ export class TileWin {
         let tilePercentageY = [...this.config.tilePercentageY];
         tilePercentageY.push(0);
         
-
+        
         // Make tiles
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            let { xSnap, ySnap, wSnap, hSnap } = calcSnapValues(tile);
+            tile.xSnapPercent = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] +
+            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] * (snapResize[tile.xSnap][tile.ySnap][0][0] % 1));
+            tile.ySnapPercent = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] +
+            (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] * (snapResize[tile.xSnap][tile.ySnap][0][1] % 1));
 
-            tile.x = xSnap + (wSnap * tile.snapShare[0][0]); // snapShare is for applying nudge to tiles
-            tile.y = ySnap + (hSnap * tile.snapShare[0][1]); // snapShare is relative value therefore the Snap vars just need to state how big the snap should be
+            tile.wSnapPercent = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] +
+            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] * (snapResize[tile.xSnap][tile.ySnap][1][0] % 1))) - tile.xSnapPercent;
+            tile.hSnapPercent = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] +
+            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] * (snapResize[tile.xSnap][tile.ySnap][1][1] % 1))) - tile.ySnapPercent;
 
-            tile.w = wSnap * (tile.snapShare[1][0] - tile.snapShare[0][0]);
-            tile.h = hSnap * (tile.snapShare[1][1] - tile.snapShare[0][1]);
+            tile.x = tile.xSnapPercent + (tile.wSnapPercent * tile.snapShare[0][0]); // snapShare is for applying nudge to tiles
+            tile.y = tile.ySnapPercent + (tile.hSnapPercent * tile.snapShare[0][1]); // snapShare is relative value therefore the Snap vars just need to state how big the snap should be
+
+            tile.w = tile.wSnapPercent * (tile.snapShare[1][0] - tile.snapShare[0][0]);
+            tile.h = tile.hSnapPercent * (tile.snapShare[1][1] - tile.snapShare[0][1]);
         }
 
         // need better fix than this for scroll tile ordering as this only works when all scroll tiles are all rendered in the same update func call
@@ -374,8 +370,6 @@ export class TileWin {
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            let { xSnap, ySnap, wSnap, hSnap } = calcSnapValues(tile);
-
             if (tile.status === "unrendered") {
                 if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
                     makeTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, this);
@@ -383,9 +377,9 @@ export class TileWin {
                     // create row manager
                     if (document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`) === undefined || document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`) === null) {
                         if (this.configStore.tileOppositeDirection === "x") {
-                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, `${xSnap}%`, 0, `${wSnap}%`, "auto", scrollRowMangerStyles, this.config.parent);
+                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, `${tile.xSnapPercent}%`, 0, `${tile.wSnapPercent}%`, "auto", scrollRowMangerStyles, this.config.parent);
                         } else {
-                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, 0, `${ySnap}%`, "auto", `${hSnap}%`, scrollRowMangerStyles, this.config.parent);
+                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, 0, `${tile.ySnapPercent}%`, "auto", `${tile.hSnapPercent}%`, scrollRowMangerStyles, this.config.parent);
                         }
                     }
                     if (this.configStore.tileOppositeDirection === "x") {

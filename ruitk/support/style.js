@@ -1,3 +1,5 @@
+import { Merge } from "./merger.js";
+
 export class Style {
     static style(element, style, forceOnFlags = "") {
         function sortObjectKeys(obj) {
@@ -77,6 +79,7 @@ export class Style {
             }
             return cssStyles;
         }
+
         if (typeof style !== "object" || style === null) {
             console.error("style is not dict");
             return;
@@ -102,21 +105,14 @@ export class Style {
 
         element.className = className;
 
-        let styleElement = document.getElementById("RUITKStyles");
-        if (styleElement === null) {
-            styleElement = document.createElement("style");
-            styleElement.id = "RUITKStyles";
-            styleElement.textContent = "\n";
-            document.querySelector("body").append(styleElement);
-        }
+        let styleElement = getStyleElement();
+
         if (styleElement.textContent.includes(`.${className}`)) { //style is already made so don't bother
             console.debug("skipped style processing");
             return element;
         }
         
-        let styleText = "";
-
-        
+        let styleText = ""; 
 
         // landscape true
         if(this.isLandscape() === true || forceOnFlags.includes("landscape") === true) {
@@ -148,7 +144,6 @@ export class Style {
          * To all one person who will read this, your welcome future r33s3y.
          */
 
-        
         let flagInfo = [{
             name : "active",
             prefix : ":",
@@ -281,4 +276,55 @@ export class Style {
     static isLandscape() {
         return window.innerWidth >= window.innerHeight;
     }
+
+    static declare(vars) {
+        let styleElement = getStyleElement();
+        let varsDict = {};
+
+        if (styleElement.textContent.includes(":root")) { //style is already made so don't bother
+            let rootMatch = styleElement.textContent.match(/:root\s*\{[^}]*\}/);
+
+            let rootContent = rootMatch[0];
+
+            let varRegex = /--([\w-]+)\s*:\s*([^;]+);/g;
+            let match;
+
+            while ((match = varRegex.exec(rootContent)) !== null) {
+                let varName = match[1].trim();
+                let varValue = match[2].trim();
+                varsDict[varName] = varValue;
+            }
+        }
+
+        varsDict = Merge.dicts(varsDict, vars);
+
+        let rootContent = ":root {\n";
+  
+        // Loop through the dictionary and add each variable to the root block
+        for (const [key, value] of Object.entries(varsDict)) {
+            rootContent += `  --${key}: ${value};\n`;
+        }
+        rootContent += "}";
+
+
+        let rootMatch = styleElement.textContent.match(/:root\s*\{[^}]*\}/);
+        if (rootMatch) {
+            // Replace the existing :root block with the new one
+            styleElement.textContent = styleElement.textContent.replace(rootMatch[0], rootContent);
+        } else {
+            // If no :root block exists, append the new one at the end
+            styleElement.textContent += `\n${rootContent}`;
+        }
+    }
+}
+
+function getStyleElement() {
+    let styleElement = document.getElementById("RUITKStyles");
+    if (styleElement === null) {
+        styleElement = document.createElement("style");
+        styleElement.id = "RUITKStyles";
+        styleElement.textContent = "\n";
+        document.querySelector("body").append(styleElement);
+    }
+    return styleElement;
 }

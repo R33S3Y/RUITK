@@ -1,4 +1,8 @@
 # 0.5
+#### style.js changes
+ - Added a new function called `declare` [Documentation](style.js.md#Declare)
+#### documentation Changes 
+ - Added documentation changes for `query` and `declare` from `style.js`
 #### tile.js Changes
  - Added a new function called `destory` to delete a tile
 #### tileWin.js Changes
