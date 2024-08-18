@@ -1,3 +1,12 @@
+# 0.5
+#### tile.js Changes
+ - Added a new function called `destory` to delete a tile
+#### tileWin.js Changes
+ - Scroll tiles will now take nudge into account when positioning
+ - Added a option to `configStore` called `cleanScrollAnimationFix = true`
+ - Renamed `tileRowDirection` to `tileOppositeDirection` in `configStore`
+ - Renamed `maxX` to `xMax` in `configStore`
+ - Renamed `maxY` to `yMax` in `configStore`
 ## 0.4.1
 #### tileWin.js Changes
  - Fixed a issue with scroll elements overlapping when there are multiple in the same row 

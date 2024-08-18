@@ -31,12 +31,13 @@ export class TileWin {
         this.configStore = {
             tileSnapFirst : this.config.tileDirection,
             tileNudgeFirst : this.config.tileDirection,
-            tileRowDirection : this.config.tileDirection,
+            tileOppositeDirection : this.config.tileDirection,
             tileNudgeSwap : true,
-            maxX : this.config.tilePercentageX.length,
-            maxY : this.config.tilePercentageY.length,
+            xMax : this.config.tilePercentageX.length,
+            yMax : this.config.tilePercentageY.length,
+            cleanScrollAnimationFix : true
         }
-        this.configStore.tileRowDirection = this.config.tileDirection === "y" ? "x" : "y";
+        this.configStore.tileOppositeDirection = this.config.tileDirection === "y" ? "x" : "y";
 
         return;
     }
@@ -92,34 +93,48 @@ export class TileWin {
             backgroundColor : "rgba(0, 0, 0, 0)",
             borderColor : "rgba(0, 0, 0, 0)",
             position : "absolute",
-        }
+            display : "flex",
+            flexWrap : "wrap",
+        };
+        let holderBoxStyles = {
+            backgroundColor : "rgba(0, 0, 0, 0)",
+            borderColor : "rgba(0, 0, 0, 0)",
+            position : "relative",
+        }; 
+        
+        function animateTile(id, x, y, w, h, t) {
+            if (t.config.animateOnCreateTile === true) {
+                Tile.transform(`tile${id}`, `calc(${x} + (${w} / 2))`, `calc(${y} + (${h} / 2))`, 0, 0);
+                setTimeout(() => {
+                    Tile.transform(`tile${id}`, x, y, w, h);
+                }, 0);
+            }
+        } 
         function makeTile(tile, id, x, y, w, h, p, content, t) {
             let { wInner, hInner } = calcWInnerAndHInner(tile, w, h, t);
-
-            if (t.config.animateOnCreateTile === true) {
-                if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
-                    Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.fixedTileStyle, p);
-                } else {
-                    Tile.create(`tile${id}`, `calc(${x} + (${wInner} / 2))`, `calc(${y} + (${hInner} / 2))`, 0, 0, t.scrollTileStyle, p);
-                }
-                setTimeout(() => {
-                    Tile.transform(`tile${id}`, x, y, wInner, hInner);
-                }, 0);
+            
+            if (t.config.tileRowType[tile[`${t.configStore.tileOppositeDirection}Snap`]] === "fixed") {
+                Tile.create(`tile${id}`, x, y, wInner, hInner, t.fixedTileStyle, p);
+                
             } else {
-                if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] === "fixed") {
-                    Tile.create(`tile${id}`, x, y, wInner, hInner, t.fixedTileStyle, p);
+                if (t.configStore.cleanScrollAnimationFix === true && t.config.animateOnCreateTile === true) {
+                    ({ wInner, hInner } = calcWInnerAndHInner(tile, "100%", "100%", t));
+                    Tile.create(`tileP${id}`, x, y, w, h, holderBoxStyles, p);
+                    Tile.create(`tile${id}`, 0, 0, wInner, hInner, t.scrollTileStyle, `#tileP${id}`);
                 } else {
                     Tile.create(`tile${id}`, x, y, wInner, hInner, t.scrollTileStyle, p);
                 }
             }
+            animateTile(id, x, y, wInner, hInner, t);
             if (tile.content !== null) {
-                Tile.append(`tile${tile.id}`, tile.content);
+                Tile.append(`tile${id}`, tile.content);
             }
         }
         function calcWInnerAndHInner(tile, w, h, t) {
             let wInner = `calc(${w} - (${Style.query("marginLeft", t.fixedTileStyle)} + ${Style.query("marginRight", t.fixedTileStyle)}))`;
             let hInner = `calc(${h} - (${Style.query("marginTop", t.fixedTileStyle)} + ${Style.query("marginBottom", t.fixedTileStyle)}))`;
-            if (t.config.tileRowType[tile[`${t.configStore.tileRowDirection}Snap`]] !== "fixed") {
+
+            if (t.config.tileRowType[tile[`${t.configStore.tileOppositeDirection}Snap`]] !== "fixed") {
                 if(t.config.tileDirection === "y") {
                     hInner = "auto";
                 } else {
@@ -129,10 +144,22 @@ export class TileWin {
 
             return { wInner, hInner };
         }
+        function calcSnapValues(tile) {
+            let xSnap = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] * (snapResize[tile.xSnap][tile.ySnap][0][0] % 1));
+            let ySnap = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] +
+                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] * (snapResize[tile.xSnap][tile.ySnap][0][1] % 1));
+            let wSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] * (snapResize[tile.xSnap][tile.ySnap][1][0] % 1))) - xSnap;
+            let hSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] * (snapResize[tile.xSnap][tile.ySnap][1][1] % 1))) - ySnap;
+        
+            return { xSnap, ySnap, wSnap, hSnap };
+        }
         
 
-        let tileLayout = List2D.create(this.configStore.maxX, this.configStore.maxY, false);
-        let tileLayoutLength = List2D.create(this.configStore.maxX, this.configStore.maxY, 0);
+        let tileLayout = List2D.create(this.configStore.xMax, this.configStore.yMax, false);
+        let tileLayoutLength = List2D.create(this.configStore.xMax, this.configStore.yMax, 0);
         // add items to layout
         for (let tile of this.tiles) {
             tileLayout[tile.xSnap][tile.ySnap] = true;
@@ -194,7 +221,7 @@ export class TileWin {
             }
 
             // Snap Minor axis
-            let xList = Array(this.configStore.maxX).fill(false);
+            let xList = Array(this.configStore.xMax).fill(false);
             for (let x in tileLayout) {
                 if(List2D.getListY(x, tileLayout).some(item => item === true)) {
                     xList[x] = true;
@@ -218,7 +245,7 @@ export class TileWin {
             }
 
             // Snap Minor axis
-            let yList = Array(this.configStore.maxY).fill(false);
+            let yList = Array(this.configStore.yMax).fill(false);
             for (let y in tileLayout[0]) {
                 if(List2D.getListX(y, tileLayout).some(item => item === true)) {
                     yList[y] = true;
@@ -324,56 +351,52 @@ export class TileWin {
         tilePercentageX.push(0);
         let tilePercentageY = [...this.config.tilePercentageY];
         tilePercentageY.push(0);
-
-        // need better fix than this for scroll tile ordering as this only works when all scroll tiles are all rendered in the same update func call
-        this.tiles = this.tiles.sort((a, b) => {
-            if (a[`${this.config.tileDirection}Snap`] === b[`${this.config.tileDirection}Snap`]) {
-                return a[`${this.config.tileDirection}Nudge`] - b[`${this.config.tileDirection}Nudge`];
-            }
-            return a[`${this.config.tileDirection}Snap`] - b[`${this.config.tileDirection}Snap`];
-        });
         
 
         // Make tiles
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            let xSnap = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])]+
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])]*(snapResize[tile.xSnap][tile.ySnap][0][0]%1));
-            let ySnap = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])]+
-                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])]*(snapResize[tile.xSnap][tile.ySnap][0][1]%1));
-
-            let wSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])]+
-            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])]*(snapResize[tile.xSnap][tile.ySnap][1][0]%1))) - xSnap;
-            let hSnap = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])]+
-            (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])]*(snapResize[tile.xSnap][tile.ySnap][1][1]%1))) - ySnap;
+            let { xSnap, ySnap, wSnap, hSnap } = calcSnapValues(tile);
 
             tile.x = xSnap + (wSnap * tile.snapShare[0][0]); // snapShare is for applying nudge to tiles
             tile.y = ySnap + (hSnap * tile.snapShare[0][1]); // snapShare is relative value therefore the Snap vars just need to state how big the snap should be
 
             tile.w = wSnap * (tile.snapShare[1][0] - tile.snapShare[0][0]);
             tile.h = hSnap * (tile.snapShare[1][1] - tile.snapShare[0][1]);
+        }
+
+        // need better fix than this for scroll tile ordering as this only works when all scroll tiles are all rendered in the same update func call
+        this.tiles = this.tiles.sort((a, b) => {
+            return a[`${this.config.tileDirection}`] - b[`${this.config.tileDirection}`];
+        });
+
+        for (let i in this.tiles) {
+            let tile = this.tiles[i];
+
+            let { xSnap, ySnap, wSnap, hSnap } = calcSnapValues(tile);
+
             if (tile.status === "unrendered") {
-                if (this.config.tileRowType[tile[`${this.configStore.tileRowDirection}Snap`]] === "fixed") {
+                if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
                     makeTile(tile, tile.id, `${tile.x}%`, `${tile.y}%`, `${tile.w}%`, `${tile.h}%`, this.config.parent, tile.content, this);
                 } else {
                     // create row manager
-                    if (document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`) === undefined || document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`) === null) {
-                        if (this.configStore.tileRowDirection === "x") {
-                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, `${xSnap}%`, 0, `${wSnap}%`, "auto", scrollRowMangerStyles, this.config.parent);
+                    if (document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`) === undefined || document.querySelector(`#ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`) === null) {
+                        if (this.configStore.tileOppositeDirection === "x") {
+                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, `${xSnap}%`, 0, `${wSnap}%`, "auto", scrollRowMangerStyles, this.config.parent);
                         } else {
-                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, 0, `${ySnap}%`, "auto", `${hSnap}%`, scrollRowMangerStyles, this.config.parent);
+                            Tile.create(`ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, 0, `${ySnap}%`, "auto", `${hSnap}%`, scrollRowMangerStyles, this.config.parent);
                         }
                     }
-                    if (this.configStore.tileRowDirection === "x") {
-                        makeTile(tile, tile.id, "0%", "0%", "100%", "auto", `#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, tile.content, this);
+                    if (this.configStore.tileOppositeDirection === "x") {
+                        makeTile(tile, tile.id, "0%", "0%", `${(tile.snapShare[1][0] - tile.snapShare[0][0])*100}%`, "auto", `#ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, tile.content, this);
                     } else {
-                        makeTile(tile, tile.id, "0%", "0%", "auto", "100%", `#ScrollRowManger${tile[`${this.configStore.tileRowDirection}Snap`]}`, tile.content, this);
+                        makeTile(tile, tile.id, "0%", "0%", "auto", `${(tile.snapShare[1][0] - tile.snapShare[0][0])*100}%`, `#ScrollRowManger${tile[`${this.configStore.tileOppositeDirection}Snap`]}`, tile.content, this);
                     }
                 }
                 tile.status = "rendered";
             } else {
-                if (this.config.tileRowType[tile[`${this.configStore.tileRowDirection}Snap`]] === "fixed") {
+                if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
 
                     let { wInner, hInner } = calcWInnerAndHInner(tile, `${tile.w}%`, `${tile.h}%`, this);
                     
@@ -386,6 +409,7 @@ export class TileWin {
             }
         }
     }
+
 
     append(name, content) {
         if (content === null) {

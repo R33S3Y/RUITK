@@ -60,4 +60,11 @@ export class Tile {
         let tile = document.getElementById(id);
         tile.innerHTML = "";
     }
+    static destory(id) {
+        let tile = document.getElementById(id);
+
+        if (tile) {
+            tile.remove();
+        }
+    }
 }
