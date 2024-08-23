@@ -1,13 +1,12 @@
 # 0.5
 #### style.js changes
- - Added a new function called `declare` [Documentation](style.js.md#Declare)
+ - Added a new function called `declare` - [Documentation Here](style.js.md#Declare)
 #### documentation Changes 
  - Added documentation changes for `query` and `declare` from `style.js`
 #### tile.js Changes
  - Added a new function called `destory` to delete a tile
 #### tileWin.js Changes
- - Scroll tiles will now take nudge into account when positioning
- - Added a option to `configStore` called `cleanScrollAnimationFix = true`
+ - Scroll tiles will now take nudge into account when positioning thanks to a rewrite of how tile rendering and state handling work
  - Renamed `tileRowDirection` to `tileOppositeDirection` in `configStore`
  - Renamed `maxX` to `xMax` in `configStore`
  - Renamed `maxY` to `yMax` in `configStore`
