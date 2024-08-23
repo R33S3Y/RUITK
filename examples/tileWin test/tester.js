@@ -15,7 +15,7 @@ let colors = {
 };
 
 let style = {
-    transition: "all 0.2s ease-in-out",
+    transition: "all 2.2s ease-in-out",
     position : "absolute",
     overflow : "hidden",
     boxSizing : "border-box",
@@ -53,19 +53,25 @@ document.querySelector("body").appendChild(app);
 
 let tileWin = new TileWin();
 
-tileWin.updateStyle(style);
+
 tileWin.updateConfig({
     animateOnCreateTile : true,
     createInnerTile : true,
     tileRowType : ["fixed", "scroll", "scroll"],
 });
+tileWin.updateStyle(style);
 
+let test = document.createElement("h1");
+test.innerText = "wshfleryjkgejgtuihregurighrwghuthjn;ourefh mwelfclhsd gwfwefsefxwsef wefc werfwerfg wf wefvd cvdvcwfe dvdefcdefefvedfv efvefved vdevdevev dmreuo 9em uhtgor";
 tileWin.createTile("leftSideTop", 0, -1, 0, -1);
 tileWin.createTile("leftSideBottom", 0, -1, 2, 1);
-tileWin.createTile("CentreD", 1, 0, 2, 0);
 
-let text = document.createElement("h1")
-text.innerHTML = `In the heart of an ancient forest, where the trees whispered secrets and shadows danced beneath the moonlight, there was a figure known as the Keeper of the Keys. Cloaked in a tattered robe of deep midnight blue, the Keeper moved with an uncanny grace, slipping through the forest like a wisp of smoke. No one knew where the Keeper came from, nor did they know the true purpose behind the keys he guarded.
+tileWin.createTile("CentreD1", 1, -1, 2, -1);
+tileWin.createTile("CentreD2", 1, 1, 2, 1);
+tileWin.createTile("CentreD3", 1, -1, 2, 1, test);
+
+let text = document.createElement("h1");
+text.innerText = `In the heart of an ancient forest, where the trees whispered secrets and shadows danced beneath the moonlight, there was a figure known as the Keeper of the Keys. Cloaked in a tattered robe of deep midnight blue, the Keeper moved with an uncanny grace, slipping through the forest like a wisp of smoke. No one knew where the Keeper came from, nor did they know the true purpose behind the keys he guarded.
 
 Legends spoke of the Keeper's origins. Some said he was a fallen star, cast down from the heavens for stealing the key to the gates of paradise. Others claimed he was a sorcerer who had bargained with ancient spirits, gaining immortality in exchange for his service. But all agreed on one thing: the Keeper possessed a key for every lock, a solution for every enigma.
 
@@ -103,8 +109,9 @@ tileWin.update();
 
 setTimeout(function() {
     let stuff = document.createElement("h1")
-    stuff.innerHTML = "This Should Be in the Centre tile";
+    stuff.innerHTML = "This Should Be in the Centre tile saiogvf kludzfougjfvhlkcl gjborguih riohiuebnrso;d;hvj,b jtgldfj,gikrtwerwrw efwfw fwefw fcrewrfwe jngp98j";
     
     tileWin.createTile("Centre", 1, 0, 1, 0, stuff);
     tileWin.update();
 }, 1000);
+

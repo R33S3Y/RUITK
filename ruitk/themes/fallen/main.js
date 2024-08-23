@@ -32,11 +32,6 @@ let config = {
     fontSizeP1 : "1em",
     fontSizeP2 : "1em",
     fontSizeP3 : "1em",
-
-    backgroundTile :{
-        margin : "10px",
-        padding : "10px"
-    }
 };
 export class Theme {
     getTileWinStyle() {

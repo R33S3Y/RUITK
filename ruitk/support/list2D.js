@@ -5,7 +5,7 @@ export class List2D {
         for (let x = 0; x < xLength; x++) {
             list.push(Array(yLength).fill(value));
         }
-        return list
+        return JSON.parse(JSON.stringify(list));
     }
 
     static getListY(x, list) {

@@ -1,6 +1,6 @@
 import { Elements } from "/ruitk/elements/elements.js";
 import { TileWin } from "/ruitk/tileWin/tileWin.js";
-import { Theme } from "/ruitk/themes/fallen/fallen.js";
+import { Theme } from "/ruitk/themes/fallen/main.js";
 
 let app = document.createElement("img");
 app.src = "/ruitk/themes/fallen/wallpaper.jpg";
@@ -31,5 +31,5 @@ elements.addElements(theme.getElements());
 tileWin.createTile("TextWindow", 1, 0, 1, 0, elements.makeElements(`
     <p1>{"text" : "p1 p1 p1 p1 p1 p1 p1"}
     `));
-tileWin.createTile("help",2,0,1,0);
+tileWin.createTile("Tile the 2nd",2,0,1,0);
 tileWin.update();
