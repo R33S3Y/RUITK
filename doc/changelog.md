@@ -1,3 +1,19 @@
+## 0.5.1
+#### Fallen Changes
+ - Renamed `main.js` to `base.js`
+ - Renamed class `Theme` to `FallenBase`
+ - Change all functions in `FallenBase` to static functions
+ - Added a new function called `init`
+ - Added the following elements to `base.js`
+	 - `h1`
+	 - `h2`
+	 - `h3`
+	 - `p2`
+	 - `p3`
+- Added more config options to `base` element
+#### style.js changes
+ - Fixed a issue with the `declare` not adding new lines afterward
+
 # 0.5
 #### style.js changes
  - Added a new function called `declare` - [Documentation Here](style.js.md#Declare)
