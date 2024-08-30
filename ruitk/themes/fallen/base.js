@@ -85,16 +85,21 @@ let elements = [
         
             let e = document.createElement(element.element);
             e.id = info.id;
+            
+            e.style.textAline = info.textAline;
+            
             e.innerText = info.text;
             // Check for string content properly
             if (info.content) {
-                if(info.content.isArray() === false) {
+                if(Array.isArray(info.content) === false) {
                     info.content = [info.content];
                 }
                 for (let item of info.content) {
-                    e.appendChild(item);
+                    e.innerHTML += item;
                 }
             }
+
+
             if (info.x === "" && info.y === "" && info.xAline === "" && info.yAline === "" && info.w === "auto" && info.h === "auto" ) {// all defaults
                 e.style.position = "relative";
             } else {
@@ -103,6 +108,12 @@ let elements = [
             if (info.position !== "") {
                 e.style.position = info.position;
             }
+
+            e.style.left = info.x;
+            e.style.top = info.y;
+            e.style.width = info.w;
+            e.style.height = info.h;
+
             let convert = {
                 left: 0,
                 top: 0,
@@ -110,7 +121,6 @@ let elements = [
                 right: 100,
                 bottom: 100
             };
-        
             // Handle horizontal alignment
             if (info.xAline !== "") {
                 let xPercent = convert[info.xAline];
@@ -227,6 +237,13 @@ let elements = [
             objectFit : "cover",
             zIndex : "-1",
         }
+    }, { // b
+        name : "b",
+        function : "<h1>", 
+        generate : "<base>",
+        style : {
+        },
+        element : "b"
     }
 ];
 

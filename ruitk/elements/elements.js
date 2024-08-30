@@ -56,13 +56,13 @@ export class Elements {
             // Test the string against the regex
             return regex.test(str);
         }
-        function resolve(item, dictName, t) {
+        function resolveElementKey(item, dictName) {
             let regex = /^<[\w\d]+>$/;
             if (typeof item === "string" && regex.test(item)) {
                 item = item.replace("<", "");
                 item = item.replace(">", "");
 
-                for(let element of t.elements) {
+                for(let element of this.elements) {
                     if (element.name === item) {
                         return element[dictName];
                     }
@@ -70,57 +70,155 @@ export class Elements {
             }
             return item;
         }
-        let currentStr = str.trim();
-        let output = [];
-        while(currentStr.length > 0) {
+        function softParseInfo(str) {
+
+            // A helper function to split by commas but only at the top level
+            function splitTopLevel(str) {
+                let result = [];
+                let braceDepth = 0;
+                let bracketDepth = 0;
+                let currentPart = '';
+
+                for (let char of str) {
+                    if (char === '{') braceDepth++;
+                    if (char === '}') braceDepth--;
+                    if (char === '[') bracketDepth++;
+                    if (char === ']') bracketDepth--;
+
+                    if (char === ',' && braceDepth === 0 && bracketDepth === 0) {
+                        result.push(currentPart);
+                        currentPart = '';
+                    } else {
+                        currentPart += char;
+                    }
+                }
+                if (currentPart) result.push(currentPart); // Add the last part
+                return result;
+            }
+
+            // Main processing
+            let keyValuePairs = splitTopLevel(str.slice(1, -1)); // Remove outermost curly braces
+            let values = {};
+
+            keyValuePairs.forEach(pair => {
+                // Find the first colon, assuming key and value are somewhat intact
+                let splitIndex = pair.indexOf(':');
+                
+                if (splitIndex !== -1) {
+                    let value = pair.slice(splitIndex + 1).trim();
+                    let key = pair.slice(0, splitIndex).trim();
+                    values[key] = value;
+                }
+            });
+
+            return values;
+        }
+        function resolveInfo(str) {
+            let info = [];
+            let hadElement = false;
+            while(str.length > 0) {
+                
+                let itemEnd = 0;
+                let isElement = false;
+
+                str.trim();
+                if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
+                    itemEnd = str.slice(1).indexOf(str[0]);
+                } else if (str.startsWith("{") || str.startsWith("[")) { // array or dict
+                    itemEnd = getIndentStrEnd(str);
+                } else if (str.startsWith("<")) { // is element
+                    isElement = true;
+                    hadElement = true;
+                    itemEnd = getElementStr(str).dictEnd;
+                } else {
+                    console.error("str type not found");
+                    if (hadElement === false && info.length === 0) {
+                        info = info[0];
+                    }
+                    return info;
+                }
+
+                let item = str.slice(0, itemEnd);
+                str = str.slice(itemEnd);
+
+                if (isElement === true) {
+                    item = this.makeElements(item);
+                    info = info.concat(item);
+                } else {
+                    item = JSON.parse(item);
+                    info.push(item);
+                }
+            }
+            if (hadElement === false && info.length === 0) {
+                info = info[0];
+            }
+            return info;
+        }
+        function getElementStr(str) {
+            str = str.trim();
+
             let currentElement = {};
 
-            currentElement.nameStart = currentStr.indexOf("<");
-            currentElement.nameEnd = currentStr.indexOf(">");
-            currentElement.dictStart = currentStr.indexOf("{");
+            currentElement.nameStart = str.indexOf("<");
+            currentElement.nameEnd = str.indexOf(">");
+            currentElement.dictStart = str.indexOf("{");
 
             if (currentElement.dictStart === -1) {
                 console.error("Opening curly brace '{' not found in the string");
                 return;
             }
 
-            currentElement.dictEnd = 0;
-            let indentAmount = 0;
-            let indentCountStr = currentStr.slice(currentElement.dictStart)
-            for (let i = 0; i < indentCountStr.length; i++) {
-                let char = indentCountStr[i];
+            currentElement.dictEnd = getIndentStrEnd(str.slice(currentElement.dictStart));
 
-                if (char === "{") {
+            currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd+1);
+
+            return str;
+        }
+        function getIndentStrEnd(str) {
+            str = str.trim();
+            let indentAmount = 0;
+            let end = 0;
+            let bracketType = "";
+            if (str[0] === "[") {
+                bracketType = "square";
+            }
+            if (str[0] === "{") {
+                bracketType = "curly";
+            }
+            if (bracketType === "") {
+                console.error(`input (${str}) not valid`);
+                return 0;
+            }
+
+            for (let i = 0; i < str.length; i++) {
+                let char = str[i];
+
+                if ((char === "{" && bracketType === "curly") || (char === "[" && bracketType === "square")) {
                     indentAmount++;
                 }
-                if (char === "}") {
+                if ((char === "}" && bracketType === "curly") || (char === "]" && bracketType === "square")) {
                     indentAmount--;
                 }
                 if (indentAmount === 0) {
-                    currentElement.dictEnd = currentElement.dictStart + i;
+                    end =  i;
                     break;
                 }
             }
-            if (currentElement.dictEnd === 0) {
-                console.error(`curly brackets not closed propery in ${currentStr}`);
-                continue;
+            if (end === 0) {
+                console.error(`${bracketType} brackets not closed propery in ${currentStr}`);
+                return 0;
             }
+            return end;
+        }
+        
 
-            currentElement.str = currentStr.slice(currentElement.nameStart, currentElement.dictEnd+1);
+        let currentStr = str.trim();
+        let output = [];
+        while(currentStr.length > 0) {
             
+            let currentElement = getElementStr(currentStr);
             
-            let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd+1);
-            let dict = JSON.parse(dictStr);
             let name = currentElement.str.slice(currentElement.str.indexOf("<")+1, currentElement.str.indexOf(">"));
-            if (Object.keys(dict).length !== 0) {
-                for (let item in dict) {
-                    if(typeof item === 'string' && isElement(item)) {
-                        item = this.makeElements(item); // shouldn't need protection against infinte loop as it is protected by the srinking of str
-                    }
-                }
-            }
-            
-
             let elementInfo;
             for(let element of this.elements) {
                 if (element.name === name) {
@@ -128,10 +226,24 @@ export class Elements {
                     break;
                 }
             }
+            if (elementInfo === undefined) {
+                console.error(`could't find an element called ${name} dumping elements to debug`);
+                console.debug(JSON.parse(JSON.stringify(this.elements)));
+                return;
+            }
             let keys = Object.keys(elementInfo);
             for (let key of keys) {
-                elementInfo[key] = resolve(elementInfo[key], key, this);
+                elementInfo[key] = resolveElementKey(elementInfo[key], key);
             }
+
+            
+
+            let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd+1);
+            let softDict = softParseInfo(dictStr);
+            let dict = {};
+            
+            
+            
             
             let element = elementInfo.function(dict, elementInfo);
             Style.style(element, elementInfo.style);
@@ -141,5 +253,20 @@ export class Elements {
             output.push(element);
         }
         return output;
+    }
+
+    append(content, querySelector) {
+        if (!content) {
+            console.error(`item (${content}) is falsely`);
+            return;
+        }
+        if (Array.isArray(content) === false) {
+            content = [content];
+        }
+        let p = document.querySelector(querySelector);
+        
+        for (let item of content) {
+            p.appendChild(item);
+        }
     }
 }

@@ -1,4 +1,4 @@
-## 0.5.1
+# 0.6
 #### Fallen Changes
  - Renamed `main.js` to `base.js`
  - Renamed class `Theme` to `FallenBase`
@@ -11,6 +11,12 @@
 	 - `p2`
 	 - `p3`
 - Added more config options to `base` element
+- Bug fixes to the Base elements
+- Changed fallen to use the `declare` function provided in [V0.5](tileWin/doc/changelog.md#0.5)
+#### element.js Changes
+ - Rewrite of `makeElements` for better nesting handling
+ - Added the a function called `append`
+ - Added a error check of undefined names
 #### style.js changes
  - Fixed a issue with the `declare` not adding new lines afterward
 
