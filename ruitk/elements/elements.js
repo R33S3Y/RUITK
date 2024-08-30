@@ -241,9 +241,10 @@ export class Elements {
             let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd+1);
             let softDict = softParseInfo(dictStr);
             let dict = {};
-            
-            
-            
+            keys = Object.keys(softDict);
+            for (let key of keys) {
+                dict[key] = resolveElementKey(softDict[key]);
+            }
             
             let element = elementInfo.function(dict, elementInfo);
             Style.style(element, elementInfo.style);
