@@ -14,8 +14,8 @@ let colors = {
     base06: "", // Light Foreground (Not often used)
     base07: "", // Light Background (Not often used)
     
-    base08: "", // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-    base09: "", // Integers, Boolean, Constants, XML Attributes, Markup Link Url
+    base08: "rgba(80, 50, 250, 0.8)", // bold
+    base09: "rgba(80, 50, 250, 0.8)", // itlic
 
     base0A: "rgba(180, 100, 235, 0.8)", // h1
     base0B: "rgba(190, 120, 245, 0.8)", // h2
@@ -95,7 +95,11 @@ let elements = [
                     info.content = [info.content];
                 }
                 for (let item of info.content) {
-                    e.innerHTML += item;
+                    if (typeof item === "string") {
+                        e.innerHTML += item; 
+                    } else if (item instanceof HTMLElement) {
+                        e.appendChild(item); 
+                    }
                 }
             }
 
@@ -242,6 +246,9 @@ let elements = [
         function : "<h1>", 
         generate : "<base>",
         style : {
+            margin : "0",
+            fontFamily : "var(--font)",
+            color : "var(--base08)",
         },
         element : "b"
     }

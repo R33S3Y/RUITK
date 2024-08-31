@@ -49,14 +49,22 @@ export class Elements {
     }
 
     makeElements(str) {
-        function isElement(str) {
+        const removeQuotes = (str) => {
+            str = str.trim();
+            if((str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) && (str.endsWith('"') || str.endsWith("'") || str.endsWith("`"))) {
+                return str.slice(1, str.length-1);
+            }
+            return str;
+        }
+
+        const isElement = (str) => {
             // Define the regular expression to match the pattern <elementName>{...}
             const regex = /<\w+>{[^}]*}/g;
           
             // Test the string against the regex
             return regex.test(str);
         }
-        function resolveElementKey(item, dictName) {
+        const resolveElementKey = (item, dictName) => {
             let regex = /^<[\w\d]+>$/;
             if (typeof item === "string" && regex.test(item)) {
                 item = item.replace("<", "");
@@ -70,7 +78,7 @@ export class Elements {
             }
             return item;
         }
-        function softParseInfo(str) {
+        const softParseInfo = (str) => {
 
             // A helper function to split by commas but only at the top level
             function splitTopLevel(str) {
@@ -107,23 +115,24 @@ export class Elements {
                 if (splitIndex !== -1) {
                     let value = pair.slice(splitIndex + 1).trim();
                     let key = pair.slice(0, splitIndex).trim();
+                    key = removeQuotes(key);
                     values[key] = value;
                 }
             });
 
             return values;
         }
-        function resolveInfo(str) {
+        const resolveInfo = (str) => {
             let info = [];
             let hadElement = false;
             while(str.length > 0) {
                 
                 let itemEnd = 0;
                 let isElement = false;
-
-                str.trim();
+                
+                str = str.trim();
                 if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
-                    itemEnd = str.slice(1).indexOf(str[0]);
+                    itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
                 } else if (str.startsWith("{") || str.startsWith("[")) { // array or dict
                     itemEnd = getIndentStrEnd(str);
                 } else if (str.startsWith("<")) { // is element
@@ -154,7 +163,7 @@ export class Elements {
             }
             return info;
         }
-        function getElementStr(str) {
+        const getElementStr = (str) => {
             str = str.trim();
 
             let currentElement = {};
@@ -168,13 +177,13 @@ export class Elements {
                 return;
             }
 
-            currentElement.dictEnd = getIndentStrEnd(str.slice(currentElement.dictStart));
+            currentElement.dictEnd = getIndentStrEnd(str.slice(currentElement.dictStart)) + currentElement.dictStart;
 
-            currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd+1);
+            currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd);
 
-            return str;
+            return currentElement;
         }
-        function getIndentStrEnd(str) {
+        const getIndentStrEnd = (str) => {
             str = str.trim();
             let indentAmount = 0;
             let end = 0;
@@ -208,7 +217,7 @@ export class Elements {
                 console.error(`${bracketType} brackets not closed propery in ${currentStr}`);
                 return 0;
             }
-            return end;
+            return end + 1;
         }
         
 
@@ -227,7 +236,7 @@ export class Elements {
                 }
             }
             if (elementInfo === undefined) {
-                console.error(`could't find an element called ${name} dumping elements to debug`);
+                console.error(`could't find an element called "${name}" dumping elements to debug`);
                 console.debug(JSON.parse(JSON.stringify(this.elements)));
                 return;
             }
@@ -238,12 +247,12 @@ export class Elements {
 
             
 
-            let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd+1);
+            let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
             let softDict = softParseInfo(dictStr);
             let dict = {};
             keys = Object.keys(softDict);
             for (let key of keys) {
-                dict[key] = resolveElementKey(softDict[key]);
+                dict[key] = resolveInfo(softDict[key]);
             }
             
             let element = elementInfo.function(dict, elementInfo);
