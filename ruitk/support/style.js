@@ -304,7 +304,7 @@ export class Style {
         for (const [key, value] of Object.entries(varsDict)) {
             rootContent += `  --${key}: ${value};\n`;
         }
-        rootContent += "}";
+        rootContent += "}\n";
 
 
         let rootMatch = styleElement.textContent.match(/:root\s*\{[^}]*\}/);

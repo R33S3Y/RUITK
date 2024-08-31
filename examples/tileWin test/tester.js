@@ -55,8 +55,6 @@ let tileWin = new TileWin();
 
 
 tileWin.updateConfig({
-    animateOnCreateTile : true,
-    createInnerTile : true,
     tileRowType : ["fixed", "scroll", "scroll"],
 });
 tileWin.updateStyle(style);
