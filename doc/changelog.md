@@ -1,3 +1,14 @@
+## 0.6.1
+#### Fallen Changes
+ - Added the following elements
+	 - `i`
+	 - `grid` (Documentation needed)
+ - Made all based element accept the `c` and `r` as args (Documentation needed)
+ - Renamed `textAline` to `textAlign`
+#### element.js Changes
+ - Added check to prevent [style.js](support/style.js.md) from throwing a warning
+#### documentation Changes 
+ - Fixed a bunch of links
 # 0.6
 #### Fallen Changes
  - Renamed `main.js` to `base.js`
@@ -12,17 +23,20 @@
 	 - `p3`
 - Added more config options to `base` element
 - Bug fixes to the Base elements
-- Changed fallen to use the `declare` function provided in [V0.5](tileWin/doc/changelog.md#0.5)
+- Changed fallen to use the `declare` function provided in [V0.5](changelog.md#0.5)
 #### element.js Changes
  - Rewrite of `makeElements` for better nesting handling
  - Added the a function called `append`
  - Added a error check of undefined names
 #### style.js changes
  - Fixed a issue with the `declare` not adding new lines afterward
+#### documentation Changes 
+ - Added [1. Fallen Summary](fallen/1.%20Fallen%20Summary.md)
+ - Added [2. The Base Element](fallen/2.%20The%20Base%20Element.md)
 
 # 0.5
 #### style.js changes
- - Added a new function called `declare` - [Documentation Here](style.js.md#Declare)
+ - Added a new function called `declare` - [Documentation Here](support/style.js.md#Declare)
 #### documentation Changes 
  - Added documentation changes for `query` and `declare` from `style.js`
 #### tile.js Changes
@@ -35,7 +49,7 @@
 ## 0.4.1
 #### tileWin.js Changes
  - Fixed a issue with scroll elements overlapping when there are multiple in the same row 
- - Remove the config option `createInnerTile` as it was made redundant in [V0.3](tileWin/doc/changelog.md#0.3)
+ - Remove the config option `createInnerTile` as it was made redundant in [V0.3](changelog.md#0.3)
  - Fixed a issue with scroll tiles that were animated not starting animation in center
  - Fixed a issue causing `tile.js`  to throw errors during expected behavior
  - Fixed a issue with scroll tiles ordering based off when they were made instead of there actual position (sorta)

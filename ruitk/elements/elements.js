@@ -256,7 +256,11 @@ export class Elements {
             }
             
             let element = elementInfo.function(dict, elementInfo);
-            Style.style(element, elementInfo.style);
+
+            if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0) {
+                Style.style(element, elementInfo.style);
+            }
+            
             
             currentStr = currentStr.replace(currentElement.str, "").trim();
             
