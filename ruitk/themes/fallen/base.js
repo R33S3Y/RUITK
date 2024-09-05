@@ -15,7 +15,7 @@ let colors = {
     base07: "", // Light Background (Not often used)
     
     base08: "rgba(80, 50, 250, 0.8)", // bold
-    base09: "rgba(80, 50, 250, 0.8)", // itlic
+    base09: "rgba(80, 50, 250, 0.8)", // italic
 
     base0A: "rgba(180, 100, 235, 0.8)", // h1
     base0B: "rgba(190, 120, 245, 0.8)", // h2
@@ -76,9 +76,11 @@ let elements = [
                 y : "",
                 w : "auto",
                 h : "auto",
+                c : "",
+                r : "",
                 xAline : "",
                 yAline : "",
-                textAline : "left",
+                textAlign : "left",
                 position : "",
                 text : "",
             }, info);
@@ -86,7 +88,7 @@ let elements = [
             let e = document.createElement(element.element);
             e.id = info.id;
             
-            e.style.textAline = info.textAline;
+            e.style.textAlign = info.textAlign;
             
             e.innerText = info.text;
             // Check for string content properly
@@ -117,6 +119,9 @@ let elements = [
             e.style.top = info.y;
             e.style.width = info.w;
             e.style.height = info.h;
+
+            e.style.gridColumn = info.c;
+            e.style.gridRow = info.r;
 
             let convert = {
                 left: 0,
@@ -251,6 +256,50 @@ let elements = [
             color : "var(--base08)",
         },
         element : "b"
+    }, { // i
+        name : "i",
+        function : "<h1>", 
+        generate : "<base>",
+        style : {
+            margin : "0",
+            fontFamily : "var(--font)",
+            color : "var(--base09)",
+        },
+        element : "i"
+    }, { // grid
+        name : "grid",
+        function : (info, element) => {
+            info = Merge.dicts({
+                r: "auto", // default row setting
+                c: "auto", // default column setting
+                gap: "0", // gap between rows and columns
+                areas: "", // grid template areas (optional)
+                j : "space-between",
+            }, info);
+    
+            let grid = element.generate(info, element);
+
+            // Remove the child element info
+            grid.style.gridColumn = "";
+            grid.style.gridRow = "";
+    
+            // Apply grid-specific styles
+            grid.style.display = "grid";
+            grid.style.gridTemplateRows = info.r;
+            grid.style.gridTemplateColumns = info.c;
+            grid.style.gridGap = info.gap;
+
+            grid.style.justifyContent = info.j;
+    
+            if (info.areas !== "") {
+                grid.style.gridTemplateAreas = info.areas;
+            }
+    
+            return grid;
+        },
+        generate : "<base>",
+        style: {},
+        element: "div"
     }
 ];
 
