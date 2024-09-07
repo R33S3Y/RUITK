@@ -4,25 +4,25 @@ import { Style } from "../../support/style.js";
 // color scheme syntax from https://github.com/chriskempson/base16/tree/main
 
 let colors = {
-    base00: "rgba(0, 0, 0, 0.65)", // Default Background
-    base01: "rgba(0, 0, 0, 0.85)", // Lighter Background
-    base02: "rgba(20, 1, 65, 0.8)", // Background Accent
-    base03: "rgba(40, 2, 130, 0.8)", // Lighter Background Accent
+    base00: "rgba(0, 0, 0, 1)", // Default Background
+    base01: "rgba(0, 0, 0, 1)", // Lighter (Focus) Background
+    base02: "rgba(20, 1, 65, 1)", // Background Accent
+    base03: "rgba(40, 2, 130, 1)", // Lighter Background Accent
 
     base04: "", // Dark Foreground (Used for status bars)
     base05: "", // Default Foreground, Caret, Delimiters, Operators
     base06: "", // Light Foreground (Not often used)
     base07: "", // Light Background (Not often used)
     
-    base08: "rgba(80, 50, 250, 0.8)", // bold
-    base09: "rgba(80, 50, 250, 0.8)", // italic
+    base08: "rgba(80, 50, 250, 1)", // bold
+    base09: "rgba(80, 50, 250, 1)", // italic
 
-    base0A: "rgba(180, 100, 235, 0.8)", // h1
-    base0B: "rgba(190, 120, 245, 0.8)", // h2
-    base0C: "rgba(200, 160, 255, 0.8)", // h3
-    base0D: "rgba(250, 200, 255, 0.8)", // p1
-    base0E: "rgba(230, 180, 245, 0.8)", // p2
-    base0F: "rgba(210, 160, 235, 0.8)", // p3
+    base0A: "rgba(180, 100, 235, 1)", // h1
+    base0B: "rgba(190, 120, 245, 1)", // h2
+    base0C: "rgba(200, 160, 255, 1)", // h3
+    base0D: "rgba(250, 200, 255, 1)", // p1
+    base0E: "rgba(230, 180, 245, 1)", // p2
+    base0F: "rgba(210, 160, 235, 1)", // p3
 };
 
 
@@ -38,32 +38,6 @@ let config = {
     fontSizeP2 : "1em",
     fontSizeP3 : "0.75em",
 };
-
-
-let tileWinStyle = {
-    transition: "all 0.2s ease-in-out",
-    position : "absolute",
-    overflow : "hidden",
-    boxSizing : "border-box",
-    margin : "10px",
-    padding : "10px",
-    
-    // background
-    backgroundColor : "var(--base00)",
-    hover_backgroundColor : "var(--base01)",
-    backdropFilter: "blur(2px)",
-    hover_backdropFilter: "blur(10px)",
-    
-    // border
-    borderStyle : "solid",
-    borderWidth : "3px",
-    borderRadius : "15px",
-    borderColor : "var(--base02)",
-    boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
-    hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
-    hover_borderColor : "var(--base03)",
-};
-
 
 let elements = [
     { // base
@@ -223,29 +197,6 @@ let elements = [
             color : "var(--base0F)",
         },
         element : "p"
-    }, { // background Img
-        name : "backgroundImg",
-        function : (info, element) => {
-            info = Merge.dicts({
-                id : element.name, // id
-                img : "/ruitk/themes/fallen/wallpaper.jpg",
-            }, info);
-
-            let img = document.createElement("img");
-            img.id = info.id;
-            img.src = info.img;
-
-            return img;
-        },
-        style : {
-            position : "fixed",
-            left : "0px",
-            top : "0px",
-            width : "100%",
-            height : "100%",
-            objectFit : "cover",
-            zIndex : "-1",
-        }
     }, { // b
         name : "b",
         function : "<h1>", 
@@ -308,9 +259,6 @@ export class FallenBase {
     static init () {
         Style.declare(colors);
         Style.declare(config);
-    }
-    static getTileWinStyle() {
-        return tileWinStyle;
     }
     static getElements() {
         return elements;

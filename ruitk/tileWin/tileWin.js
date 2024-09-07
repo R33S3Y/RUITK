@@ -21,6 +21,13 @@ export class TileWin {
             transition : "all 0.2s ease-in-out",
         }
         this.updateConfig(); // run to make this.configStore
+
+        this.updateStyle({
+            transition : this.config.transition,
+            backgroundColor : "rgba(0, 0, 0, 0)",
+            borderColor : "rgba(0, 0, 0, 0)",
+            position : "absolute",
+        });
     }
 
     updateConfig(config = {}) {

@@ -16,7 +16,7 @@ let str = '<button>{"label": "Click me"} <input>{"placeholder": "Enter text"}';
    - Pass the string containing the custom elements to the `makeElements` function.
    - Example:
 ```javascript
-let elements = makeElements(str);
+let HTMLelements = elements.makeElements(str);
 ```
 
 3. **Handle the Generated Elements**:
@@ -24,21 +24,28 @@ let elements = makeElements(str);
    - You can then append these elements to the DOM or manipulate them as needed.
    - Example:
 ```javascript
-elements.forEach(element => {
+HTMLelements.forEach(element => {
 	document.body.appendChild(element);
 });
 ```
  - It should be noted that the append function found in other parts of the RUITK project can accept lists like this. So these examples also work
 ```javascript
+// element.js
+elements.append("querySelector", HTMLelements);
 // tileWin.js
-tileWin.append("exampleTile", elements);
+tileWin.append("exampleTile", HTMLelements);
 // tile.js
-Tile.append("exampleTileID", elements);
+Tile.append("exampleTileID", HTMLelements);
 ```
 
 #### Notes
 - **Custom Elements**: Ensure that the custom element names and their corresponding JSON data match the predefined templates in your implementation.
-- **Nested Elements**: The function can handle nested elements, allowing you to create complex structures from a single string input.
+- **Nested Elements**: The function can handle multiple nested elements, allowing you to create complex structures from a single string input.  Eg:
+```js
+elements.append("body", elements.makeElements(
+	`<h1>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}}` 
+));
+```
 
 - - -
 # AddElements
@@ -85,6 +92,7 @@ let buttonElement = {
 addElements([buttonElement]);
 ```
 #### Notes
+- **Style Syntax**: Style Syntax is defined by [style.js](support/style.js.md). Look there for up to date info
 - **Array Handling**: If a single element object is passed instead of an array, it is wrapped in an array for processing. So this also works:
 ```javascript
 addElements(buttonElement);
@@ -92,27 +100,37 @@ addElements(buttonElement);
 - **Uniqueness Check**: Ensures each element name is unique in the collection, logging a warning and rejecting duplicates. 
 - Example:
 ```javascript
-addElements([buttonElement]);
-addElements([buttonElement]); // Logs a warning and rejects the duplicate
+addElements(buttonElement);
+addElements(buttonElement); // Logs a warning and rejects the duplicate
 ```
  - **Referencing Other Elements**: You can reference the parts of other elements by naming the key, of the current element to the same name as the key, of the reference element and then setting the key, of the current element to the following pattern `<referenceElementName>` (this value should be a string) Here's a example:
 ```javascript
 let elements = [{
-	name : "p1",
+	name : "h1",
 	function : (info, element) => {
 		// function
 	},
 	style : {
-		// p1 styles
+		// h1 styles
 	}
 }, {
-	name : "p2",
-	function : "<p1>", // gets the function from p1 so it doesn't need to be writen twice
+	name : "h2",
+	function : "<h1>", // gets the function from p1 so it doesn't need to be writen twice
 	style : {
-		// p2 styles
+		// h2 styles
 	}
 }];
 ```
-
+ - **Handling the style property**: if you add `handleStyle : true` (by default it is set to false) to your elements definition you are now responsible for applying your elements styles
 - - -
 
+# Append
+### `append(querySelector, content)`
+
+The `append` function provides a quick and dirty way to handle get content on the page while providing support for lists of elements that the `makeElements` function spits out.
+
+#### Usage 
+```js
+elements.append("body", HTMLelements);
+```
+For more info on the `querySelector` argument go to: [Document: querySelector() method - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) 
