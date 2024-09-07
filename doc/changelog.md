@@ -1,3 +1,14 @@
+## 0.6.2
+#### Fallen Changes
+ - Made new file called `tilewin.js` for elements designed for `tileWin.js`
+ - Moved element `backgroundImg` from `base` to `tileWin`
+ - Removed the function `getTileWinStyle` from base
+ - Added a element called `tile` to `tileWin` 
+#### element.js Changes
+ - Added an option called `handleStyle = false`
+ - Swap the order of the inputs for the `append` function to be more consistent with other parts of the RUITK project
+#### tileWin.js Changes
+ - Changed the default style to be invisible making style optional.
 ## 0.6.1
 #### Fallen Changes
  - Added the following elements
@@ -26,7 +37,7 @@
 - Changed fallen to use the `declare` function provided in [V0.5](changelog.md#0.5)
 #### element.js Changes
  - Rewrite of `makeElements` for better nesting handling
- - Added the a function called `append`
+ - Added the a function called `append`  - [Documention](element.js.md#Append)
  - Added a error check of undefined names
 #### style.js changes
  - Fixed a issue with the `declare` not adding new lines afterward

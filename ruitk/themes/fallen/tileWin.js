@@ -1,0 +1,125 @@
+
+import { Merge } from "../../support/merger.js";
+import { Style } from "../../support/style.js";
+
+
+let elements = [
+        { // background Img
+        name : "backgroundImg",
+        function : (info, element) => {
+            info = Merge.dicts({
+                id : element.name, // id
+                img : "/ruitk/themes/fallen/wallpaper.jpg",
+            }, info);
+
+            let img = document.createElement("img");
+            img.id = info.id;
+            img.src = info.img;
+
+            return img;
+        },
+        style : {
+            position : "fixed",
+            left : "0px",
+            top : "0px",
+            width : "100%",
+            height : "100%",
+            objectFit : "cover",
+            zIndex : "-1",
+        }
+    }, {
+        name : "tile",
+        function : (info, element) => {
+            info = Merge.dicts({
+                id: element.name, // id 
+                content: "",
+            }, info);
+
+            let outerTile = document.createElement("div");
+            outerTile.style.left = "0%";
+            outerTile.style.top = "0%";
+            outerTile.style.width = `calc(100% - (${Style.query("marginLeft", element.style.outerTile)} + ${Style.query("marginRight", element.style.outerTile)}))`;
+            outerTile.style.height = `calc(100% - (${Style.query("marginTop", element.style.outerTile)} + ${Style.query("marginBottom", element.style.outerTile)}))`;
+
+            Style.style(outerTile, element.style.outerTile);
+
+            let innerTile = document.createElement("div");
+            outerTile.appendChild(innerTile);
+            innerTile.id = info.id;
+            
+            // Check for string content properly
+            if (info.content) {
+                if(Array.isArray(info.content) === false) {
+                    info.content = [info.content];
+                }
+                for (let item of info.content) {
+                    if (typeof item === "string") {
+                        innerTile.innerHTML += item; 
+                    } else if (item instanceof HTMLElement) {
+                        innerTile.appendChild(item); 
+                    }
+                }
+            }
+            
+            innerTile.style.left = "0%";
+            innerTile.style.top = "0%";
+            innerTile.style.width = "100%";
+            innerTile.style.height = "100%";
+
+            Style.style(innerTile, element.style.innerTile);
+
+            return outerTile;
+        },
+        style : {
+            outerTile : {
+                transition: "all 0.2s ease-in-out",
+                position : "absolute",
+                overflow : "hidden",
+                boxSizing : "border-box",
+                margin : "10px",
+                padding : "0px",
+
+                // background
+                backdropFilter: "blur(2px)",
+                hover_backdropFilter: "blur(10px)",
+                
+                // border
+                borderStyle : "solid",
+                borderWidth : "3px",
+                borderRadius : "15px",
+                borderColor : "var(--base02)",
+                boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
+                hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
+                hover_borderColor : "var(--base03)",
+            },
+            innerTile : {
+                transition: "all 0.2s ease-in-out",
+                position : "absolute",
+                overflow : "hidden",
+                boxSizing : "border-box",
+                margin : "0px",
+                padding : "10px",
+
+                // opacity
+                opacity : "0.65",
+                hover_opacity : "0.85",
+                
+                // background
+                backgroundColor : "var(--base00)",
+                hover_backgroundColor : "var(--base01)",
+
+                // border
+                borderStyle : "solid",
+                borderWidth : "0px",
+                borderRadius : "0px",
+            },
+        },
+        handleStyle : true,
+    }
+];
+
+export class FallenTileWin {
+    static getElements() {
+        return elements;
+    }
+}

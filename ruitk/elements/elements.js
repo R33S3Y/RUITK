@@ -40,9 +40,17 @@ export class Elements {
             for (let currentElement of this.elements) {
                 if (currentElement.name === element.name) {
                     console.warn(`${element.name} has already been used thus ${element} has been regected`);
-                    return;
+                    continue;
                 }
             }
+            element = Merge.dicts({
+                name : "",
+                function : (info, element) => {
+                    return document.createElement("div");
+                },
+                style : {},
+                handleStyle : false,
+            }, element);
             this.elements.push(element);
         }
         return;
@@ -56,7 +64,6 @@ export class Elements {
             }
             return str;
         }
-
         const isElement = (str) => {
             // Define the regular expression to match the pattern <elementName>{...}
             const regex = /<\w+>{[^}]*}/g;
@@ -257,7 +264,7 @@ export class Elements {
             
             let element = elementInfo.function(dict, elementInfo);
 
-            if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0) {
+            if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0 && elementInfo.handleStyle === false) {
                 Style.style(element, elementInfo.style);
             }
             
@@ -269,7 +276,7 @@ export class Elements {
         return output;
     }
 
-    append(content, querySelector) {
+    append(querySelector, content) {
         if (!content) {
             console.error(`item (${content}) is falsely`);
             return;
