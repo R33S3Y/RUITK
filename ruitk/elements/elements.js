@@ -268,10 +268,12 @@ export class Elements {
                 Style.style(element, elementInfo.style);
             }
             
-            
+            if (Array.isArray(element) === false) {
+                element = [element];
+            }
             currentStr = currentStr.replace(currentElement.str, "").trim();
             
-            output.push(element);
+            output = output.concat(element);
         }
         return output;
     }

@@ -7,8 +7,11 @@
 #### element.js Changes
  - Added an option called `handleStyle = false`
  - Swap the order of the inputs for the `append` function to be more consistent with other parts of the RUITK project
+ - Fixed an issue with `makeElements` not properly handling arrays of elements
 #### tileWin.js Changes
  - Changed the default style to be invisible making style optional.
+#### documentation Changes 
+ - Added documentation for the append function
 ## 0.6.1
 #### Fallen Changes
  - Added the following elements

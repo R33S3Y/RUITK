@@ -40,5 +40,5 @@ tileWin.createTile("TextWindow", 1, 0, 1, 0, elements.makeElements(`
         }
     }   
     `));
-tileWin.createTile("Tile the 2nd",2,0,1,0, elements.makeElements(`<tile>{}`));
+tileWin.createTile("Tile the 2nd", 2, 0, 1, 0, elements.makeElements(`<tile>{}`));
 tileWin.update();

@@ -106,7 +106,7 @@ tileWin.update();
 
 
 setTimeout(function() {
-    let stuff = document.createElement("h1")
+    let stuff = document.createElement("h1");
     stuff.innerHTML = "This Should Be in the Centre tile saiogvf kludzfougjfvhlkcl gjborguih riohiuebnrso;d;hvj,b jtgldfj,gikrtwerwrw efwfw fwefw fcrewrfwe jngp98j";
     
     tileWin.createTile("Centre", 1, 0, 1, 0, stuff);

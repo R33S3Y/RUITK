@@ -72,7 +72,7 @@ let elements = [
         },
         style : {
             outerTile : {
-                transition: "all 0.2s ease-in-out",
+                transition: "var(--transition)",
                 position : "absolute",
                 overflow : "hidden",
                 boxSizing : "border-box",
@@ -93,7 +93,7 @@ let elements = [
                 hover_borderColor : "var(--base03)",
             },
             innerTile : {
-                transition: "all 0.2s ease-in-out",
+                transition: "var(--transition)",
                 position : "absolute",
                 overflow : "hidden",
                 boxSizing : "border-box",
