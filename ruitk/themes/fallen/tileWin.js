@@ -4,11 +4,11 @@ import { Style } from "../../support/style.js";
 
 
 let elements = [
-        { // background Img
+    { // background Img
         name : "backgroundImg",
         function : (info, element) => {
             info = Merge.dicts({
-                id : element.name, // id
+                id : `${element.name}-${element.elementCount}`, // id
                 img : "/ruitk/themes/fallen/wallpaper.jpg",
             }, info);
 
@@ -27,11 +27,11 @@ let elements = [
             objectFit : "cover",
             zIndex : "-1",
         }
-    }, {
+    }, { // tile
         name : "tile",
         function : (info, element) => {
             info = Merge.dicts({
-                id: element.name, // id 
+                id: `${element.name}-${element.elementCount}`, // id 
                 content: "",
             }, info);
 

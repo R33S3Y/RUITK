@@ -1,3 +1,8 @@
+## 0.6.3
+#### Fallen Changes
+ - Changed all elements to use `elementCount` in there ID
+#### element.js Changes
+ - Added `elementCount` 
 ## 0.6.2
 #### Fallen Changes
  - Made new file called `tilewin.js` for elements designed for `tileWin.js`
