@@ -31,7 +31,7 @@ export class Tile {
     }
     static append(id, content) {
         if (!content) {
-            console.error(`item (${content}) is falsely`);
+            console.warn(`content (${content}) is falsely`);
             return;
         }
         if (Array.isArray(content) === false) {

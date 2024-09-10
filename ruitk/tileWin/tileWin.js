@@ -50,6 +50,11 @@ export class TileWin {
 
     updateStyle(style = {}) {
         style = Merge.dicts(this.style, style, [0, "", [], null]);
+        style.position = "static";
+        this.tileStyle = style;
+
+        // needed for old update
+        style = JSON.parse(JSON.stringify(style));
         style.position = "relative";
         style.boxSizing = "border-box";
         this.scrollTileStyle = style;
@@ -246,7 +251,7 @@ export class TileWin {
                 }
             }
         }
-
+        console.debug(snapResize);
         // nudge code
         for (let x = 0; x < tileLayoutLength.length; x++) {
             for (let y = 0; y < tileLayoutLength[x].length; y++) {
@@ -467,6 +472,209 @@ export class TileWin {
                         tileUpdates(tile, this, i, j, k);
                     }
                 }
+            }
+        }
+    }
+
+    updateTest () {
+
+        /**
+         * Old Code (Solen From old update) to make snapResize
+         */
+
+        let tileLayout = List2D.create(this.configStore.xMax, this.configStore.yMax, false);
+        let tileLayoutLength = List2D.create(this.configStore.xMax, this.configStore.yMax, 0);
+        // add items to layout
+        for (let tile of this.tiles) {
+            tileLayout[tile.xSnap][tile.ySnap] = true;
+            tileLayoutLength[tile.xSnap][tile.ySnap]++;
+        }
+
+        // [[x1,y1],[x2,y2]]
+        let snapResize = List2D.create(3,3,[[0,0],[1,1]]);
+        snapResize = JSON.parse(JSON.stringify(snapResize));
+        
+        // Snaps
+        function resizeRow(itemTotals = []) {
+            let itemSize = Array(itemTotals.length).fill([0,0]);
+            itemSize = JSON.parse(JSON.stringify(itemSize));
+            // default values
+            let seenTrue = false;
+            let sinceTrue = 0;
+            for (let i = 0; i < itemTotals.length; i++) {
+                if (itemTotals[i] === true) {
+                    // set defaults
+                    itemSize[i][0] = i;
+                    itemSize[i][1] = i+1;
+                    if (sinceTrue > 0) {
+                        // last snap was false/empty/dead
+                        if (seenTrue === true) {
+                            //is other snap so must share dead snap
+                            itemSize[i-sinceTrue-1][1] = (i-sinceTrue)+(sinceTrue/2);
+                            itemSize[i][0] = i-(sinceTrue/2);
+                        } else {
+                            itemSize[i][0] = i-sinceTrue;
+                        }
+
+                    }
+                    
+                    seenTrue = true;
+                    sinceTrue = 0;
+                } else {
+                    sinceTrue++;
+                }
+            }
+            if (sinceTrue > 0) {
+                //last snap is empty/dead
+                if (seenTrue === true) {
+                    // there is a live snap to grow
+                    itemSize[itemTotals.length-sinceTrue-1][1] = itemTotals.length;
+                }
+            }
+
+            return itemSize;
+        }
+        if (this.configStore.tileSnapFirst === "y") {
+            // Snap Major axis
+            for (let x in tileLayout) {
+                let resizeValues = resizeRow(List2D.getListY(x, tileLayout));
+                for (let y in snapResize[x]) {
+                    snapResize[x][y][0][1] = resizeValues[y][0];
+                    snapResize[x][y][1][1] = resizeValues[y][1];
+                };
+            }
+
+            // Snap Minor axis
+            let xList = Array(this.configStore.xMax).fill(false);
+            for (let x in tileLayout) {
+                if(List2D.getListY(x, tileLayout).some(item => item === true)) {
+                    xList[x] = true;
+                }
+            }
+            let resizeValues = resizeRow(xList);
+            for (let x in snapResize) {
+                for (let i = 0; i < snapResize[x].length; i++) {
+                    snapResize[x][i][0][0] = resizeValues[x][0];
+                    snapResize[x][i][1][0] = resizeValues[x][1];
+                }
+            }
+        } else {// "x"
+            // Snap Major axis
+            for (let y in tileLayout[0]) {
+                let resizeValues = resizeRow(List2D.getListX(y, tileLayout));
+                for (let x in snapResize) {
+                    snapResize[x][y][0][0] = resizeValues[x][0];
+                    snapResize[x][y][1][0] = resizeValues[x][1];
+                };
+            }
+
+            // Snap Minor axis
+            let yList = Array(this.configStore.yMax).fill(false);
+            for (let y in tileLayout[0]) {
+                if(List2D.getListX(y, tileLayout).some(item => item === true)) {
+                    yList[y] = true;
+                }
+            }
+            let resizeValues = resizeRow(yList);
+            for (let y in snapResize[0]) {
+                for (let i = 0; i < snapResize.length; i++) {
+                    snapResize[i][y][0][1] = resizeValues[y][0];
+                    snapResize[i][y][1][1] = resizeValues[y][1];
+                }
+            }
+        }
+
+        /**
+         *  NEW CODE
+         */
+
+
+        // Init Grid Elements
+
+        let gridStyles = {
+            transition : this.config.transition,
+            backgroundColor : "rgba(0, 0, 0, 0)",
+            borderColor : "rgba(0, 0, 0, 0)",
+            display : "grid",
+
+            left : "0%",
+            top : "0%",
+            width : "100%",
+            height : "100%",
+        };
+
+
+        let parent = document.querySelector(this.config.parent);
+        if (!parent) {
+            console.error("parent not found");
+            return;
+        }
+        let scrollGrid = parent.querySelector("#scrollGrid");
+        if (!scrollGrid) {
+            scrollGrid = document.createElement("div");
+            scrollGrid.id = "scrollGrid";
+            Style.style(scrollGrid, gridStyles);
+            scrollGrid.style.position = "absolute";
+            parent.appendChild(scrollGrid);
+        }
+        let fixedGrid = parent.querySelector("#fixedGrid");
+        if (!fixedGrid) {
+            fixedGrid = document.createElement("div");
+            fixedGrid.id = "fixedGrid";
+            Style.style(fixedGrid, gridStyles);
+            fixedGrid.style.position = "fixed";
+            parent.appendChild(fixedGrid);
+        }
+
+        let columnTemplate = this.config.tilePercentageX.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
+        let rowTemplate = this.config.tilePercentageY.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
+        
+        fixedGrid.style.gridTemplateColumns = columnTemplate;
+        fixedGrid.style.gridTemplateRows = rowTemplate;
+
+        if (this.config.tileDirection === "y") {
+            scrollGrid.style.gridTemplateColumns = columnTemplate;
+            scrollGrid.style.gridTemplateRows = this.config.tilePercentageY.map(percentage => "auto auto").join(" ");
+            scrollGrid.style.height = "auto";
+        } else {
+            scrollGrid.style.gridTemplateColumns = this.config.tilePercentageX.map(percentage => "auto auto").join(" ");
+            scrollGrid.style.gridTemplateRows = rowTemplate;
+            scrollGrid.style.width = "auto";
+        }
+
+        // Make tiles
+        for (let i in this.tiles) {
+            let tile = this.tiles[i];
+
+            let tileElement;
+
+            if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
+                tileElement = fixedGrid.querySelector(`#tile${tile.id}`);
+            } else {
+                tileElement = scrollGrid.querySelector(`#tile${tile.id}`);
+            }
+
+            if (!tileElement) {
+                tileElement = document.createElement("div");
+                tileElement.id = `tile${tile.id}`;
+                if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
+                    fixedGrid.appendChild(tileElement);
+                } else {
+                    scrollGrid.appendChild(tileElement);
+                }
+            }
+            
+            Style.style(tileElement, this.tileStyle);
+            
+            tileElement.style.gridColumnStart = snapResize[tile.xSnap][tile.ySnap][0][0] * 2 + 1;
+            tileElement.style.gridColumnEnd = snapResize[tile.xSnap][tile.ySnap][1][0] * 2 + 1;
+
+            tileElement.style.gridRowStart = snapResize[tile.xSnap][tile.ySnap][0][1] * 2 + 1;
+            tileElement.style.gridRowEnd = snapResize[tile.xSnap][tile.ySnap][1][1] * 2 + 1;
+            
+            if (tile.content) {
+                Tile.remove(`tile${tile.id}`);
+                Tile.append(`tile${tile.id}`, tile.content);
             }
         }
     }
