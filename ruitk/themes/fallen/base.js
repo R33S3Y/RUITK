@@ -44,7 +44,7 @@ let elements = [
         name : "base",
         generate : (info, element) => {
             info = Merge.dicts({
-                id: element.name, // id 
+                id: `${element.name}-${element.elementCount}`, // id 
                 content: "",
                 x : "",
                 y : "",

@@ -16,7 +16,6 @@ let colors = {
 
 let style = {
     transition: "all 2.2s ease-in-out",
-    position : "absolute",
     overflow : "hidden",
     boxSizing : "border-box",
     margin : "10px",
@@ -102,7 +101,7 @@ tileWin.createTile("CentreTop", 1, 0, 0, 0);
 
 console.log(tileWin.tiles);
 
-tileWin.update();
+tileWin.updateTest();
 
 
 setTimeout(function() {
@@ -110,6 +109,6 @@ setTimeout(function() {
     stuff.innerHTML = "This Should Be in the Centre tile saiogvf kludzfougjfvhlkcl gjborguih riohiuebnrso;d;hvj,b jtgldfj,gikrtwerwrw efwfw fwefw fcrewrfwe jngp98j";
     
     tileWin.createTile("Centre", 1, 0, 1, 0, stuff);
-    tileWin.update();
+    tileWin.updateTest();
 }, 1000);
 

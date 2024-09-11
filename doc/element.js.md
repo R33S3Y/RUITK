@@ -92,13 +92,12 @@ let buttonElement = {
 addElements([buttonElement]);
 ```
 #### Notes
-- **Style Syntax**: Style Syntax is defined by [style.js](support/style.js.md). Look there for up to date info
+- **Style Syntax**: Style Syntax is defined by [style.js](support/style.js.md) and there style function. Look there for up to date info
 - **Array Handling**: If a single element object is passed instead of an array, it is wrapped in an array for processing. So this also works:
 ```javascript
 addElements(buttonElement);
 ```
-- **Uniqueness Check**: Ensures each element name is unique in the collection, logging a warning and rejecting duplicates. 
-- Example:
+- **Uniqueness Check**: Ensures each element name is unique in the collection, logging a warning and rejecting duplicates. Example:
 ```javascript
 addElements(buttonElement);
 addElements(buttonElement); // Logs a warning and rejects the duplicate
@@ -122,6 +121,20 @@ let elements = [{
 }];
 ```
  - **Handling the style property**: if you add `handleStyle : true` (by default it is set to false) to your elements definition you are now responsible for applying your elements styles
+ - **Element Count**: in the element arg of the function is a key called `elementCount`. This is a int that count's up by 1 every time an element is made it is useful for coming up with unique id's. Example:
+```js
+let elements = [{
+	name : "h1",
+	function : (info, element) => {
+		info = Merge.dicts({ // Merge.dicts is imported from support/merger.js
+			id: `${element.name}-${element.elementCount}`, // id 
+		}, info);
+	},
+	style : {
+		// h1 styles
+	}
+}];
+```
 - - -
 
 # Append

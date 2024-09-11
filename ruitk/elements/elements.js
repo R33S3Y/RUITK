@@ -3,6 +3,7 @@ import { Style } from "../support/style.js";
 export class Elements {
     constructor() {
         this.elements = [];
+        this.elementCount = 0;
     }
 
     addElements(elements = []) {
@@ -262,6 +263,9 @@ export class Elements {
                 dict[key] = resolveInfo(softDict[key]);
             }
             
+            elementInfo.elementCount =  this.elementCount;
+            this.elementCount ++;
+
             let element = elementInfo.function(dict, elementInfo);
 
             if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0 && elementInfo.handleStyle === false) {

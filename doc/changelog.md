@@ -1,3 +1,10 @@
+## 0.6.3
+#### Fallen Changes
+ - Changed all elements to use `elementCount` in there ID
+#### element.js Changes
+ - Added `elementCount` 
+#### tileWin.js Changes
+ - Added a function called `updateTest` for test a rework of the update function and removal of nudge
 ## 0.6.2
 #### Fallen Changes
  - Made new file called `tilewin.js` for elements designed for `tileWin.js`
