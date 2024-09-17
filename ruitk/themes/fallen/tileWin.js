@@ -31,11 +31,14 @@ let elements = [
         name : "tile",
         function : (info, element) => {
             info = Merge.dicts({
-                id: `${element.name}-${element.elementCount}`, // id 
+                id: `innerTile-${element.elementCount}`, // id 
+                outerTileId : `outerTile-${element.elementCount}`,
                 content: "",
             }, info);
 
             let outerTile = document.createElement("div");
+            outerTile.id = info.outerTileId;
+            
             outerTile.style.left = "0%";
             outerTile.style.top = "0%";
             outerTile.style.width = `calc(100% - (${Style.query("marginLeft", element.style.outerTile)} + ${Style.query("marginRight", element.style.outerTile)}))`;
@@ -73,7 +76,6 @@ let elements = [
         style : {
             outerTile : {
                 transition: "var(--transition)",
-                position : "absolute",
                 overflow : "hidden",
                 boxSizing : "border-box",
                 margin : "10px",

@@ -10,16 +10,17 @@ let elements = new Elements();
 // styles
 import { FallenBase } from "/ruitk/themes/fallen/base.js";
 import { FallenTileWin } from "/ruitk/themes/fallen/tileWin.js";
+import { FallenInput } from "/ruitk/themes/fallen/input.js";
 
 FallenBase.init();
 elements.addElements(FallenBase.getElements());
 elements.addElements(FallenTileWin.getElements());
-
+elements.addElements(FallenInput.getElements());
 
 
 elements.append("body", elements.makeElements(`<backgroundImg>{}`));
 
-tileWin.createTile("TextWindow", 1, 0, 1, 0, elements.makeElements(`
+tileWin.createTile("TextWindow", 1, 0, 0, 0, elements.makeElements(`
     <tile>{"content" : 
         <grid>{"c" : "auto auto", "r" : "auto auto auto auto auto auto" , "content" : 
             <h1>{"content" : "h1 h1 h1 h1 h1 h1 h1", "c" : "1", "r" : "1"}
@@ -39,6 +40,16 @@ tileWin.createTile("TextWindow", 1, 0, 1, 0, elements.makeElements(`
             <p3>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "6"}
         }
     }   
-    `));
+`));
+/*
+tileWin.createTile("InputTest", 1, 0, 2, 0, elements.makeElements(`
+    <tile>{"content" : 
+        <h1>{"content" : "Sign in", "textAlign" : "center"}
+        <textbox>{"f" : "signInForm", "name" : "email", "placeholder" : "enter Your Email", "title" : "Email"}
+        <textbox>{"f" : "signInForm", "name" : "password", "placeholder" : "enter Your Password", "title" : "Password"}
+        <submit>{"f" : "signInForm", "content" : "Sign In", "onClick", "callbackFunction that I'm to lazy to write"}
+    }
+`));
+*/
 tileWin.createTile("Tile the 2nd", 2, 0, 1, 0, elements.makeElements(`<tile>{}`));
-tileWin.update();
+tileWin.updateTest();

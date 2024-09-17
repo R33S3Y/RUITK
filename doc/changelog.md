@@ -1,3 +1,14 @@
+# 0.7
+### Examples 
+ - removed the `tileWin test`
+#### Tests 
+ - Added a test called `tileWinTest`
+#### tileWin.js Changes
+ - Fixed an issue with hover not working in scroll tiles in `updateTest` 
+ - added a config option called `useUpdateTest`
+#### Fallen Changes
+ - Fixed an issue with the `tile` element overflowing when using `updateTest`
+
 ## 0.6.3
 #### Fallen Changes
  - Changed all elements to use `elementCount` in there ID

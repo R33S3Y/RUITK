@@ -19,6 +19,7 @@ export class TileWin {
             parent : "body",
             animateOnCreateTile : true,
             transition : "all 0.2s ease-in-out",
+            useUpdateTest : false,
         }
         this.updateConfig(); // run to make this.configStore
 
@@ -99,6 +100,11 @@ export class TileWin {
     }
 
     update() {
+        if (this.config.useUpdateTest === true) {
+            this.updateTest();
+            return;
+        }
+
         let rowManagerStyles = {
             transition : this.config.transition,
             backgroundColor : "rgba(0, 0, 0, 0)",
@@ -589,7 +595,8 @@ export class TileWin {
          */
 
 
-        // Init Grid Elements
+        // Make useful Vars
+
 
         let gridStyles = {
             transition : this.config.transition,
@@ -603,12 +610,39 @@ export class TileWin {
             height : "100%",
         };
 
+        // distance from 0,0
+        let tileDistanceX = [0];
+        for (let i = 0; i < this.config.tilePercentageX.length; i++) {
+            tileDistanceX.push(tileDistanceX[i] + this.config.tilePercentageX[i]);
+        }
+        if (tileDistanceX[tileDistanceX.length - 1] !== 100) {
+            console.warn("the total of tilePercentageX is not 100 meaning tileWin will ether overflow or underflow");
+        }
+        let tileDistanceY = [0];
+        for (let i = 0; i < this.config.tilePercentageY.length; i++) {
+            tileDistanceY.push(tileDistanceY[i] + this.config.tilePercentageY[i]);
+        }
+        if (tileDistanceY[tileDistanceX.length - 1] !== 100) {
+            console.warn("the total of tilePercentageY is not 100 meaning tileWin will ether overflow or underflow");
+        }
+        
 
+        // grid templates
+        let columnTemplate = this.config.tilePercentageX.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
+        let rowTemplate = this.config.tilePercentageY.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
+
+
+        // Grid init
+
+
+        // has parent
         let parent = document.querySelector(this.config.parent);
         if (!parent) {
             console.error("parent not found");
             return;
         }
+
+        // make scroll
         let scrollGrid = parent.querySelector("#scrollGrid");
         if (!scrollGrid) {
             scrollGrid = document.createElement("div");
@@ -617,20 +651,6 @@ export class TileWin {
             scrollGrid.style.position = "absolute";
             parent.appendChild(scrollGrid);
         }
-        let fixedGrid = parent.querySelector("#fixedGrid");
-        if (!fixedGrid) {
-            fixedGrid = document.createElement("div");
-            fixedGrid.id = "fixedGrid";
-            Style.style(fixedGrid, gridStyles);
-            fixedGrid.style.position = "fixed";
-            parent.appendChild(fixedGrid);
-        }
-
-        let columnTemplate = this.config.tilePercentageX.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
-        let rowTemplate = this.config.tilePercentageY.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
-        
-        fixedGrid.style.gridTemplateColumns = columnTemplate;
-        fixedGrid.style.gridTemplateRows = rowTemplate;
 
         if (this.config.tileDirection === "y") {
             scrollGrid.style.gridTemplateColumns = columnTemplate;
@@ -642,30 +662,105 @@ export class TileWin {
             scrollGrid.style.width = "auto";
         }
 
+        // make fixed
+        let getFixedGrid = (number) => {
+            let regex = new RegExp(`fixedGrid.*?${number.toString()}`);
+            let elementParent = document.querySelector(this.config.parent);
+            
+            // Convert children HTMLCollection to an array to use find()
+            let matchingElement = Array.from(elementParent.children).find(div => regex.test(div.id));
+        
+            if (matchingElement) {
+                return matchingElement;
+            } else {
+                console.warn('No element found with that number.');
+            }
+        }
+        function getFixedGridValues(id) {
+            return JSON.parse(`[${id.replace("fixedGrid", "")}]`);
+        }
+        function normalizePercentages(percentages) {
+            let total = percentages.reduce((acc, percent) => acc + percent, 0);
+            let normalized = percentages.map(percent => (percent / total) * 100);
+        
+            return normalized;
+        }
+
+        for (let i in this.config.tileRowType) {
+            if (this.config.tileRowType[i] !== "fixed") {
+                continue;
+            }
+            let fixedGrid;
+            if (this.config.tileRowType[i-1] !== "fixed") {
+                fixedGrid = getFixedGrid(i);
+                if (!fixedGrid) {
+                    fixedGrid = document.createElement("div");
+                    fixedGrid.id = `fixedGrid${i}`;
+                    Style.style(fixedGrid, gridStyles);
+                    fixedGrid.style.position = "fixed";
+                    parent.appendChild(fixedGrid);
+                }
+
+                if (this.config.tileDirection === "y") {
+                    fixedGrid.style.gridTemplateColumns = "50% 50%";
+                    fixedGrid.style.gridTemplateRows = rowTemplate;
+    
+                    fixedGrid.style.left = `${tileDistanceX[i]}%`;
+                    fixedGrid.style.width = `${this.config.tilePercentageX[i]}%`;
+                } else {
+                    fixedGrid.style.gridTemplateColumns = columnTemplate;
+                    fixedGrid.style.gridTemplateRows = "50% 50%";
+    
+                    fixedGrid.style.top = `${tileDistanceY[i]}%`;
+                    fixedGrid.style.height = `${this.config.tilePercentageY[i]}%`;
+                }
+            } else {
+                fixedGrid = getFixedGrid(i-1);
+                fixedGrid.id += `, ${i}`;
+
+                let fixedLineID = getFixedGridValues(fixedGrid.id);
+                let fixedLine = [];
+                for (let i of fixedLineID) {
+                    if (this.config.tileDirection === "y") {
+                        fixedLine.push(this.config.tilePercentageX[i]);
+                    } else {
+                        fixedLine.push(this.config.tilePercentageY[i]);
+                    }
+                }
+                fixedLine = normalizePercentages(fixedLine);
+
+                let lineTemplate = fixedLine.map(percentage => `${percentage/2}% ${percentage/2}%`).join(" ");
+
+                if (this.config.tileDirection === "y") {
+                    fixedGrid.style.gridTemplateColumns = lineTemplate;
+    
+                    fixedGrid.style.width = `calc(${this.config.tilePercentageX[i]}% + ${fixedGrid.style.width})`;
+                } else {
+                    fixedGrid.style.gridTemplateRows = lineTemplate;
+
+                    fixedGrid.style.height = `calc(${this.config.tilePercentagey[i]}% + ${fixedGrid.style.height})`;
+                }
+            }
+        }
+
         // Make tiles
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            let tileElement;
-
-            if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
-                tileElement = fixedGrid.querySelector(`#tile${tile.id}`);
-            } else {
-                tileElement = scrollGrid.querySelector(`#tile${tile.id}`);
-            }
-
+            let tileElement = document.getElementById(`tile${tile.id}`);
+            
             if (!tileElement) {
                 tileElement = document.createElement("div");
                 tileElement.id = `tile${tile.id}`;
                 if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") {
-                    fixedGrid.appendChild(tileElement);
+                    getFixedGrid(tile[`${this.configStore.tileOppositeDirection}Snap`]).appendChild(tileElement);
                 } else {
                     scrollGrid.appendChild(tileElement);
                 }
             }
             
             Style.style(tileElement, this.tileStyle);
-            
+                
             tileElement.style.gridColumnStart = snapResize[tile.xSnap][tile.ySnap][0][0] * 2 + 1;
             tileElement.style.gridColumnEnd = snapResize[tile.xSnap][tile.ySnap][1][0] * 2 + 1;
 
