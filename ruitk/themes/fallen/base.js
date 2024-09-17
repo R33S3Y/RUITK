@@ -12,8 +12,8 @@ let colors = {
     base04: "", // Dark Foreground (Used for status bars)
     base05: "", // Default Foreground, Caret, Delimiters, Operators
     base06: "", // Light Foreground (Not often used)
-    base07: "", // Light Background (Not often used)
     
+    base07: "rgba(80, 50, 250, 1)", // underline
     base08: "rgba(80, 50, 250, 1)", // bold
     base09: "rgba(80, 50, 250, 1)", // italic
 
@@ -217,6 +217,16 @@ let elements = [
             color : "var(--base09)",
         },
         element : "i"
+    }, { // u
+        name : "u",
+        function : "<h1>", 
+        generate : "<base>",
+        style : {
+            margin : "0",
+            fontFamily : "var(--font)",
+            color : "var(--base09)",
+        },
+        element : "u"
     }, { // grid
         name : "grid",
         function : (info, element) => {

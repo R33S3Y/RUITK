@@ -5,9 +5,19 @@
  - Added a test called `tileWinTest`
 #### tileWin.js Changes
  - Fixed an issue with hover not working in scroll tiles in `updateTest` 
- - added a config option called `useUpdateTest`
+ - Changed `updateTest` to use the old fixed tile rendering method
+ - Replace `update` with `updateTest` as it is deemed stable enough 
+ - Removed `xNudge` and `yNudge` from `createTile`
+ - Removed `tileNudgeFirst` and `tileNudgeSwap` from `configStore`
+ - Added a function called `destory` to destroy a tile
+ - Added a function called `destoryAll` to destroy all tiles
 #### Fallen Changes
  - Fixed an issue with the `tile` element overflowing when using `updateTest`
+ - Added an element to base called `u`
+#### tile.js Changes
+ - Better error handling in the `append` function
+#### documentation Changes 
+ - Updated [2. The Base Element](fallen/2.%20The%20Base%20Element.md)
 
 ## 0.6.3
 #### Fallen Changes

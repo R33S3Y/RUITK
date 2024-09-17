@@ -27,17 +27,31 @@ app.style.backgroundColor = "rgb(255, 255, 255)";
 
 document.querySelector("body").appendChild(app);
 
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
+
+
 let tileWin = new TileWin();
-tileWin.updateConfig({
-    useUpdateTest : true,       // Note this
-});
 tileWin.updateStyle(style);
+
+
+
 
 // test 1
 
 tileWin.updateConfig({
     tileRowType : ["scroll", "fixed", "scroll"],
 });
-tileWin.createTile("1", 1, 0, 1, 0); 
+tileWin.createTile("1", 1, 1); 
 tileWin.update();
 
+await wait(1000);
+
+tileWin.destoryAll();
+tileWin.update();
+
+// needs to be expanded

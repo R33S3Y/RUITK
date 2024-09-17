@@ -88,6 +88,10 @@ export class Style {
             console.warn("style dict = {}");
             return;
         }
+        if (!element) {
+            console.error("element is falsey");
+            return;
+        }
 
         // forceOnFlags processing
         if (Array.isArray(forceOnFlags) === false) {

@@ -20,7 +20,7 @@ elements.addElements(FallenInput.getElements());
 
 elements.append("body", elements.makeElements(`<backgroundImg>{}`));
 
-tileWin.createTile("TextWindow", 1, 0, 0, 0, elements.makeElements(`
+tileWin.createTile("TextWindow", 1, 0, elements.makeElements(`
     <tile>{"content" : 
         <grid>{"c" : "auto auto", "r" : "auto auto auto auto auto auto" , "content" : 
             <h1>{"content" : "h1 h1 h1 h1 h1 h1 h1", "c" : "1", "r" : "1"}
@@ -31,18 +31,18 @@ tileWin.createTile("TextWindow", 1, 0, 0, 0, elements.makeElements(`
             <p2>{"content" : "p2 p2 p2 p2 p2 p2 p2", "c" : "1", "r" : "5"}
             <p3>{"content" : "p3 p3 p3 p3 p3 p3 p3", "c" : "1", "r" : "6"}
             
-            <h1>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "1"}
-            <h2>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "2"}
-            <h3>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "3"}
+            <h1>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic "} <u>{"content" : "UnderLine"}, "textAlign" : "right", "c" : "2", "r" : "1"}
+            <h2>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic "} <u>{"content" : "UnderLine"}, "textAlign" : "right", "c" : "2", "r" : "2"}
+            <h3>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic "} <u>{"content" : "UnderLine"}, "textAlign" : "right", "c" : "2", "r" : "3"}
 
-            <p1>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "4"}
-            <p2>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "5"}
-            <p3>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}, "textAlign" : "right", "c" : "2", "r" : "6"}
+            <p1>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic "} <u>{"content" : "UnderLine"}, "textAlign" : "right", "c" : "2", "r" : "4"}
+            <p2>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic "} <u>{"content" : "UnderLine"}, "textAlign" : "right", "c" : "2", "r" : "5"}
+            <p3>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic "} <u>{"content" : "UnderLine"}, "textAlign" : "right", "c" : "2", "r" : "6"}
         }
     }   
 `));
 /*
-tileWin.createTile("InputTest", 1, 0, 2, 0, elements.makeElements(`
+tileWin.createTile("InputTest", 1, 2, elements.makeElements(`
     <tile>{"content" : 
         <h1>{"content" : "Sign in", "textAlign" : "center"}
         <textbox>{"f" : "signInForm", "name" : "email", "placeholder" : "enter Your Email", "title" : "Email"}
@@ -51,5 +51,5 @@ tileWin.createTile("InputTest", 1, 0, 2, 0, elements.makeElements(`
     }
 `));
 */
-tileWin.createTile("Tile the 2nd", 2, 0, 1, 0, elements.makeElements(`<tile>{}`));
-tileWin.updateTest();
+tileWin.createTile("Tile the 2nd", 2, 1, elements.makeElements(`<tile>{}`));
+tileWin.update();
