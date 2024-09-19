@@ -103,8 +103,8 @@ let elements = [
                 padding : "10px",
 
                 // opacity
-                opacity : "0.65",
-                hover_opacity : "0.85",
+                opacity : "0.45",
+                hover_opacity : "0.75",
                 
                 // background
                 backgroundColor : "var(--base00)",

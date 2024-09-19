@@ -227,6 +227,16 @@ let elements = [
             color : "var(--base09)",
         },
         element : "u"
+    }, { // a
+        name : "a",
+        function : "<h1>", 
+        generate : "<base>",
+        style : {
+            margin : "0",
+            fontFamily : "var(--font)",
+            color : "var(--base09)",
+        },
+        element : "a"
     }, { // grid
         name : "grid",
         function : (info, element) => {

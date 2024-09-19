@@ -14,6 +14,7 @@
 #### Fallen Changes
  - Fixed an issue with the `tile` element overflowing when using `updateTest`
  - Added an element to base called `u`
+ - Changed wallpaper to a draft picture
 #### tile.js Changes
  - Better error handling in the `append` function
 #### documentation Changes 
