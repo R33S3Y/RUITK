@@ -13,8 +13,10 @@
  - Added a function called `destoryAll` to destroy all tiles
 #### Fallen Changes
  - Fixed an issue with the `tile` element overflowing when using `updateTest`
- - Added an element to base called `u`
- - Changed wallpaper to a draft picture
+ - Added an element to base called `u` for underline
+ - Added an element to base called `a` for links
+ - Changed wallpaper to a picture done by a friend of mine
+ - Removed the `text` property from the base element
 #### tile.js Changes
  - Better error handling in the `append` function
 #### documentation Changes 

@@ -56,7 +56,6 @@ let elements = [
                 yAline : "",
                 textAlign : "left",
                 position : "",
-                text : "",
             }, info);
         
             let e = document.createElement(element.element);
@@ -64,7 +63,6 @@ let elements = [
             
             e.style.textAlign = info.textAlign;
             
-            e.innerText = info.text;
             // Check for string content properly
             if (info.content) {
                 if(Array.isArray(info.content) === false) {
@@ -229,7 +227,16 @@ let elements = [
         element : "u"
     }, { // a
         name : "a",
-        function : "<h1>", 
+        function : (info, element) => {
+            info = Merge.dicts({
+                href : ""
+            }, info);
+
+            let p = element.generate(info, element);
+            p.href = info.href;
+
+            return p;
+        }, 
         generate : "<base>",
         style : {
             margin : "0",
