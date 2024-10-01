@@ -15,5 +15,5 @@ You can see the change log [Here](doc/changelog.md).
  - [tileWin.js](doc/tileWin.js.md)
  - [style.js](doc/support/style.js.md)
  - [support Library's Explanation](doc/support/support%20Library's%20Explanation.md)
- - [1. Fallen Summary](doc/fallen/1.%20Fallen%20Summary.md)
- - [2. The Base Element](doc/fallen/2.%20The%20Base%20Element.md)
+ - [Fallen Summary](doc/fallen/Fallen%20Summary.md)
+ - [The Base Element](doc/fallen/The%20Base%20Element.md)

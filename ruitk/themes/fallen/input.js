@@ -3,8 +3,8 @@ import { Style } from "../../support/style.js";
 
 
 let elements = [
-    {   // text box
-        name : "",
+    {   // textbox
+        name : "textbox",
         function : (info, element) => {
             info = Merge.dicts({
                 
@@ -19,8 +19,8 @@ let elements = [
             
         },
         element : "input"
-    }, { // radio box
-        name : "",
+    }, { // radio
+        name : "radio",
         function : (info, element) => {
             info = Merge.dicts({
                 
@@ -36,7 +36,7 @@ let elements = [
         },
         element : "input"
     }, { // checkbox
-        name : "",
+        name : "checkbox",
         function : (info, element) => {
             info = Merge.dicts({
                 
@@ -51,8 +51,8 @@ let elements = [
             
         },
         element : "input"
-    }, { // Dropdown
-        name : "",
+    }, { // dropdown
+        name : "dropdown",
         function : (info, element) => {
             info = Merge.dicts({
                 
@@ -67,8 +67,8 @@ let elements = [
             
         },
         element : "input"
-    }, { // Combo Box
-        name : "",
+    }, { // combo Box
+        name : "combo",
         function : (info, element) => {
             info = Merge.dicts({
                 
@@ -83,8 +83,8 @@ let elements = [
             
         },
         element : "input"
-    }, { // Button
-        name : "",
+    }, { // button
+        name : "button",
         function : (info, element) => {
             info = Merge.dicts({
                 
@@ -99,8 +99,8 @@ let elements = [
             
         },
         element : "input"
-    }, { // Submit form
-        name : "",
+    }, { // submit
+        name : "submit",
         function : (info, element) => {
             info = Merge.dicts({
                 

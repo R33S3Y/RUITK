@@ -89,10 +89,10 @@ let elements = [
                 borderStyle : "solid",
                 borderWidth : "3px",
                 borderRadius : "15px",
-                borderColor : "var(--base02)",
+                borderColor : "var(--accent1)",
                 boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
                 hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
-                hover_borderColor : "var(--base03)",
+                hover_borderColor : "var(--accent2)",
             },
             innerTile : {
                 transition: "var(--transition)",
@@ -107,8 +107,8 @@ let elements = [
                 hover_opacity : "0.75",
                 
                 // background
-                backgroundColor : "var(--base00)",
-                hover_backgroundColor : "var(--base01)",
+                backgroundColor : "var(--background0)",
+                hover_backgroundColor : "var(--background1)",
 
                 // border
                 borderStyle : "solid",

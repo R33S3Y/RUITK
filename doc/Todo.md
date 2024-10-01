@@ -1,0 +1,5 @@
+ - [x] rename colors in fallen
+ - [ ] Replace favicon.ico
+ - [ ] make template in input.js
+ - [ ] make ruitk puplic
+ - [ ] fix the tile element issue

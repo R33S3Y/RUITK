@@ -17,10 +17,12 @@
  - Added an element to base called `a` for links
  - Changed wallpaper to a picture done by a friend of mine
  - Removed the `text` property from the base element
+ - Removed the `init` function in `base.js`
+ - Renamed all colors in fallen
 #### tile.js Changes
  - Better error handling in the `append` function
 #### documentation Changes 
- - Updated [2. The Base Element](fallen/2.%20The%20Base%20Element.md)
+ - Made a full rundown on fallen at [Fallen Summary](fallen/Fallen%20Summary.md)
 
 ## 0.6.3
 #### Fallen Changes
@@ -76,8 +78,8 @@
 #### style.js changes
  - Fixed a issue with the `declare` not adding new lines afterward
 #### documentation Changes 
- - Added [1. Fallen Summary](fallen/1.%20Fallen%20Summary.md)
- - Added [2. The Base Element](fallen/2.%20The%20Base%20Element.md)
+ - Added [Fallen Summary](fallen/Fallen%20Summary.md)
+ - Added [The Base Element](fallen/The%20Base%20Element.md)
 
 # 0.5
 #### style.js changes
