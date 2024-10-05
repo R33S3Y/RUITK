@@ -1,3 +1,7 @@
+## 0.7.1
+#### style.js changes
+ - Fixed a bugs with `jsHover`
+
 # 0.7
 #### Licence Changes
  - Changed licence from Apache License 2.0 to the GPL V3

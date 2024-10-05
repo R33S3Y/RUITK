@@ -16,9 +16,9 @@ elements.addElements(FallenTileWin.getElements());
 elements.addElements(FallenInput.getElements());
 
 
-//tileWin.updateConfig({
-//    tileRowType : ["scroll", "scroll", "fixed"],
-//});
+tileWin.updateConfig({
+    tileRowType : ["scroll", "scroll", "fixed"],
+});
 
 elements.append("body", elements.makeElements(`<backgroundImg>{}`));
 
