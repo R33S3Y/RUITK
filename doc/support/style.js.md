@@ -65,6 +65,7 @@ Well then you can use flags. Here's a list of all current flags:
 **Other**
  - **portrait** - only apply this style when `window.innerHeight > window.innerWidth === true`
  - **landscape** - only apply this style when `window.innerWidth >= window.innerHeight === true`
+ - **jsHover** - Works like hover but using the `mouseenter` and `mouseleave` event Listeners instead of compiling styles
 
 you can apply flags in one of two ways
 1. Subdicts - you can make a subdict with the flags name.

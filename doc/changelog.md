@@ -1,8 +1,6 @@
 # 0.7
-### Examples 
- - removed the `tileWin test`
-#### Tests 
- - Added a test called `tileWinTest`
+#### Licence Changes
+ - Changed licence from Apache License 2.0 to the GPL V3
 #### tileWin.js Changes
  - Fixed an issue with hover not working in scroll tiles in `updateTest` 
  - Changed `updateTest` to use the old fixed tile rendering method
@@ -19,9 +17,11 @@
  - Removed the `text` property from the base element
  - Removed the `init` function in `base.js`
  - Renamed all colors in fallen
+#### style.js changes
+ - Added a new flag called `jsHover`
 #### tile.js Changes
  - Better error handling in the `append` function
-#### documentation Changes 
+#### documentation Changes
  - Made a full rundown on fallen at [Fallen Summary](fallen/Fallen%20Summary.md)
 
 ## 0.6.3

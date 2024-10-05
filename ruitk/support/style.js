@@ -136,6 +136,23 @@ export class Style {
             getFlageditems(style, "portrait");
         }
 
+        // js hover
+        let jsHoverFlags = getFlageditems(style, "jsHover");
+        if (forceOnFlags.includes("jsHover")) {
+            style = Merge.dicts(style, jsHoverFlags);
+        } else {
+            // Add hover effect
+            element.addEventListener('mouseenter', () => {
+                Object.assign(element.style, jsHoverFlags)
+            });
+
+            element.addEventListener('mouseleave', () => {
+                for (let key in jsHoverFlags) {
+                    element.style[key] = undefined;
+                }
+            });
+        }
+
         /**
          * The reason why we have a seprate get & apply phases for flags like hover is because when:
          * 
