@@ -31,11 +31,14 @@ let elements = [
         name : "tile",
         function : (info, element) => {
             info = Merge.dicts({
-                id: `${element.name}-${element.elementCount}`, // id 
+                id: `innerTile-${element.elementCount}`, // id 
+                outerTileId : `outerTile-${element.elementCount}`,
                 content: "",
             }, info);
 
             let outerTile = document.createElement("div");
+            outerTile.id = info.outerTileId;
+            
             outerTile.style.left = "0%";
             outerTile.style.top = "0%";
             outerTile.style.width = `calc(100% - (${Style.query("marginLeft", element.style.outerTile)} + ${Style.query("marginRight", element.style.outerTile)}))`;
@@ -73,7 +76,6 @@ let elements = [
         style : {
             outerTile : {
                 transition: "var(--transition)",
-                position : "absolute",
                 overflow : "hidden",
                 boxSizing : "border-box",
                 margin : "10px",
@@ -87,10 +89,10 @@ let elements = [
                 borderStyle : "solid",
                 borderWidth : "3px",
                 borderRadius : "15px",
-                borderColor : "var(--base02)",
+                borderColor : "var(--accent1)",
                 boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
                 hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
-                hover_borderColor : "var(--base03)",
+                hover_borderColor : "var(--accent2)",
             },
             innerTile : {
                 transition: "var(--transition)",
@@ -101,12 +103,12 @@ let elements = [
                 padding : "10px",
 
                 // opacity
-                opacity : "0.65",
-                hover_opacity : "0.85",
+                opacity : "0.45",
+                hover_opacity : "0.75",
                 
                 // background
-                backgroundColor : "var(--base00)",
-                hover_backgroundColor : "var(--base01)",
+                backgroundColor : "var(--background0)",
+                hover_backgroundColor : "var(--background1)",
 
                 // border
                 borderStyle : "solid",

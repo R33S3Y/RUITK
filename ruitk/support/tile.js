@@ -39,8 +39,16 @@ export class Tile {
         }
         let tile = document.getElementById(id);
         
-        for (let item of content) {
-            tile.appendChild(item);
+        if (content) {
+            for (let item of content) {
+                if (typeof item === "string") {
+                    tile.innerHTML += item; 
+                } else if (item instanceof HTMLElement) {
+                    tile.appendChild(item); 
+                } else {
+                    console.warn(`item (${item}) is not vaild`);
+                }
+            }
         }
     }
     static restyle(id, style) {

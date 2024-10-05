@@ -1,28 +1,28 @@
 import { Merge } from "../../support/merger.js";
 import { Style } from "../../support/style.js";
 
-// color scheme syntax from https://github.com/chriskempson/base16/tree/main
+// color scheme syntax from https://github.com/chriskempson/background16/tree/main
 
 let colors = {
-    base00: "rgba(0, 0, 0, 1)", // Default Background
-    base01: "rgba(0, 0, 0, 1)", // Lighter (Focus) Background
-    base02: "rgba(20, 1, 65, 1)", // Background Accent
-    base03: "rgba(40, 2, 130, 1)", // Lighter Background Accent
+    background0: "rgba(0, 0, 0, 1)", // Default Background
+    background1: "rgba(0, 0, 0, 1)", // Lighter (Focus) Background
+    background2: "", 
+    background3: "", 
 
-    base04: "", // Dark Foreground (Used for status bars)
-    base05: "", // Default Foreground, Caret, Delimiters, Operators
-    base06: "", // Light Foreground (Not often used)
-    base07: "", // Light Background (Not often used)
+    accent1: "rgba(20, 1, 65, 1)", // border
+    accent2: "rgba(40, 2, 130, 1)", // border active
+    accent3: "rgba(40, 50, 250, 1)", // links
     
-    base08: "rgba(80, 50, 250, 1)", // bold
-    base09: "rgba(80, 50, 250, 1)", // italic
+    accent4: "rgba(80, 50, 250, 1)", // underline
+    accent5: "rgba(80, 50, 250, 1)", // bold
+    accent6: "rgba(80, 50, 250, 1)", // italic
 
-    base0A: "rgba(180, 100, 235, 1)", // h1
-    base0B: "rgba(190, 120, 245, 1)", // h2
-    base0C: "rgba(200, 160, 255, 1)", // h3
-    base0D: "rgba(250, 200, 255, 1)", // p1
-    base0E: "rgba(230, 180, 245, 1)", // p2
-    base0F: "rgba(210, 160, 235, 1)", // p3
+    standout1: "rgba(180, 100, 235, 1)", // h1
+    standout2: "rgba(190, 120, 245, 1)", // h2
+    standout3: "rgba(200, 160, 255, 1)", // h3
+    standout4: "rgba(250, 200, 255, 1)", // p1
+    standout5: "rgba(230, 180, 245, 1)", // p2
+    standout6: "rgba(210, 160, 235, 1)", // p3
 };
 
 
@@ -56,7 +56,6 @@ let elements = [
                 yAline : "",
                 textAlign : "left",
                 position : "",
-                text : "",
             }, info);
         
             let e = document.createElement(element.element);
@@ -64,7 +63,6 @@ let elements = [
             
             e.style.textAlign = info.textAlign;
             
-            e.innerText = info.text;
             // Check for string content properly
             if (info.content) {
                 if(Array.isArray(info.content) === false) {
@@ -134,7 +132,7 @@ let elements = [
             margin : "0",
             fontFamily : "var(--font)",
             fontSize : "var(--fontSizeH1)",
-            color : "var(--base0A)",
+            color : "var(--standout1)",
         },
         element : "h1"
     }, { // h2
@@ -146,7 +144,7 @@ let elements = [
             margin : "0",
             fontFamily : "var(--font)",
             fontSize : "var(--fontSizeH2)",
-            color : "var(--base0B)",
+            color : "var(--standout2)",
         },
         element : "h2"
     }, { // h3
@@ -158,7 +156,7 @@ let elements = [
             margin : "0",
             fontFamily : "var(--font)",
             fontSize : "var(--fontSizeH3)",
-            color : "var(--base0C)",
+            color : "var(--standout3)",
         },
         element : "h3"
     }, { // p1
@@ -170,7 +168,7 @@ let elements = [
             margin : "0",
             fontFamily : "var(--font)",
             fontSize : "var(--fontSizeP1)",
-            color : "var(--base0D)",
+            color : "var(--standout4)",
         },
         element : "p"
     }, { // p2
@@ -182,7 +180,7 @@ let elements = [
             margin : "0",
             fontFamily : "var(--font)",
             fontSize : "var(--fontSizeP2)",
-            color : "var(--base0E)",
+            color : "var(--standout5)",
         },
         element : "p"
     }, { // p3
@@ -194,7 +192,7 @@ let elements = [
             margin : "0",
             fontFamily : "var(--font)",
             fontSize : "var(--fontSizeP3)",
-            color : "var(--base0F)",
+            color : "var(--standout6)",
         },
         element : "p"
     }, { // b
@@ -204,7 +202,7 @@ let elements = [
         style : {
             margin : "0",
             fontFamily : "var(--font)",
-            color : "var(--base08)",
+            color : "var(--accent5)",
         },
         element : "b"
     }, { // i
@@ -214,9 +212,38 @@ let elements = [
         style : {
             margin : "0",
             fontFamily : "var(--font)",
-            color : "var(--base09)",
+            color : "var(--accent6)",
         },
         element : "i"
+    }, { // u
+        name : "u",
+        function : "<h1>", 
+        generate : "<base>",
+        style : {
+            margin : "0",
+            fontFamily : "var(--font)",
+            color : "var(--accent4)",
+        },
+        element : "u"
+    }, { // a
+        name : "a",
+        function : (info, element) => {
+            info = Merge.dicts({
+                href : ""
+            }, info);
+
+            let p = element.generate(info, element);
+            p.href = info.href;
+
+            return p;
+        }, 
+        generate : "<base>",
+        style : {
+            margin : "0",
+            fontFamily : "var(--font)",
+            color : "var(--accent6)",
+        },
+        element : "a"
     }, { // grid
         name : "grid",
         function : (info, element) => {
@@ -254,13 +281,14 @@ let elements = [
     }
 ];
 
+function init () {
+    Style.declare(colors);
+    Style.declare(config);
+}
 
 export class FallenBase {
-    static init () {
-        Style.declare(colors);
-        Style.declare(config);
-    }
     static getElements() {
+        init();
         return elements;
     }
 }

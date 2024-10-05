@@ -88,6 +88,10 @@ export class Style {
             console.warn("style dict = {}");
             return;
         }
+        if (!element) {
+            console.error("element is falsey");
+            return;
+        }
 
         // forceOnFlags processing
         if (Array.isArray(forceOnFlags) === false) {
@@ -130,6 +134,23 @@ export class Style {
         // portrait false
         if(this.isPortrait() === false && forceOnFlags.includes("portrait") === false) {
             getFlageditems(style, "portrait");
+        }
+
+        // js hover
+        let jsHoverFlags = getFlageditems(style, "jsHover");
+        if (forceOnFlags.includes("jsHover")) {
+            style = Merge.dicts(style, jsHoverFlags);
+        } else {
+            // Add hover effect
+            element.addEventListener('mouseenter', () => {
+                Object.assign(element.style, jsHoverFlags)
+            });
+
+            element.addEventListener('mouseleave', () => {
+                for (let key in jsHoverFlags) {
+                    element.style[key] = undefined;
+                }
+            });
         }
 
         /**
