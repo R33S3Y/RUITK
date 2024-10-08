@@ -33,7 +33,7 @@ let elements = [
             info = Merge.dicts({
                 id: `innerTile-${element.elementCount}`, // id 
                 outerTileId : `outerTile-${element.elementCount}`,
-                scrollTileDirection : "",
+                //scrollTileDirection : "",
                 content: "",
             }, info);
 
@@ -70,6 +70,7 @@ let elements = [
             innerTile.style.width = "100%";
             innerTile.style.height = "100%";
 
+            /*
             if (info.scrollTileDirection === "x") {
                 innerTile.style.width = "auto";
                 outerTile.style.width = "auto"; 
@@ -78,7 +79,7 @@ let elements = [
                 innerTile.style.height = "auto";
                 outerTile.style.height = "auto"; 
             }
-
+            */
             Style.style(innerTile, element.style.innerTile);
 
             return outerTile;
