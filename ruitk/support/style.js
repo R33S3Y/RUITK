@@ -111,6 +111,23 @@ export class Style {
 
         let styleElement = getStyleElement();
 
+        // js Hover
+        let jsHoverFlags = getFlageditems(style, "jsHover");
+        if (!forceOnFlags.includes("jsHover")) {
+            if (jsHoverFlags) {
+                // Add hover effect
+                element.addEventListener('mouseenter', () => {
+                    Object.assign(element.style, jsHoverFlags);
+                });
+
+                element.addEventListener('mouseleave', () => {
+                    for (let key in jsHoverFlags) {
+                        element.style[key] = "";
+                    }
+                });
+            }
+        }
+
         if (styleElement.textContent.includes(`.${className}`)) { //style is already made so don't bother
             console.debug("skipped style processing");
             return element;
@@ -136,21 +153,9 @@ export class Style {
             getFlageditems(style, "portrait");
         }
 
-        // js hover
-        let jsHoverFlags = getFlageditems(style, "jsHover");
+        // js Hover
         if (forceOnFlags.includes("jsHover")) {
             style = Merge.dicts(style, jsHoverFlags);
-        } else {
-            // Add hover effect
-            element.addEventListener('mouseenter', () => {
-                Object.assign(element.style, jsHoverFlags)
-            });
-
-            element.addEventListener('mouseleave', () => {
-                for (let key in jsHoverFlags) {
-                    element.style[key] = undefined;
-                }
-            });
         }
 
         /**

@@ -166,7 +166,7 @@ export class Elements {
                     info.push(item);
                 }
             }
-            if (hadElement === false && info.length === 0) {
+            if (hadElement === false && info.length >= 1) {
                 info = info[0];
             }
             return info;
