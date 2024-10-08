@@ -1,7 +1,9 @@
 ## 0.7.1
+
+#### element.js Changes
+ - Fixed a bug that was causing anything other all items passed into as info objects to be wrapped in an array
 #### style.js changes
  - Fixed a bugs with `jsHover`
-
 # 0.7
 #### Licence Changes
  - Changed licence from Apache License 2.0 to the GPL V3

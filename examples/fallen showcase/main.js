@@ -23,7 +23,7 @@ tileWin.updateConfig({
 elements.append("body", elements.makeElements(`<backgroundImg>{}`));
 
 tileWin.createTile("TextWindow", 1, 1, elements.makeElements(`
-    <tile>{"content" : 
+    <tile>{"scrollTileDirection" : "y", "content" : 
         <grid>{"c" : "auto auto", "r" : "auto auto auto auto auto auto" , "content" : 
             <h1>{"content" : "h1 h1 h1 h1 h1 h1 h1", "c" : "1", "r" : "1"}
             <h2>{"content" : "h2 h2 h2 h2 h2 h2 h2", "c" : "1", "r" : "2"}
@@ -45,7 +45,7 @@ tileWin.createTile("TextWindow", 1, 1, elements.makeElements(`
 `));
 
 tileWin.createTile("InputTest", 1, 2, elements.makeElements(`
-    <tile>{"content" : 
+    <tile>{"scrollTileDirection" : "y", "content" : 
         <h1>{"content" : "Sign in", "textAlign" : "center"}
         <textbox>{"f" : "signInForm", "name" : "email", "placeholder" : "enter Your Email", "title" : "Email"}
         <textbox>{"f" : "signInForm", "name" : "password", "placeholder" : "enter Your Password", "title" : "Password"}

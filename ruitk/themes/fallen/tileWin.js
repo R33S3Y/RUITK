@@ -33,6 +33,7 @@ let elements = [
             info = Merge.dicts({
                 id: `innerTile-${element.elementCount}`, // id 
                 outerTileId : `outerTile-${element.elementCount}`,
+                scrollTileDirection : "",
                 content: "",
             }, info);
 
@@ -69,6 +70,15 @@ let elements = [
             innerTile.style.width = "100%";
             innerTile.style.height = "100%";
 
+            if (info.scrollTileDirection === "x") {
+                innerTile.style.width = "auto";
+                outerTile.style.width = "auto"; 
+            }
+            if (info.scrollTileDirection === "y") {
+                innerTile.style.height = "auto";
+                outerTile.style.height = "auto"; 
+            }
+
             Style.style(innerTile, element.style.innerTile);
 
             return outerTile;
@@ -80,10 +90,10 @@ let elements = [
                 boxSizing : "border-box",
                 margin : "10px",
                 padding : "0px",
-                
+
                 // background
                 backdropFilter: "blur(2px)",
-                jsHover_backdropFilter: "blur(10px)",
+                hover_backdropFilter: "blur(10px)",
                 
                 // border
                 borderStyle : "solid",
@@ -91,8 +101,8 @@ let elements = [
                 borderRadius : "15px",
                 borderColor : "var(--accent1)",
                 boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
-                jsHover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
-                jsHover_borderColor : "var(--accent2)",
+                hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
+                hover_borderColor : "var(--accent2)",
             },
             innerTile : {
                 transition: "var(--transition)",
@@ -104,11 +114,11 @@ let elements = [
 
                 // opacity
                 opacity : "0.45",
-                jsHover_opacity : "0.75",
+                hover_opacity : "0.75",
                 
                 // background
                 backgroundColor : "var(--background0)",
-                jsHover_backgroundColor : "var(--background1)",
+                hover_backgroundColor : "var(--background1)",
 
                 // border
                 borderStyle : "solid",

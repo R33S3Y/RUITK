@@ -114,7 +114,6 @@ export class Style {
         // js Hover
         let jsHoverFlags = getFlageditems(style, "jsHover");
         if (!forceOnFlags.includes("jsHover")) {
-            console.debug(jsHoverFlags);
             if (jsHoverFlags) {
                 // Add hover effect
                 element.addEventListener('mouseenter', () => {
