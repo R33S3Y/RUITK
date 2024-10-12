@@ -1,3 +1,6 @@
+## 0.7.2
+#### Fallen Changes
+ - Fixed an issue with the `tile` not displaying properly when in a scroll tile
 ## 0.7.1
 
 #### element.js Changes

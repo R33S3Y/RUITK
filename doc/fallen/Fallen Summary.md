@@ -4,6 +4,8 @@
  - [Elements](Fallen%20Summary.md#Elements)
 	 - [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 	 - [Base](Fallen%20Summary.md#Base)
+		 - [h1, h2, h3](#h1,%20h2,%20h3)
+		 - [p1, p2, p3](#p1,%20p2,%20p3)
 	 - [TileWin](Fallen%20Summary.md#TileWin)
 	 - [Input](Fallen%20Summary.md#Input)
 
@@ -30,7 +32,7 @@ elements.addElements(FallenInput.getElements());
 ```
 # Elements
 ## Standard Inputs
-In Fallen there's a Element called `base` although if you do call it [element.js](element.js.md) will throw an error. So why does this exist? Well it's there to store the generate function of course! The generate function handles many of the default values built into most elements in Fallen. (think of it like a dependency) Here a list of them and there default values and what they do
+In Fallen there's a Element called `base` although if you do call it [element.js](element.js.md) will throw an error. So why does this exist? Well it's there to store the generate function of course! The generate function handles many of the default values built into most elements in Fallen. (think of it like a dependency) Here a list of them and there default values and what they do:
  - `id` - Defaults to the Element name and the `element.elementCount` - sets `element.id`
  - `content` - Defaults to an empty string - anything you want appended including strings 
  - `x` - Defaults to an empty string - sets `element.style.left`
@@ -50,9 +52,15 @@ The following elements do not accept these as input:
  - `tile`
 ## Base
 #### `base.js`
-
+Base is meant to act as a dependency for other files as such it only contains some of the most basic elements.
 ### h1, h2, h3
-All accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and output an h1, h2 & h3 elements respectively
+All accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and output an h1, h2 & h3 elements respectively.
+### p1, p2, p3
+Also accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and output various shapes and sizes of p elements.
+### b, u, i
+B, u & i are for bold, underline and italic elements respectively. They also only accept the [Standard Inputs](#Standard%20Inputs). **Note:**  These element expects to be nested in p1, p2, p3, h1, h2 ,h3 elements for sizing info.
+### a
+A elements work just like [b, u & i](#b,%20u,%20i) elements but with the addition of the value `href` which defaults to a empty string and sets the `element.href` value.
 
 ## TileWin
 #### `tileWin.js`
