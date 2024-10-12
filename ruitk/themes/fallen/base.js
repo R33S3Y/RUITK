@@ -1,7 +1,5 @@
 import { Merge } from "../../support/merger.js";
-import { Style } from "../../support/style.js";
-
-// color scheme syntax from https://github.com/chriskempson/background16/tree/main
+import { Style } from "../../support/style.js"; 
 
 let colors = {
     background0: "rgba(0, 0, 0, 1)", // Default Background
