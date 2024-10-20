@@ -1,3 +1,11 @@
+# 0.8
+#### element.js Changes
+ - element.js will now pass through the `makeElements` function into the a elements function via the element object.
+ - Rewrote large chunks of the the `makeElements` function to better handle object nesting
+#### Fallen Changes
+ - Added a tile called `tilewin` in the `tilewin.js` file 
+#### documentation Changes
+ - updated the documentation for [element.js](element.js.md)
 ## 0.7.2
 #### Fallen Changes
  - Fixed an issue with the `tile` not displaying properly when in a scroll tile

@@ -33,7 +33,7 @@ HTMLelements.forEach(element => {
 // element.js
 elements.append("querySelector", HTMLelements);
 // tileWin.js
-tileWin.append("exampleTile", HTMLelements);
+tileWin.append("exampleTileName", HTMLelements);
 // tile.js
 Tile.append("exampleTileID", HTMLelements);
 ```
@@ -121,6 +121,19 @@ let elements = [{
 }];
 ```
  - **Handling the style property**: if you add `handleStyle : true` (by default it is set to false) to your elements definition you are now responsible for applying your elements styles
+ - **MakeElements:** you can access the [MakeElements](#MakeElements) function inside an element like so:
+```js
+let elements = [{
+	name : "btn",
+	function : (info, element) => {
+		buttontext = element.makeElements(`<p1>{"content" : "example"}`);
+		// other code
+	},
+	style : {
+		// h1 styles
+	}
+}];
+```
  - **Element Count**: in the element arg of the function is a key called `elementCount`. This is a int that count's up by 1 every time an element is made it is useful for coming up with unique id's. Example:
 ```js
 let elements = [{

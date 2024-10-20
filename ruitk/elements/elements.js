@@ -64,14 +64,14 @@ export class Elements {
                 return str.slice(1, str.length-1);
             }
             return str;
-        }
+        };
         const isElement = (str) => {
             // Define the regular expression to match the pattern <elementName>{...}
             const regex = /<\w+>{[^}]*}/g;
           
             // Test the string against the regex
             return regex.test(str);
-        }
+        };
         const resolveElementKey = (item, dictName) => {
             let regex = /^<[\w\d]+>$/;
             if (typeof item === "string" && regex.test(item)) {
@@ -85,8 +85,14 @@ export class Elements {
                 }
             }
             return item;
-        }
+        };
         const softParseInfo = (str) => {
+            /**
+             * this function takes a stringify dict or array for input and parses that object but leaves all values inside as strings for futher processing
+             * @param {string} str 
+             * @returns array or dict of strs
+             */
+
 
             // A helper function to split by commas but only at the top level
             function splitTopLevel(str) {
@@ -113,43 +119,65 @@ export class Elements {
             }
 
             // Main processing
+            
             let keyValuePairs = splitTopLevel(str.slice(1, -1)); // Remove outermost curly braces
             let values = {};
 
-            keyValuePairs.forEach(pair => {
-                // Find the first colon, assuming key and value are somewhat intact
-                let splitIndex = pair.indexOf(':');
-                
-                if (splitIndex !== -1) {
-                    let value = pair.slice(splitIndex + 1).trim();
-                    let key = pair.slice(0, splitIndex).trim();
-                    key = removeQuotes(key);
-                    values[key] = value;
+            if(str.startsWith("{")) { // doing this if statement adds support for arrays 
+                keyValuePairs.forEach(pair => {
+                    let splitIndex = pair.indexOf(':');
+                    
+                    if (splitIndex !== -1) {
+                        let value = pair.slice(splitIndex + 1).trim();
+                        let key = pair.slice(0, splitIndex).trim();
+                        key = removeQuotes(key);
+                        values[key] = value;
+                    }
+                });
+                return values;
+            } else {
+                return keyValuePairs;
+            }
+        };
+        const getNumberEnd = (str) => {
+            let i = 0
+            for (let char of str) {
+                if (!isNaN(char) || char === ".") {
+                    i++;
+                } else {
+                    return i;
                 }
-            });
-
-            return values;
-        }
+            }
+            return i;
+        };
         const resolveInfo = (str) => {
             let info = [];
-            let hadElement = false;
+            str = str.trim();
             while(str.length > 0) {
                 
                 let itemEnd = 0;
-                let isElement = false;
+                let itemType = ""
                 
                 str = str.trim();
                 if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
+                    itemType = "str";
                     itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
-                } else if (str.startsWith("{") || str.startsWith("[")) { // array or dict
+                } else if (str.startsWith("{")) { // array or dict
+                    itemType = "dict";
+                    itemEnd = getIndentStrEnd(str);
+                } else if (str.startsWith("[")) { // array or dict
+                    itemType = "array";
                     itemEnd = getIndentStrEnd(str);
                 } else if (str.startsWith("<")) { // is element
-                    isElement = true;
-                    hadElement = true;
+                    itemType = "element";
                     itemEnd = getElementStr(str).dictEnd;
+                } else if (!isNaN(str.charAt(0))) { //is number
+                    itemType = "number";
+                    itemEnd = getNumberEnd(str);
                 } else {
                     console.error("str type not found");
-                    if (hadElement === false && info.length === 0) {
+                    console.debug(`str : "${str}"`);
+                    if (info.length >= 1) {
                         info = info[0];
                     }
                     return info;
@@ -158,19 +186,27 @@ export class Elements {
                 let item = str.slice(0, itemEnd);
                 str = str.slice(itemEnd);
 
-                if (isElement === true) {
+                if (itemType === "element") {
                     item = this.makeElements(item);
                     info = info.concat(item);
+                } else if (itemType === "dict") {
+                    item = parseDict(item);
+                    info.push(item);
+                } else if (itemType === "array") {
+                    item = parseArray(item);
+                    info.push(item);
                 } else {
+                    console.debug(item);
                     item = JSON.parse(item);
                     info.push(item);
                 }
             }
-            if (hadElement === false && info.length >= 1) {
+
+            if (info.length >= 1) {
                 info = info[0];
             }
             return info;
-        }
+        };
         const getElementStr = (str) => {
             str = str.trim();
 
@@ -190,7 +226,7 @@ export class Elements {
             currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd);
 
             return currentElement;
-        }
+        };
         const getIndentStrEnd = (str) => {
             str = str.trim();
             let indentAmount = 0;
@@ -226,6 +262,22 @@ export class Elements {
                 return 0;
             }
             return end + 1;
+        };
+        const parseDict = (str) => {
+            let softDict = softParseInfo(str);
+            let dict = {};
+            for (let key of Object.keys(softDict)) {
+                dict[key] = resolveInfo(softDict[key]);
+            }
+            return dict;
+        }
+        const parseArray = (str) => {
+            let softArray = softParseInfo(str);
+            let array = [];
+            for (let item of softArray) {
+                array.push(resolveInfo(item));
+            }
+            return array;
         }
         
 
@@ -256,13 +308,9 @@ export class Elements {
             
 
             let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
-            let softDict = softParseInfo(dictStr);
-            let dict = {};
-            keys = Object.keys(softDict);
-            for (let key of keys) {
-                dict[key] = resolveInfo(softDict[key]);
-            }
+            let dict = parseDict(dictStr);
             
+            elementInfo.makeElements = this.makeElements;
             elementInfo.elementCount =  this.elementCount;
             this.elementCount ++;
 
