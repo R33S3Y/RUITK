@@ -1,4 +1,9 @@
 # 0.8
+
+#### tileWin.js Changes
+ - Added a function called generate
+ - Removed the need for `tile.js`
+ - Removed `tile.js`
 #### element.js Changes
  - element.js will now pass through the `makeElements` function into the a elements function via the element object.
  - Rewrote large chunks of the the `makeElements` function to better handle object nesting
