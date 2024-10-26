@@ -5,7 +5,7 @@ export class Elements {
     constructor() {
         this.elements = [];
         this.elementCount = 0;
-        this.initMakeElements();
+        this.initRenderElements();
     }
 
     addElements(elements = []) {
@@ -56,14 +56,15 @@ export class Elements {
             }, element);
             this.elements.push(element);
         }
-        this.initMakeElements();
+        this.initRenderElements();
         return;
     }
-    initMakeElements () {
+    initRenderElements () {
         /**
          * We have this function because we need to define makeElements as an arrow function so it can be passed through the elements while not changing the this context
          */
-        this.makeElements = (str) => {
+        this.renderElements = (str) => {
+
             let currentStr = str.trim();
             let output = [];
             while(currentStr.length > 0) {
@@ -85,13 +86,25 @@ export class Elements {
                 }
                 let keys = Object.keys(elementInfo);
                 for (let key of keys) {
-                    elementInfo[key] = resolveElementKey(elementInfo[key], key);
+                    let regex = /^<[\w\d]+>$/;
+                    if (typeof elementInfo[key] === "string" && regex.test(elementInfo[key])) {
+                        elementInfo[key] = elementInfo[key].replace("<", "");
+                        elementInfo[key] = elementInfo[key].replace(">", "");
+                
+                        for(let element of this.elements) {
+                            if (element.name === elementInfo[key]) {
+                                elementInfo[key] = element[key];
+                                break;
+                            }
+                        }
+                    }
+                    
                 }
     
                 
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
-                let dict = this.parse(dictStr, this.makeElements);
+                let dict = this.parse(dictStr);
                 
                 elementInfo.makeElements = this.makeElements;
                 elementInfo.elementCount =  this.elementCount;
@@ -111,9 +124,12 @@ export class Elements {
                 output = output.concat(element);
             }
             return output;
-        }
+        };
+
+        this.makeElements = (str) => {
+            return this.parse(str);
+        };
     }
-    
     append(querySelector, content) {
         if (!content) {
             console.error(`item (${content}) is falsely`);
@@ -188,10 +204,10 @@ export class Elements {
             str = str.slice(itemEnd);
 
             if (itemType === "element") {
-                item = this.makeElements(item);
+                item = this.renderElements(item);
                 info = info.concat(item);
             } else if (itemType === "dict") {
-                let softDict = softParseInfo(str);
+                let softDict = softParseInfo(item);
                 let dict = {};
                 for (let key of Object.keys(softDict)) {
                     dict[key] = this.parse(softDict[key]);
@@ -199,7 +215,7 @@ export class Elements {
                 item = dict;
                 info.push(item);
             } else if (itemType === "array") {
-                let softArray = softParseInfo(str);
+                let softArray = softParseInfo(item);
                 let array = [];
                 for (let item of softArray) {
                     array.push(this.parse(item));
@@ -315,20 +331,6 @@ function getDictOrArrayEnd(str) {
         return 0;
     }
     return end + 1;
-};
-function resolveElementKey(item, dictName) { // resoles item from this.elements with the "<otherElement>" syntax
-    let regex = /^<[\w\d]+>$/;
-    if (typeof item === "string" && regex.test(item)) {
-        item = item.replace("<", "");
-        item = item.replace(">", "");
-
-        for(let element of this.elements) {
-            if (element.name === item) {
-                return element[dictName];
-            }
-        }
-    }
-    return item;
 };
 function getElementStr(str) { // get some basic info about element from str
     str = str.trim();
