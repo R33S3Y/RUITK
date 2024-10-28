@@ -34,7 +34,7 @@ let elements = [
             info = Merge.dicts({
                 id: `innerTile-${element.elementCount}`, // id 
                 outerTileId : `outerTile-${element.elementCount}`,
-                content: "",
+                content: {},
             }, info);
 
             let outerTile = document.createElement("div");
@@ -123,11 +123,15 @@ let elements = [
         name : "tileWin",
         function : (info, element) => {
             info = Merge.dicts({
-                config : {},
-                style : {},
-                tiles : [],
+                config : "{}",
+                style : "{}",
+                tiles : "[]",
                 disableTileElement : false,
             }, info);
+
+            info.config = element.parse(info.config);
+            info.style = element.parse(info.style);
+            info.tiles = element.parse(info.tiles, true);
 
             let tileWin = new TileWin();
 
@@ -135,13 +139,22 @@ let elements = [
             tileWin.updateStyle(info.style);
 
             for (let tile of info.tiles) {
+
+                tile = element.parse(tile, true);
+                tile = Merge.dicts({
+                    content : "",
+                    name : "",
+                    x : 0,
+                    y : 0,
+                }, tile);
+
                 let content = tile.content;
                 if (info.disableTileElement === false) {
-                    let elementStr = `<tile>{"content" : "${JSON.stringify(tile.content)}"}`;
+                    let elementStr = `<tile>{"content" : ${tile.content}}`;
                     console.debug(elementStr);
                     content = element.makeElements(elementStr);
                 }
-                tileWin.createTile(tile.name, tile.x, tile.y, tile.content);
+                tileWin.createTile(tile.name, tile.x, tile.y, content);
             }
             return tileWin.genrate();
         },
@@ -149,6 +162,7 @@ let elements = [
             
         },
         handleStyle : true,
+        parseLevel : 1,
     }
 ];
 

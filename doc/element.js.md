@@ -34,8 +34,6 @@ HTMLelements.forEach(element => {
 elements.append("querySelector", HTMLelements);
 // tileWin.js
 tileWin.append("exampleTileName", HTMLelements);
-// tile.js
-Tile.append("exampleTileID", HTMLelements);
 ```
 
 #### Notes
@@ -114,13 +112,30 @@ let elements = [{
 	}
 }, {
 	name : "h2",
-	function : "<h1>", // gets the function from p1 so it doesn't need to be writen twice
+	function : "<h1>", // gets the function from h1 so it doesn't need to be writen twice
 	style : {
 		// h2 styles
 	}
 }];
 ```
- - **Handling the style property**: if you add `handleStyle : true` (by default it is set to false) to your elements definition you are now responsible for applying your elements styles
+ - **Handling the style property**: if you add `handleStyle : true` (by default it is set to false) to your elements definition you are now responsible for applying your elements styles. Eg:
+```js
+import { Style } from "../../support/style.js";
+
+let elements = [{ // tile
+	name : "tile",
+	function : (info, element) => {
+		let tile = document.createElement("div");
+		Style.style(tile, element.style);
+		return tile;
+	},
+	style : {
+		// styles
+	},
+	handleStyle : true,
+}];
+```
+ - **ParseLevel:** this value changes how much prepossessing the info object is going through. By default this value is set to 2 meaning that is fully processed with all the child elements sorted and things like that, 0 means it's a string so have fun with that and 1 means that the first level of dicts and arrays are processed but nothing more. this means that all contents of the first array are stringifyed.
  - **MakeElements:** you can access the [MakeElements](#MakeElements) function inside an element like so:
 ```js
 let elements = [{

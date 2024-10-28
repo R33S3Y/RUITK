@@ -5,7 +5,7 @@ export class Elements {
     constructor() {
         this.elements = [];
         this.elementCount = 0;
-        this.initRenderElements();
+        this.initFunctions();
     }
 
     addElements(elements = []) {
@@ -53,13 +53,14 @@ export class Elements {
                 },
                 style : {},
                 handleStyle : false,
+                parseLevel : 2
             }, element);
             this.elements.push(element);
         }
-        this.initRenderElements();
+        this.initFunctions();
         return;
     }
-    initRenderElements () {
+    initFunctions () {
         /**
          * We have this function because we need to define makeElements as an arrow function so it can be passed through the elements while not changing the this context
          */
@@ -104,10 +105,21 @@ export class Elements {
                 
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
-                let dict = this.parse(dictStr);
+                let dict
+                if(elementInfo.softParse === 0) {
+                    dict = dictStr;
+                } else {
+                    let softParse = false;
+                    if (elementInfo.parseLevel === 1) {
+                        softParse = true;
+                    }
+                    dict = this.parse(dictStr, softParse);
+                }
                 
                 elementInfo.makeElements = this.makeElements;
+                elementInfo.parse = this.parse;
                 elementInfo.elementCount =  this.elementCount;
+
                 this.elementCount ++;
     
                 let element = elementInfo.function(dict, elementInfo);
@@ -129,6 +141,98 @@ export class Elements {
         this.makeElements = (str) => {
             return this.parse(str);
         };
+    
+        this.parse = (str, softParse = false) => {
+            let info = [];
+            str = str.trim();
+            while(str.length > 0) {
+                
+                let itemEnd = 0;
+                let itemType = "";
+                
+                str = str.trim();
+                if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
+                    itemType = "str";
+                    itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
+                } else if (str.startsWith("{")) { // dict
+                    itemType = "dict";
+                    itemEnd = getDictOrArrayEnd(str);
+                } else if (str.startsWith("[")) { // array
+                    itemType = "array";
+                    itemEnd = getDictOrArrayEnd(str);
+                } else if (str.startsWith("<")) { // is element
+                    itemType = "element";
+                    
+                    let dictStart = str.indexOf("{");
+                    if (dictStart === -1) {
+                        console.error("Opening curly brace '{' not found in the string");
+                        if (info.length === 1) {
+                            info = info[0];
+                        }
+                        return info;
+                    }
+                    itemEnd = getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
+                            
+                } else if (!isNaN(str.charAt(0))) { //is number
+                    itemType = "number";
+
+                    let i = 0
+                    for (let char of str) {
+                        if (!isNaN(char) || char === ".") {
+                            i++;
+                        } else {
+                            itemEnd = i;
+                            break;
+                        }
+                    }
+                    itemEnd = i;
+                } else {
+                    console.error("str type not found");
+                    console.debug(`str : "${str}"`);
+                    if (info.length === 1) {
+                        info = info[0];
+                    }
+                    return info;
+                }
+
+                let item = str.slice(0, itemEnd);
+                str = str.slice(itemEnd);
+
+                if (itemType === "dict" || itemType === "array") {
+                    item = softParseInfo(item);
+                }
+                if(softParse === true) {
+                    info.push(item);
+                    continue;
+                }
+
+                if (itemType === "element") {
+                    item = this.renderElements(item);
+                    info = info.concat(item);
+                } else if (itemType === "dict") {
+                    let dict = {};
+                    for (let key of Object.keys(item)) {
+                        dict[key] = this.parse(item[key]);
+                    }
+                    info.push(dict);
+                } else if (itemType === "array") {
+                    let array = [];
+                    for (let thing of item) {
+                        array.push(this.parse(thing));
+                    }
+                    info.push(array);
+                } else {
+                    item = JSON.parse(item);
+                    info.push(item);
+                }
+            }
+
+            if (info.length === 1) {
+                info = info[0];
+            }
+            return info;
+
+        };
     }
     append(querySelector, content) {
         if (!content) {
@@ -146,93 +250,6 @@ export class Elements {
         for (let item of content) {
             p.appendChild(item);
         }
-    }
-    parse(str) {
-        let info = [];
-        str = str.trim();
-        while(str.length > 0) {
-            
-            let itemEnd = 0;
-            let itemType = ""
-            
-            str = str.trim();
-            if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
-                itemType = "str";
-                itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
-            } else if (str.startsWith("{")) { // dict
-                itemType = "dict";
-                itemEnd = getDictOrArrayEnd(str);
-            } else if (str.startsWith("[")) { // array
-                itemType = "array";
-                itemEnd = getDictOrArrayEnd(str);
-            } else if (str.startsWith("<")) { // is element
-                itemType = "element";
-                
-                let dictStart = str.indexOf("{");
-                if (dictStart === -1) {
-                    console.error("Opening curly brace '{' not found in the string");
-                    if (info.length >= 1) {
-                        info = info[0];
-                    }
-                    return info;
-                }
-                itemEnd = getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
-                        
-            } else if (!isNaN(str.charAt(0))) { //is number
-                itemType = "number";
-
-                let i = 0
-                for (let char of str) {
-                    if (!isNaN(char) || char === ".") {
-                        i++;
-                    } else {
-                        itemEnd = i;
-                        break;
-                    }
-                }
-                itemEnd = i;
-            } else {
-                console.error("str type not found");
-                console.debug(`str : "${str}"`);
-                if (info.length >= 1) {
-                    info = info[0];
-                }
-                return info;
-            }
-
-            let item = str.slice(0, itemEnd);
-            str = str.slice(itemEnd);
-
-            if (itemType === "element") {
-                item = this.renderElements(item);
-                info = info.concat(item);
-            } else if (itemType === "dict") {
-                let softDict = softParseInfo(item);
-                let dict = {};
-                for (let key of Object.keys(softDict)) {
-                    dict[key] = this.parse(softDict[key]);
-                }
-                item = dict;
-                info.push(item);
-            } else if (itemType === "array") {
-                let softArray = softParseInfo(item);
-                let array = [];
-                for (let item of softArray) {
-                    array.push(this.parse(item));
-                }
-                item = array;
-                info.push(item);
-            } else {
-                item = JSON.parse(item);
-                info.push(item);
-            }
-        }
-
-        if (info.length >= 1) {
-            info = info[0];
-        }
-        return info;
-
     }
 }
 
@@ -274,7 +291,7 @@ function softParseInfo(str) {
 
     // Main processing
     
-    let keyValuePairs = splitTopLevel(str.slice(1, -1)); // Remove outermost curly braces
+    let keyValuePairs = splitTopLevel(str.slice(1, -1).trim()); // Remove outermost curly braces
     let values = {};
 
     if(str.startsWith("{")) { // doing this if statement adds support for arrays 

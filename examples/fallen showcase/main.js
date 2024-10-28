@@ -49,6 +49,6 @@ elements.append("body", elements.makeElements(`
             "name" : "Tile the 2nd",
             "x" : 2,
             "y" : 1,
-        },
+        }
     ]}
 `));

@@ -6,11 +6,16 @@
  - Removed `tile.js`
 #### element.js Changes
  - element.js will now pass through the `makeElements` function into the a elements function via the element object.
+ - element.js pass will pass through the new `parse` in the same manor to `makeElements`
+ - Added an extra option to an element called `parseLevel`
  - Rewrote large chunks of the the `makeElements` function to better handle object nesting
+ - Added a fix to allow it to handle arrays with the last item ending with a unnecessary comma
 #### Fallen Changes
  - Added a tile called `tilewin` in the `tilewin.js` file 
 #### documentation Changes
  - updated the documentation for [element.js](element.js.md)
+#### Merger.js  Changes
+ - Fixed a bug that was causing it to delete HTML elements
 ## 0.7.2
 #### Fallen Changes
  - Fixed an issue with the `tile` not displaying properly when in a scroll tile
