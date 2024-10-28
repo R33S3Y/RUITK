@@ -153,6 +153,8 @@ let elements = [
                     let elementStr = `<tile>{"content" : ${tile.content}}`;
                     console.debug(elementStr);
                     content = element.makeElements(elementStr);
+                } else {
+                    content = element.parse(tile.content);
                 }
                 tileWin.createTile(tile.name, tile.x, tile.y, content);
             }
