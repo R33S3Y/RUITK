@@ -1,4 +1,3 @@
-import { Tile } from "../support/tile.js";
 import { List2D } from "../support/list2D.js";
 import { Merge } from "../support/merger.js";
 import { Style } from "../support/style.js";
@@ -65,6 +64,18 @@ export class TileWin {
     }
 
     createTile(name, xSnap, ySnap, content = null) {
+        if (!name) {
+            console.error(`name is falsey`);
+            return;
+        }
+        if (!xSnap) {
+            console.error(`x is falsey`);
+            return;
+        }
+        if (!ySnap) {
+            console.error(`y is falsey`);
+            return;
+        }
         for (let tile of this.tiles) {
             if (tile.name === name) {
                 console.error(`tile name ${name} is already in use by tile id: ${tile.id}`);
@@ -96,8 +107,32 @@ export class TileWin {
         this.idCounter ++;
         this.tiles.push(newTile);
     }
+    update () {
+        function append(querySelector, content) { // yes I know this is copyed over from element.js I just don't care
+            if (!content) {
+                console.error(`item (${content}) is falsely`);
+                return;
+            }
+            if (Array.isArray(content) === false) {
+                content = [content];
+            }
+            let p = document.querySelector(querySelector);
+            if (!p) {
+                console.error("querySelector not found");
+                return;
+            }
+            for (let item of content) {
+                p.appendChild(item);
+            }
+        }
 
-    update() {
+        let parentList = this.genrate();
+
+        append(this.config.parent, parentList);
+
+    }
+    genrate() {
+        let parentList = [];
         /**
          * Old Code (Solen From old update) to make snapResize
          */
@@ -263,22 +298,15 @@ export class TileWin {
         // Grid init
 
 
-        // has parent
-        let parent = document.querySelector(this.config.parent);
-        if (!parent) {
-            console.error("parent not found");
-            return;
-        }
+        
 
         // make scroll
-        let scrollGrid = parent.querySelector("#scrollGrid");
-        if (!scrollGrid) {
-            scrollGrid = document.createElement("div");
-            scrollGrid.id = "scrollGrid";
-            Style.style(scrollGrid, gridStyles);
-            scrollGrid.style.position = "absolute";
-            parent.appendChild(scrollGrid);
-        }
+        let scrollGrid = document.createElement("div");
+        scrollGrid.id = "scrollGrid";
+        Style.style(scrollGrid, gridStyles);
+        scrollGrid.style.position = "absolute";
+        parentList.push(scrollGrid);
+        
 
         if (this.config.tileDirection === "y") {
             scrollGrid.style.gridTemplateColumns = columnTemplate;
@@ -294,58 +322,94 @@ export class TileWin {
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            let tileElement = document.getElementById(`tile${tile.id}`);
-
             if (tile.destory === true) {
-                if (tileElement) {
-                    tileElement.remove();
-                }
                 this.tiles.splice(i, 1);
                 continue;
             }
+            let tileElement;
+
+            if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") { // make fixed
+                tile.x = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] * (snapResize[tile.xSnap][tile.ySnap][0][0] % 1));
+                tile.y = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] +
+                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] * (snapResize[tile.xSnap][tile.ySnap][0][1] % 1));
+
+                tile.w = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] * (snapResize[tile.xSnap][tile.ySnap][1][0] % 1))) - tile.x;
+                tile.h = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] * (snapResize[tile.xSnap][tile.ySnap][1][1] % 1))) - tile.y;
+
+                let x = `${tile.x}%`;
+                let y = `${tile.y}%`;
+
+                let w = `${tile.w}%`;
+                let h = `${tile.h}%`;
+
+                let wInner = `calc(${w} - (${Style.query("marginLeft", this.fixedTileStyle)} + ${Style.query("marginRight", this.fixedTileStyle)}))`;
+                let hInner = `calc(${h} - (${Style.query("marginTop", this.fixedTileStyle)} + ${Style.query("marginBottom", this.fixedTileStyle)}))`;
+                
+                function create(id, x = "100px", y = "100px", w = "100px", h = "100px", style, p = "body") {
+
+                    let tile = document.createElement("div");
+                    tile.id = id;
             
-            if (!tileElement) {
-                if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") { // make fixed
-                    tile.x = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] +
-                    (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] * (snapResize[tile.xSnap][tile.ySnap][0][0] % 1));
-                    tile.y = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] +
-                    (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] * (snapResize[tile.xSnap][tile.ySnap][0][1] % 1));
-
-                    tile.w = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] +
-                    (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] * (snapResize[tile.xSnap][tile.ySnap][1][0] % 1))) - tile.x;
-                    tile.h = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] +
-                    (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] * (snapResize[tile.xSnap][tile.ySnap][1][1] % 1))) - tile.y;
-
-                    let x = `${tile.x}%`;
-                    let y = `${tile.y}%`;
-
-                    let w = `${tile.w}%`;
-                    let h = `${tile.h}%`;
-
-                    let wInner = `calc(${w} - (${Style.query("marginLeft", this.fixedTileStyle)} + ${Style.query("marginRight", this.fixedTileStyle)}))`;
-                    let hInner = `calc(${h} - (${Style.query("marginTop", this.fixedTileStyle)} + ${Style.query("marginBottom", this.fixedTileStyle)}))`;
-                        
-                    Tile.create(`tile${tile.id}`, x, y, wInner, hInner, this.fixedTileStyle, this.config.parent);
-                } else { // make scroll
-                    tileElement = document.createElement("div");
-                    tileElement.id = `tile${tile.id}`;
-
-                    Style.style(tileElement, this.tileStyle);
-
-                    tileElement.style.gridColumnStart = snapResize[tile.xSnap][tile.ySnap][0][0] * 2 + 1;
-                    tileElement.style.gridColumnEnd = snapResize[tile.xSnap][tile.ySnap][1][0] * 2 + 1;
-
-                    tileElement.style.gridRowStart = snapResize[tile.xSnap][tile.ySnap][0][1] * 2 + 1;
-                    tileElement.style.gridRowEnd = snapResize[tile.xSnap][tile.ySnap][1][1] * 2 + 1;
-
-                    scrollGrid.appendChild(tileElement);
+                    tile = Style.style(tile, style);
+            
+                    // sizing and pos
+                    tile.style.left = x;
+                    tile.style.top = y;
+                    tile.style.width = w;
+                    tile.style.height = h;
+            
+                    return tile;
                 }
+                tileElement = create(`tile${tile.id}`, x, y, wInner, hInner, this.fixedTileStyle);
+                parentList.push(tileElement);
+            } else { // make scroll
+                tileElement = document.createElement("div");
+                tileElement.id = `tile${tile.id}`;
+
+                Style.style(tileElement, this.tileStyle);
+
+                tileElement.style.gridColumnStart = snapResize[tile.xSnap][tile.ySnap][0][0] * 2 + 1;
+                tileElement.style.gridColumnEnd = snapResize[tile.xSnap][tile.ySnap][1][0] * 2 + 1;
+
+                tileElement.style.gridRowStart = snapResize[tile.xSnap][tile.ySnap][0][1] * 2 + 1;
+                tileElement.style.gridRowEnd = snapResize[tile.xSnap][tile.ySnap][1][1] * 2 + 1;
+
+                scrollGrid.appendChild(tileElement);
             }
+            
             if (tile.content) {
-                Tile.remove(`tile${tile.id}`);
-                Tile.append(`tile${tile.id}`, tile.content);
+                tileElement.innerHTML = "";
+                function append(id, content, tile = null) {
+                    if (!content) {
+                        console.warn(`content (${content}) is falsely`);
+                        return;
+                    }
+                    if (Array.isArray(content) === false) {
+                        content = [content];
+                    }
+                    if(tile === null) {
+                        tile = document.getElementById(id);
+                    }
+                    
+                    if (content) {
+                        for (let item of content) {
+                            if (typeof item === "string") {
+                                tile.innerHTML += item; 
+                            } else if (item instanceof HTMLElement) {
+                                tile.appendChild(item); 
+                            } else {
+                                console.warn(`item (${item}) is not vaild`);
+                            }
+                        }
+                    }
+                }
+                append(`tile${tile.id}`, tile.content, tileElement);
             }
         }
+        return parentList;
     }
 
 

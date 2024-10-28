@@ -1,6 +1,7 @@
 
 import { Merge } from "../../support/merger.js";
 import { Style } from "../../support/style.js";
+import { TileWin } from "../../tileWin/tileWin.js";
 
 
 let elements = [
@@ -33,7 +34,7 @@ let elements = [
             info = Merge.dicts({
                 id: `innerTile-${element.elementCount}`, // id 
                 outerTileId : `outerTile-${element.elementCount}`,
-                content: "",
+                content: {},
             }, info);
 
             let outerTile = document.createElement("div");
@@ -118,6 +119,52 @@ let elements = [
             },
         },
         handleStyle : true,
+    }, { // tilewin
+        name : "tileWin",
+        function : (info, element) => {
+            info = Merge.dicts({
+                config : "{}",
+                style : "{}",
+                tiles : "[]",
+                disableTileElement : false,
+            }, info);
+
+            info.config = element.parse(info.config);
+            info.style = element.parse(info.style);
+            info.tiles = element.parse(info.tiles, true);
+
+            let tileWin = new TileWin();
+
+            tileWin.updateConfig(info.config);
+            tileWin.updateStyle(info.style);
+
+            for (let tile of info.tiles) {
+
+                tile = element.parse(tile, true);
+                tile = Merge.dicts({
+                    content : "",
+                    name : "",
+                    x : 0,
+                    y : 0,
+                }, tile);
+
+                let content = tile.content;
+                if (info.disableTileElement === false) {
+                    let elementStr = `<tile>{"content" : ${tile.content}}`;
+                    console.debug(elementStr);
+                    content = element.makeElements(elementStr);
+                } else {
+                    content = element.parse(tile.content);
+                }
+                tileWin.createTile(tile.name, tile.x, tile.y, content);
+            }
+            return tileWin.genrate();
+        },
+        style : {
+            
+        },
+        handleStyle : true,
+        parseLevel : 1,
     }
 ];
 

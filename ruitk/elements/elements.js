@@ -1,9 +1,11 @@
 import { Merge } from "../support/merger.js";
 import { Style } from "../support/style.js";
+
 export class Elements {
     constructor() {
         this.elements = [];
         this.elementCount = 0;
+        this.initFunctions();
     }
 
     addElements(elements = []) {
@@ -51,105 +53,143 @@ export class Elements {
                 },
                 style : {},
                 handleStyle : false,
+                parseLevel : 2
             }, element);
             this.elements.push(element);
         }
+        this.initFunctions();
         return;
     }
+    initFunctions () {
+        /**
+         * We have this function because we need to define makeElements as an arrow function so it can be passed through the elements while not changing the this context
+         */
+        this.renderElements = (str) => {
 
-    makeElements(str) {
-        const removeQuotes = (str) => {
-            str = str.trim();
-            if((str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) && (str.endsWith('"') || str.endsWith("'") || str.endsWith("`"))) {
-                return str.slice(1, str.length-1);
-            }
-            return str;
-        }
-        const isElement = (str) => {
-            // Define the regular expression to match the pattern <elementName>{...}
-            const regex = /<\w+>{[^}]*}/g;
-          
-            // Test the string against the regex
-            return regex.test(str);
-        }
-        const resolveElementKey = (item, dictName) => {
-            let regex = /^<[\w\d]+>$/;
-            if (typeof item === "string" && regex.test(item)) {
-                item = item.replace("<", "");
-                item = item.replace(">", "");
-
-                for(let element of this.elements) {
-                    if (element.name === item) {
-                        return element[dictName];
-                    }
-                }
-            }
-            return item;
-        }
-        const softParseInfo = (str) => {
-
-            // A helper function to split by commas but only at the top level
-            function splitTopLevel(str) {
-                let result = [];
-                let braceDepth = 0;
-                let bracketDepth = 0;
-                let currentPart = '';
-
-                for (let char of str) {
-                    if (char === '{') braceDepth++;
-                    if (char === '}') braceDepth--;
-                    if (char === '[') bracketDepth++;
-                    if (char === ']') bracketDepth--;
-
-                    if (char === ',' && braceDepth === 0 && bracketDepth === 0) {
-                        result.push(currentPart);
-                        currentPart = '';
-                    } else {
-                        currentPart += char;
-                    }
-                }
-                if (currentPart) result.push(currentPart); // Add the last part
-                return result;
-            }
-
-            // Main processing
-            let keyValuePairs = splitTopLevel(str.slice(1, -1)); // Remove outermost curly braces
-            let values = {};
-
-            keyValuePairs.forEach(pair => {
-                // Find the first colon, assuming key and value are somewhat intact
-                let splitIndex = pair.indexOf(':');
+            let currentStr = str.trim();
+            let output = [];
+            while(currentStr.length > 0) {
                 
-                if (splitIndex !== -1) {
-                    let value = pair.slice(splitIndex + 1).trim();
-                    let key = pair.slice(0, splitIndex).trim();
-                    key = removeQuotes(key);
-                    values[key] = value;
+                let currentElement = getElementStr(currentStr);
+                
+                let name = currentElement.str.slice(currentElement.str.indexOf("<")+1, currentElement.str.indexOf(">"));
+                let elementInfo;
+                for(let element of this.elements) {
+                    if (element.name === name) {
+                        elementInfo = element;
+                        break;
+                    }
                 }
-            });
+                if (elementInfo === undefined) {
+                    console.error(`could't find an element called "${name}" dumping elements to debug`);
+                    console.debug(JSON.parse(JSON.stringify(this.elements)));
+                    return;
+                }
+                let keys = Object.keys(elementInfo);
+                for (let key of keys) {
+                    let regex = /^<[\w\d]+>$/;
+                    if (typeof elementInfo[key] === "string" && regex.test(elementInfo[key])) {
+                        elementInfo[key] = elementInfo[key].replace("<", "");
+                        elementInfo[key] = elementInfo[key].replace(">", "");
+                
+                        for(let element of this.elements) {
+                            if (element.name === elementInfo[key]) {
+                                elementInfo[key] = element[key];
+                                break;
+                            }
+                        }
+                    }
+                    
+                }
+    
+                
+    
+                let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
+                let dict
+                if(elementInfo.softParse === 0) {
+                    dict = dictStr;
+                } else {
+                    let softParse = false;
+                    if (elementInfo.parseLevel === 1) {
+                        softParse = true;
+                    }
+                    dict = this.parse(dictStr, softParse);
+                }
+                
+                elementInfo.makeElements = this.makeElements;
+                elementInfo.parse = this.parse;
+                elementInfo.elementCount =  this.elementCount;
 
-            return values;
-        }
-        const resolveInfo = (str) => {
+                this.elementCount ++;
+    
+                let element = elementInfo.function(dict, elementInfo);
+    
+                if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0 && elementInfo.handleStyle === false) {
+                    Style.style(element, elementInfo.style);
+                }
+                
+                if (Array.isArray(element) === false) {
+                    element = [element];
+                }
+                currentStr = currentStr.replace(currentElement.str, "").trim();
+                
+                output = output.concat(element);
+            }
+            return output;
+        };
+
+        this.makeElements = (str) => {
+            return this.parse(str);
+        };
+    
+        this.parse = (str, softParse = false) => {
             let info = [];
-            let hadElement = false;
+            str = str.trim();
             while(str.length > 0) {
                 
                 let itemEnd = 0;
-                let isElement = false;
+                let itemType = "";
                 
                 str = str.trim();
                 if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
+                    itemType = "str";
                     itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
-                } else if (str.startsWith("{") || str.startsWith("[")) { // array or dict
-                    itemEnd = getIndentStrEnd(str);
+                } else if (str.startsWith("{")) { // dict
+                    itemType = "dict";
+                    itemEnd = getDictOrArrayEnd(str);
+                } else if (str.startsWith("[")) { // array
+                    itemType = "array";
+                    itemEnd = getDictOrArrayEnd(str);
                 } else if (str.startsWith("<")) { // is element
-                    isElement = true;
-                    hadElement = true;
-                    itemEnd = getElementStr(str).dictEnd;
+                    itemType = "element";
+                    
+                    let dictStart = str.indexOf("{");
+                    if (dictStart === -1) {
+                        console.error("Opening curly brace '{' not found in the string");
+                        if (info.length === 1) {
+                            info = info[0];
+                        }
+                        return info;
+                    }
+                    itemEnd = getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
+                            
+                } else if (!isNaN(str.charAt(0))) { //is number
+                    itemType = "number";
+
+                    let i = 0
+                    for (let char of str) {
+                        if (!isNaN(char) || char === ".") {
+                            i++;
+                        } else {
+                            itemEnd = i;
+                            break;
+                        }
+                    }
+                    itemEnd = i;
                 } else {
                     console.error("str type not found");
-                    if (hadElement === false && info.length === 0) {
+                    console.debug(`str : "${str}"`);
+                    if (info.length === 1) {
                         info = info[0];
                     }
                     return info;
@@ -158,130 +198,42 @@ export class Elements {
                 let item = str.slice(0, itemEnd);
                 str = str.slice(itemEnd);
 
-                if (isElement === true) {
-                    item = this.makeElements(item);
+                if (itemType === "dict" || itemType === "array") {
+                    item = softParseInfo(item);
+                }
+                if(softParse === true) {
+                    info.push(item);
+                    continue;
+                }
+
+                if (itemType === "element") {
+                    item = this.renderElements(item);
                     info = info.concat(item);
+                } else if (itemType === "dict") {
+                    let dict = {};
+                    for (let key of Object.keys(item)) {
+                        dict[key] = this.parse(item[key]);
+                    }
+                    info.push(dict);
+                } else if (itemType === "array") {
+                    let array = [];
+                    for (let thing of item) {
+                        array.push(this.parse(thing));
+                    }
+                    info.push(array);
                 } else {
                     item = JSON.parse(item);
                     info.push(item);
                 }
             }
-            if (hadElement === false && info.length >= 1) {
+
+            if (info.length === 1) {
                 info = info[0];
             }
             return info;
-        }
-        const getElementStr = (str) => {
-            str = str.trim();
 
-            let currentElement = {};
-
-            currentElement.nameStart = str.indexOf("<");
-            currentElement.nameEnd = str.indexOf(">");
-            currentElement.dictStart = str.indexOf("{");
-
-            if (currentElement.dictStart === -1) {
-                console.error("Opening curly brace '{' not found in the string");
-                return;
-            }
-
-            currentElement.dictEnd = getIndentStrEnd(str.slice(currentElement.dictStart)) + currentElement.dictStart;
-
-            currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd);
-
-            return currentElement;
-        }
-        const getIndentStrEnd = (str) => {
-            str = str.trim();
-            let indentAmount = 0;
-            let end = 0;
-            let bracketType = "";
-            if (str[0] === "[") {
-                bracketType = "square";
-            }
-            if (str[0] === "{") {
-                bracketType = "curly";
-            }
-            if (bracketType === "") {
-                console.error(`input (${str}) not valid`);
-                return 0;
-            }
-
-            for (let i = 0; i < str.length; i++) {
-                let char = str[i];
-
-                if ((char === "{" && bracketType === "curly") || (char === "[" && bracketType === "square")) {
-                    indentAmount++;
-                }
-                if ((char === "}" && bracketType === "curly") || (char === "]" && bracketType === "square")) {
-                    indentAmount--;
-                }
-                if (indentAmount === 0) {
-                    end =  i;
-                    break;
-                }
-            }
-            if (end === 0) {
-                console.error(`${bracketType} brackets not closed propery in ${currentStr}`);
-                return 0;
-            }
-            return end + 1;
-        }
-        
-
-        let currentStr = str.trim();
-        let output = [];
-        while(currentStr.length > 0) {
-            
-            let currentElement = getElementStr(currentStr);
-            
-            let name = currentElement.str.slice(currentElement.str.indexOf("<")+1, currentElement.str.indexOf(">"));
-            let elementInfo;
-            for(let element of this.elements) {
-                if (element.name === name) {
-                    elementInfo = element;
-                    break;
-                }
-            }
-            if (elementInfo === undefined) {
-                console.error(`could't find an element called "${name}" dumping elements to debug`);
-                console.debug(JSON.parse(JSON.stringify(this.elements)));
-                return;
-            }
-            let keys = Object.keys(elementInfo);
-            for (let key of keys) {
-                elementInfo[key] = resolveElementKey(elementInfo[key], key);
-            }
-
-            
-
-            let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
-            let softDict = softParseInfo(dictStr);
-            let dict = {};
-            keys = Object.keys(softDict);
-            for (let key of keys) {
-                dict[key] = resolveInfo(softDict[key]);
-            }
-            
-            elementInfo.elementCount =  this.elementCount;
-            this.elementCount ++;
-
-            let element = elementInfo.function(dict, elementInfo);
-
-            if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0 && elementInfo.handleStyle === false) {
-                Style.style(element, elementInfo.style);
-            }
-            
-            if (Array.isArray(element) === false) {
-                element = [element];
-            }
-            currentStr = currentStr.replace(currentElement.str, "").trim();
-            
-            output = output.concat(element);
-        }
-        return output;
+        };
     }
-
     append(querySelector, content) {
         if (!content) {
             console.error(`item (${content}) is falsely`);
@@ -291,9 +243,129 @@ export class Elements {
             content = [content];
         }
         let p = document.querySelector(querySelector);
-        
+        if (!p) {
+            console.error("querySelector not found");
+            return;
+        }
         for (let item of content) {
             p.appendChild(item);
         }
     }
 }
+
+/**
+ * HELPER FUNCTIONS
+ */
+
+function softParseInfo(str) {
+    /**
+     * this function takes a stringify dict or array for input and parses that object but leaves all values inside as strings for futher processing
+     * @param {string} str 
+     * @returns array or dict of strs
+     */
+
+
+    // A helper function to split by commas but only at the top level
+    function splitTopLevel(str) {
+        let result = [];
+        let braceDepth = 0;
+        let bracketDepth = 0;
+        let currentPart = '';
+
+        for (let char of str) {
+            if (char === '{') braceDepth++;
+            if (char === '}') braceDepth--;
+            if (char === '[') bracketDepth++;
+            if (char === ']') bracketDepth--;
+
+            if (char === ',' && braceDepth === 0 && bracketDepth === 0) {
+                result.push(currentPart);
+                currentPart = '';
+            } else {
+                currentPart += char;
+            }
+        }
+        if (currentPart) result.push(currentPart); // Add the last part
+        return result;
+    }
+
+    // Main processing
+    
+    let keyValuePairs = splitTopLevel(str.slice(1, -1).trim()); // Remove outermost curly braces
+    let values = {};
+
+    if(str.startsWith("{")) { // doing this if statement adds support for arrays 
+        keyValuePairs.forEach(pair => {
+            let splitIndex = pair.indexOf(':');
+            
+            if (splitIndex !== -1) {
+                let value = pair.slice(splitIndex + 1).trim();
+                let key = pair.slice(0, splitIndex).trim();
+                key = key.trim();
+                if((key.startsWith('"') || key.startsWith("'") || key.startsWith("`")) && (key.endsWith('"') || key.endsWith("'") || key.endsWith("`"))) {
+                    key = key.slice(1, key.length-1);
+                }
+                values[key] = value;
+            }
+        });
+        return values;
+    } else {
+        return keyValuePairs;
+    }
+};
+function getDictOrArrayEnd(str) {
+    str = str.trim();
+    let indentAmount = 0;
+    let end = 0;
+    let bracketType = "";
+    if (str[0] === "[") {
+        bracketType = "square";
+    }
+    if (str[0] === "{") {
+        bracketType = "curly";
+    }
+    if (bracketType === "") {
+        console.error(`input (${str}) not valid`);
+        return 0;
+    }
+
+    for (let i = 0; i < str.length; i++) {
+        let char = str[i];
+
+        if ((char === "{" && bracketType === "curly") || (char === "[" && bracketType === "square")) {
+            indentAmount++;
+        }
+        if ((char === "}" && bracketType === "curly") || (char === "]" && bracketType === "square")) {
+            indentAmount--;
+        }
+        if (indentAmount === 0) {
+            end =  i;
+            break;
+        }
+    }
+    if (end === 0) {
+        console.error(`${bracketType} brackets not closed propery in ${str}`);
+        return 0;
+    }
+    return end + 1;
+};
+function getElementStr(str) { // get some basic info about element from str
+    str = str.trim();
+
+    let currentElement = {};
+
+    currentElement.nameStart = str.indexOf("<");
+    currentElement.nameEnd = str.indexOf(">");
+    currentElement.dictStart = str.indexOf("{");
+
+    if (currentElement.dictStart === -1) {
+        console.error("Opening curly brace '{' not found in the string");
+        return;
+    }
+
+    currentElement.dictEnd = getDictOrArrayEnd(str.slice(currentElement.dictStart)) + currentElement.dictStart;
+
+    currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd);
+
+    return currentElement;
+};
