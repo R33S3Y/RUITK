@@ -6,6 +6,8 @@
 	 - [Base](Fallen%20Summary.md#Base)
 		 - [h1, h2, h3](#h1,%20h2,%20h3)
 		 - [p1, p2, p3](#p1,%20p2,%20p3)
+		 - [b, u, i](Fallen%20Summary.md#b,%20u,%20i)
+		 - [a](Fallen%20Summary.md#a)
 	 - [TileWin](Fallen%20Summary.md#TileWin)
 	 - [Input](Fallen%20Summary.md#Input)
 
@@ -61,6 +63,15 @@ Also accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and out
 B, u & i are for bold, underline and italic elements respectively. They also only accept the [Standard Inputs](#Standard%20Inputs). **Note:**  These element expects to be nested in p1, p2, p3, h1, h2 ,h3 elements for sizing info.
 ### a
 A elements work just like [b, u & i](#b,%20u,%20i) elements but with the addition of the value `href` which defaults to a empty string and sets the `element.href` value.
+
+### grid
+Grid is an invisible grid meant for organizing and moving around elements. it uses the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) as well as: 
+ - Input name - 
+ - `rTemplate` - `grid.style.gridTemplateRows`
+ - `cTemplate`
+ - `gap`
+ - `areas`
+ - `justifyContent`
 
 ## TileWin
 #### `tileWin.js`
