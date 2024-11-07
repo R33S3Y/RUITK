@@ -39,10 +39,12 @@ export class Elements {
         if (Array.isArray(elements) === false) {
             elements = [elements];
         }
+        let failCount = 0;
         for (let element of elements) {
             for (let currentElement of this.elements) {
                 if (currentElement.name === element.name) {
                     console.warn(`${element.name} has already been used thus ${element} has been regected`);
+                    failCount ++;
                     continue;
                 }
             }
@@ -57,6 +59,22 @@ export class Elements {
             }, element);
             this.elements.push(element);
         }
+        console.debug(`addElements Function: Added ${elements.length - failCount} out of ${elements.length} new elements`);
+        console.debug(`addElements Function: Starting dependency test`);
+
+        /**
+         * This could be set up as a minor preformance inprovement.
+         * 
+         * In witch you resolve and save the element once instead of resolving the element every time it is called at runtime.
+         * It may also increase the size and memory reqiurements of this.elements. IDK just a thought.
+         */
+        elements = JSON.parse(JSON.stringify(elements));
+        for (let element of elements) {
+            resolveElementObject(element, this.elements);
+        }
+
+        console.debug(`addElements Function: Finished dependency test`);
+
         this.initFunctions();
         return;
     }
@@ -85,24 +103,7 @@ export class Elements {
                     console.debug(JSON.parse(JSON.stringify(this.elements)));
                     return;
                 }
-                let keys = Object.keys(elementInfo);
-                for (let key of keys) {
-                    let regex = /^<[\w\d]+>$/;
-                    if (typeof elementInfo[key] === "string" && regex.test(elementInfo[key])) {
-                        elementInfo[key] = elementInfo[key].replace("<", "");
-                        elementInfo[key] = elementInfo[key].replace(">", "");
-                
-                        for(let element of this.elements) {
-                            if (element.name === elementInfo[key]) {
-                                elementInfo[key] = element[key];
-                                break;
-                            }
-                        }
-                    }
-                    
-                }
-    
-                
+                elementInfo = resolveElementObject(elementInfo, this.elements);
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
                 let dict
@@ -368,4 +369,34 @@ function getElementStr(str) { // get some basic info about element from str
     currentElement.str = str.slice(currentElement.nameStart, currentElement.dictEnd);
 
     return currentElement;
+};
+function resolveElementObject(elementInfo, elements) {
+    let keys = Object.keys(elementInfo);
+    for (let key of keys) {
+        let regex = /^<[\w\d]+>$/;
+        if (typeof elementInfo[key] === "string" && regex.test(elementInfo[key])) {
+
+            let elementName = elementInfo[key];
+
+            elementName = elementName.replace("<", "");
+            elementName = elementName.replace(">", "");
+            
+            let foundElement = false
+            for(let element of elements) {
+                if (element.name === elementName) {
+                    foundElement = true;
+                    if (element[key] === undefined) {
+                        console.error(`Dependency Error: key: "${key}" is undefined in Element: "${element.name}". \n Key is used as a depenancy for Element: "${elementInfo.name}"`);
+                    }
+                    elementInfo[key] = element[key];
+                    break;
+                }
+            }
+            if (foundElement === false) {
+                console.error(`Dependency Error: Failed to find Element: "${elementName}" which is needed as a dependancy for Element: "${elementInfo.name}"`);
+                elementInfo[key] = undefined;
+            }
+        }
+    }
+    return elementInfo;
 };

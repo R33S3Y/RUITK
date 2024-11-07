@@ -1,4 +1,6 @@
 ## 0.8.1
+#### element.js Changes
+ - Added Error Checking for element dependencies 
 #### Fallen Changes
  - 
 # 0.8

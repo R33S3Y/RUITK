@@ -38,6 +38,9 @@ let config = {
 
     borderRadius : "10px",
     borderWidth : "3px",
+
+    margin : "0.5em",
+    padding : "1em",
 };
 
 let elements = [

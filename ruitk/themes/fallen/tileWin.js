@@ -151,7 +151,6 @@ let elements = [
                 let content = tile.content;
                 if (info.disableTileElement === false) {
                     let elementStr = `<tile>{"content" : ${tile.content}}`;
-                    console.debug(elementStr);
                     content = element.makeElements(elementStr);
                 } else {
                     content = element.parse(tile.content);
