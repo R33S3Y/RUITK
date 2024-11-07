@@ -55,7 +55,7 @@ The `addElements` function allows you to add custom elements to a collection, en
 #### Usage
 
 1. **Define Custom Elements**:
-   - Each custom element should be defined with a `name`, a `function` to create the element, and a `style` object for applying CSS styles.
+   - Each custom element should be defined with a `name`, a `function` to create the element, and a `style` object for applying CSS styles. For more info about elements go [Here](Making%20Elements.md)
    - Example:
 ```javascript
 let buttonElement = {
@@ -90,7 +90,6 @@ let buttonElement = {
 addElements([buttonElement]);
 ```
 #### Notes
-- **Style Syntax**: Style Syntax is defined by [style.js](support/style.js.md) and there style function. Look there for up to date info
 - **Array Handling**: If a single element object is passed instead of an array, it is wrapped in an array for processing. So this also works:
 ```javascript
 addElements(buttonElement);
@@ -99,69 +98,6 @@ addElements(buttonElement);
 ```javascript
 addElements(buttonElement);
 addElements(buttonElement); // Logs a warning and rejects the duplicate
-```
- - **Referencing Other Elements**: You can reference the parts of other elements by naming the key, of the current element to the same name as the key, of the reference element and then setting the key, of the current element to the following pattern `<referenceElementName>` (this value should be a string) Here's a example:
-```javascript
-let elements = [{
-	name : "h1",
-	function : (info, element) => {
-		// function
-	},
-	style : {
-		// h1 styles
-	}
-}, {
-	name : "h2",
-	function : "<h1>", // gets the function from h1 so it doesn't need to be writen twice
-	style : {
-		// h2 styles
-	}
-}];
-```
- - **Handling the style property**: if you add `handleStyle : true` (by default it is set to false) to your elements definition you are now responsible for applying your elements styles. Eg:
-```js
-import { Style } from "../../support/style.js";
-
-let elements = [{ // tile
-	name : "tile",
-	function : (info, element) => {
-		let tile = document.createElement("div");
-		Style.style(tile, element.style);
-		return tile;
-	},
-	style : {
-		// styles
-	},
-	handleStyle : true,
-}];
-```
- - **ParseLevel:** this value changes how much prepossessing the info object is going through. By default this value is set to 2 meaning that is fully processed with all the child elements sorted and things like that, 0 means it's a string so have fun with that and 1 means that the first level of dicts and arrays are processed but nothing more. this means that all contents of the first array are stringifyed.
- - **MakeElements:** you can access the [MakeElements](#MakeElements) function inside an element like so:
-```js
-let elements = [{
-	name : "btn",
-	function : (info, element) => {
-		buttontext = element.makeElements(`<p1>{"content" : "example"}`);
-		// other code
-	},
-	style : {
-		// h1 styles
-	}
-}];
-```
- - **Element Count**: in the element arg of the function is a key called `elementCount`. This is a int that count's up by 1 every time an element is made it is useful for coming up with unique id's. Example:
-```js
-let elements = [{
-	name : "h1",
-	function : (info, element) => {
-		info = Merge.dicts({ // Merge.dicts is imported from support/merger.js
-			id: `${element.name}-${element.elementCount}`, // id 
-		}, info);
-	},
-	style : {
-		// h1 styles
-	}
-}];
 ```
 - - -
 

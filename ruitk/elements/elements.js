@@ -55,8 +55,9 @@ export class Elements {
                 },
                 style : {},
                 handleStyle : false,
-                parseLevel : 2
-            }, element);
+                parseLevel : 2,
+                strictStyles : false,
+            }, element, []);
             this.elements.push(element);
         }
         console.debug(`addElements Function: Added ${elements.length - failCount} out of ${elements.length} new elements`);
@@ -107,7 +108,7 @@ export class Elements {
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
                 let dict
-                if(elementInfo.softParse === 0) {
+                if(elementInfo.parseLevel === 0) {
                     dict = dictStr;
                 } else {
                     let softParse = false;

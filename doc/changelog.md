@@ -3,6 +3,8 @@
  - Added Error Checking for element dependencies 
 #### Fallen Changes
  - 
+#### documentation Changes
+ - updated the documentation for [element.js](element.js.md)
 # 0.8
 
 #### tileWin.js Changes
