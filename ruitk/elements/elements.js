@@ -125,14 +125,17 @@ export class Elements {
                 this.elementCount ++;
     
                 let element = elementInfo.function(dict, elementInfo);
-    
-                if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0 && elementInfo.handleStyle === false) {
-                    Style.style(element, elementInfo.style);
-                }
                 
                 if (Array.isArray(element) === false) {
                     element = [element];
                 }
+
+                if (elementInfo.handleStyle === false) {
+                    for (let thing of element) {
+                        thing = styleElement(thing, elementInfo);
+                    }
+                }
+                
                 currentStr = currentStr.replace(currentElement.str, "").trim();
                 
                 output = output.concat(element);
@@ -401,3 +404,22 @@ function resolveElementObject(elementInfo, elements) {
     }
     return elementInfo;
 };
+function styleElement(element, elementInfo) {
+    if (elementInfo.handleStyle === true) {
+        return element;
+    }
+    if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0) {
+        Style.style(element, elementInfo.style);
+    }
+
+    if (elementInfo.strictStyles === true) {
+        return element;
+    }
+    for(let key of Object.keys(elementInfo)) {
+        if(key.startsWith("style_") && typeof elementInfo[key] === "object" && Object.keys(elementInfo[key]).length !== 0) {
+            Style.style(element, elementInfo[key]);
+        }
+    }
+
+    return element;
+}

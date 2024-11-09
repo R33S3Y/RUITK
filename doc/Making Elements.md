@@ -44,7 +44,8 @@ info = {
 }
 ​
 ```
-
+ - `style_*`  - If a dict key starts with `style_` it will be treated just like the style key this can be disabled by setting `strictStyles` to true.
+ - `strictStyles` - Defaults to false - is used to disable the `style_` functionality. 
 ### Function Args
 The function will have 2 args inputted: 
 #### Info
