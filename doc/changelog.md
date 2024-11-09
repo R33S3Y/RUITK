@@ -5,6 +5,7 @@
  - 
 #### documentation Changes
  - updated the documentation for [element.js](element.js.md)
+ - added new file called [Making Elements](Making%20Elements.md) just for explaining the process of making elements
 # 0.8
 
 #### tileWin.js Changes
