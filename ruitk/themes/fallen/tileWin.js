@@ -89,8 +89,8 @@ let elements = [
                 
                 // border
                 borderStyle : "solid",
-                borderWidth : "3px",
-                borderRadius : "15px",
+                borderWidth : "var(--borderWidth)",
+                borderRadius : "var(--borderRadius)",
                 borderColor : "var(--accent1)",
                 boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
                 hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
@@ -105,7 +105,7 @@ let elements = [
                 padding : "10px",
 
                 // opacity
-                opacity : "0.45",
+                opacity : "0.55",
                 hover_opacity : "0.75",
                 
                 // background
@@ -151,7 +151,6 @@ let elements = [
                 let content = tile.content;
                 if (info.disableTileElement === false) {
                     let elementStr = `<tile>{"content" : ${tile.content}}`;
-                    console.debug(elementStr);
                     content = element.makeElements(elementStr);
                 } else {
                     content = element.parse(tile.content);

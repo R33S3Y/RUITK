@@ -9,18 +9,18 @@ let colors = {
 
     accent1: "rgba(20, 1, 65, 1)", // border
     accent2: "rgba(40, 2, 130, 1)", // border active
-    accent3: "rgba(40, 50, 250, 1)", // links
+    accent3: "rgba(20, 40, 250, 1)", // links
     
-    accent4: "rgba(80, 50, 250, 1)", // underline
+    accent4: "rgba(140, 100, 250, 1)", // underline
     accent5: "rgba(80, 50, 250, 1)", // bold
-    accent6: "rgba(80, 50, 250, 1)", // italic
+    accent6: "rgba(220, 100, 160, 1)", // italic
 
     standout1: "rgba(180, 100, 235, 1)", // h1
     standout2: "rgba(190, 120, 245, 1)", // h2
     standout3: "rgba(200, 160, 255, 1)", // h3
-    standout4: "rgba(250, 200, 255, 1)", // p1
-    standout5: "rgba(230, 180, 245, 1)", // p2
-    standout6: "rgba(210, 160, 235, 1)", // p3
+    standout4: "rgba(255, 240, 255, 1)", // p1
+    standout5: "rgba(235, 220, 235, 1)", // p2
+    standout6: "rgba(215, 200, 215, 1)", // p3
 };
 
 
@@ -35,6 +35,12 @@ let config = {
     fontSizeP1 : "1.5em",
     fontSizeP2 : "1em",
     fontSizeP3 : "0.75em",
+
+    borderRadius : "10px",
+    borderWidth : "3px",
+
+    margin : "0.5em",
+    padding : "1em",
 };
 
 let elements = [
@@ -239,30 +245,26 @@ let elements = [
         style : {
             margin : "0",
             fontFamily : "var(--font)",
-            color : "var(--accent6)",
+            color : "var(--accent3)",
         },
         element : "a"
     }, { // grid
         name : "grid",
         function : (info, element) => {
             info = Merge.dicts({
-                r: "auto", // default row setting
-                c: "auto", // default column setting
+                rTemplate: "auto", // default row setting
+                cTemplate: "auto", // default column setting
                 gap: "0", // gap between rows and columns
                 areas: "", // grid template areas (optional)
-                j : "space-between",
+                justifyContent : "space-between",
             }, info);
     
             let grid = element.generate(info, element);
 
-            // Remove the child element info
-            grid.style.gridColumn = "";
-            grid.style.gridRow = "";
-    
             // Apply grid-specific styles
             grid.style.display = "grid";
-            grid.style.gridTemplateRows = info.r;
-            grid.style.gridTemplateColumns = info.c;
+            grid.style.gridTemplateRows = info.rTemplate;
+            grid.style.gridTemplateColumns = info.cTemplate;
             grid.style.gridGap = info.gap;
 
             grid.style.justifyContent = info.j;

@@ -129,7 +129,7 @@ export class Style {
         }
 
         if (styleElement.textContent.includes(`.${className}`)) { //style is already made so don't bother
-            console.debug("skipped style processing");
+            console.debug("style Function: skipped duplicate style processing");
             return element;
         }
         
