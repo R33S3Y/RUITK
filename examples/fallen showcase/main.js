@@ -13,7 +13,7 @@ elements.addElements(FallenInput.getElements());
 
 elements.append("body", elements.makeElements(`
     <backgroundImg>{}
-    <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"]}, "tiles" : [
+    <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"], tilePercentageX : [30,40,30]}, "tiles" : [
         {    
             "name" : "TextWindow",
             "x" : 1,

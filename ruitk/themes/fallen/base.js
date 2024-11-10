@@ -24,23 +24,29 @@ let colors = {
 };
 
 
-let config = {
+let config = { 
     transition : "all 0.2s ease-in-out",
 
     font : "Arial, Helvetica, sans-serif",
-    
-    fontSizeH1 : "3.2em",
-    fontSizeH2 : "2.5em",
-    fontSizeH3 : "2em",
-    fontSizeP1 : "1.5em",
-    fontSizeP2 : "1em",
-    fontSizeP3 : "0.75em",
+       
+    fontSizeH1 : "3.2vw",
+    fontSizeH2 : "2.5vw",
+    fontSizeH3 : "2vw",
+    fontSizeP1 : "1.5vw",
+    fontSizeP2 : "1vw",
+    fontSizeP3 : "0.75vw",
 
-    borderRadius : "10px",
-    borderWidth : "3px",
+    borderRadius : "1vw",
+    borderWidth : "0.25vw",
 
-    margin : "0.5em",
-    padding : "1em",
+    marginSmall : "0.1vw",
+    paddingSmall : "0.1vw",
+
+    marginMedium : "0.6vw",
+    paddingMedium : "0.6vw",
+
+    marginLarge : "1vw",
+    paddingLarge : "1vw",
 };
 
 let elements = [
@@ -120,8 +126,39 @@ let elements = [
             }
         
             return e;
-        }
-        ,
+        },
+        style_standard : {
+            transition: "var(--transition)",
+            fontFamily : "var(--font)",
+            focus_outline : "3px solid var(--standout3)",
+            fontSize : "1vw",
+            position : "relative",
+            overflow : "hidden",
+            boxSizing : "border-box",
+        },
+        style_border : {
+            border : "var(--borderWidth) solid var(--accent1)",
+            borderRadius : "var(--borderRadius)",
+            boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
+            hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
+            hover_borderColor : "var(--accent2)",
+        },
+        style_paddingNone : {
+            margin : "0",
+            padding : "0",
+        },
+        style_paddingSmall : {
+            margin : "var(--marginSmall)",
+            padding : "var(--paddingSmall)",
+        },
+        style_paddingMedium : {
+            margin : "var(--marginMedium)",
+            padding : "var(--paddingMedium)",
+        },
+        style_paddingLarge : {
+            margin : "var(--marginLarge)",
+            padding : "var(--paddingLarge)",
+        },
     }, { // h1
         name : "h1",
         function : (info, element) => {
@@ -132,102 +169,99 @@ let elements = [
         }, 
         generate : "<base>",
         style : {
-            padding : "10px",
-            margin : "0",
-            fontFamily : "var(--font)",
             fontSize : "var(--fontSizeH1)",
             color : "var(--standout1)",
         },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element : "h1"
     }, { // h2
         name : "h2",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            padding : "10px",
-            margin : "0",
-            fontFamily : "var(--font)",
             fontSize : "var(--fontSizeH2)",
             color : "var(--standout2)",
         },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element : "h2"
     }, { // h3
         name : "h3",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            padding : "10px",
-            margin : "0",
-            fontFamily : "var(--font)",
             fontSize : "var(--fontSizeH3)",
             color : "var(--standout3)",
         },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element : "h3"
     }, { // p1
         name : "p1",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            padding : "10px",
-            margin : "0",
-            fontFamily : "var(--font)",
             fontSize : "var(--fontSizeP1)",
             color : "var(--standout4)",
         },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element : "p"
     }, { // p2
         name : "p2",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            padding : "10px",
-            margin : "0",
-            fontFamily : "var(--font)",
             fontSize : "var(--fontSizeP2)",
             color : "var(--standout5)",
         },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element : "p"
     }, { // p3
         name : "p3",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            padding : "10px",
-            margin : "0",
-            fontFamily : "var(--font)",
             fontSize : "var(--fontSizeP3)",
             color : "var(--standout6)",
         },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element : "p"
     }, { // b
         name : "b",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            margin : "0",
-            fontFamily : "var(--font)",
+            fontSize: "inherit",
             color : "var(--accent5)",
         },
+        style_standard : "<base>",
+        style_paddingNone : "<base>",
         element : "b"
     }, { // i
         name : "i",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            margin : "0",
-            fontFamily : "var(--font)",
+            fontSize: "inherit",
             color : "var(--accent6)",
         },
+        style_standard : "<base>",
+        style_paddingNone : "<base>",
         element : "i"
     }, { // u
         name : "u",
         function : "<h1>", 
         generate : "<base>",
         style : {
-            margin : "0",
-            fontFamily : "var(--font)",
+            fontSize: "inherit",
             color : "var(--accent4)",
         },
+        style_standard : "<base>",
+        style_paddingNone : "<base>",
         element : "u"
     }, { // a
         name : "a",
@@ -243,10 +277,11 @@ let elements = [
         }, 
         generate : "<base>",
         style : {
-            margin : "0",
-            fontFamily : "var(--font)",
+            fontSize: "inherit",
             color : "var(--accent3)",
         },
+        style_standard : "<base>",
+        style_paddingNone : "<base>",
         element : "a"
     }, { // grid
         name : "grid",
@@ -277,6 +312,7 @@ let elements = [
         },
         generate : "<base>",
         style: {},
+        style_standard : "<base>",
         element: "div"
     }
 ];

@@ -1,7 +1,15 @@
+## 0.8.2
+#### element.js Changes
+ - bug fixed the `style_` feature
+ - Changed style handling so `style` overwrites `style_`
+#### Fallen Changes
+ - Restructured most CSS
+#### documentation Changes
+ - Added a credit section to the [README](../README.md)
 ## 0.8.1
 #### element.js Changes
  - Added Error Checking for element dependencies 
- - Added a new flag called `strictStyles` to control a new feature
+ - Added a new flag called `strictStyles` to control the `style_` feature
 #### documentation Changes
  - updated the documentation for [element.js](element.js.md)
  - added new file called [Making Elements](Making%20Elements.md) just for explaining the process of making elements
