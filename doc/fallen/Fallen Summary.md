@@ -8,6 +8,7 @@
 		 - [p1, p2, p3](#p1,%20p2,%20p3)
 		 - [b, u, i](Fallen%20Summary.md#b,%20u,%20i)
 		 - [a](Fallen%20Summary.md#a)
+		 - [grid](Fallen%20Summary.md#grid)
 	 - [TileWin](Fallen%20Summary.md#TileWin)
 	 - [Input](Fallen%20Summary.md#Input)
 
@@ -65,16 +66,19 @@ B, u & i are for bold, underline and italic elements respectively. They also onl
 A elements work just like [b, u & i](#b,%20u,%20i) elements but with the addition of the value `href` which defaults to a empty string and sets the `element.href` value.
 
 ### grid
-Grid is an invisible grid meant for organizing and moving around elements. it uses the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) as well as: 
- - Input name - 
- - `rTemplate` - `grid.style.gridTemplateRows`
- - `cTemplate`
- - `gap`
- - `areas`
- - `justifyContent`
-
+Grid is an invisible grid meant for organizing and moving around elements. it uses the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) as well as all the ones shown here: 
+ - Input name - CSS Value Changed - Default value
+ - `rTemplate` - `grid.style.gridTemplateRows` - `"auto"`
+ - `cTemplate` - `grid.style.gridTemplateColumns` - `"auto"`
+ - `gap` - `grid.style.gridGap` - `"0"`
+ - `areas` - `grid.style.gridTemplateAreas` - `"initial"` 
+ - `justifyContent` - `grid.style.justifyContent` - `"space-between"`
 ## TileWin
 #### `tileWin.js`
+TODO!!
 
 ## Input
 ### `input.js`
+There are no elements in `input.js` as of 0.8.3 as the have been moved to `staging.js` while they get there functions worked out.  
+## Staging
+### `staging.js`

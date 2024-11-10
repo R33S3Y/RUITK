@@ -1,3 +1,9 @@
+## 0.8.3
+#### Fallen Changes
+ - Added a file called `staging.js` for tests and in development of elements
+ - Moved all elements from `input.js` to `staging.js`
+#### documentation Changes
+ - 
 ## 0.8.2
 #### element.js Changes
  - bug fixed the `style_` feature

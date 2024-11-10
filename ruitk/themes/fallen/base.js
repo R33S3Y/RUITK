@@ -290,7 +290,7 @@ let elements = [
                 rTemplate: "auto", // default row setting
                 cTemplate: "auto", // default column setting
                 gap: "0", // gap between rows and columns
-                areas: "", // grid template areas (optional)
+                areas: "initial", // grid template areas (optional)
                 justifyContent : "space-between",
             }, info);
     
@@ -302,11 +302,11 @@ let elements = [
             grid.style.gridTemplateColumns = info.cTemplate;
             grid.style.gridGap = info.gap;
 
-            grid.style.justifyContent = info.j;
+            grid.style.justifyContent = info.justifyContent;
     
-            if (info.areas !== "") {
-                grid.style.gridTemplateAreas = info.areas;
-            }
+
+            grid.style.gridTemplateAreas = info.areas;
+
     
             return grid;
         },

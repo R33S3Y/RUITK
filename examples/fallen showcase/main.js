@@ -1,15 +1,17 @@
 // tools
-import { Elements } from "/ruitk/elements/elements.js";
+import { Elements } from "../../ruitk/elements/elements.js";
 let elements = new Elements();
 // styles
-import { FallenBase } from "/ruitk/themes/fallen/base.js";
-import { FallenTileWin } from "/ruitk/themes/fallen/tileWin.js";
-import { FallenInput } from "/ruitk/themes/fallen/input.js";
+import { FallenBase } from "../../ruitk/themes/fallen/base.js";
+import { FallenTileWin } from "../../ruitk/themes/fallen/tileWin.js";
+import { FallenInput } from "../../ruitk/themes/fallen/input.js";
+import { FallenStaging } from "../../ruitk/themes/fallen/staging.js";
 
 
 elements.addElements(FallenBase.getElements());
 elements.addElements(FallenTileWin.getElements());
 elements.addElements(FallenInput.getElements());
+elements.addElements(FallenStaging.getElements());
 
 elements.append("body", elements.makeElements(`
     <backgroundImg>{}
