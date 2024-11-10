@@ -19,19 +19,13 @@ let elements = [
         },
         generate : "<base>",
         style : {
-            transition: "var(--transition)",
-            fontFamily : "var(--font)",
-            fontSize : "1em",
-            padding : "8px",
-            margin : "5px",
             width : "100%",
             color : "var(--accent3)",
-
-            border : "var(--borderWidth) solid var(--accent1)",
-            borderRadius : "var(--borderRadius)",
-
             backgroundColor : "var(--standout4)",
         },
+        style_standard : "<base>",
+        style_border : "<base>",
+        style_paddingMedium : "<base>",
         element : "input"
     },
     {   // radio
@@ -51,11 +45,11 @@ let elements = [
         },
         generate : "<base>",
         style : {
-            transition: "var(--transition)",
-            fontFamily : "var(--font)",
-            margin : "5px",
             accentColor : "var(--accent1)",
+            backgroundColor : "var(--standout4)",
         },
+        style_standard : "<base>",
+        style_paddingMedium : "<base>",
         element : "input"
     },
     {   // checkbox
@@ -73,6 +67,8 @@ let elements = [
         },
         generate : "<base>",
         style : "<radio>",
+        style_standard : "<base>",
+        style_paddingMedium : "<base>",
         element : "input"
     },
     {   // dropdown
@@ -96,6 +92,9 @@ let elements = [
         },
         generate : "<base>",
         style : "<combo>",
+        style_standard : "<base>",
+        style_border : "<base>",
+        style_paddingMedium : "<base>",
         element : "select"
     },
     {   // combo box
@@ -123,16 +122,12 @@ let elements = [
         },
         generate : "<base>",
         style : {
-            transition: "var(--transition)",
-            fontFamily : "var(--font)",
-            fontSize : "1em",
-            padding : "8px",
-            margin : "5px",
             color : "var(--accent3)",
-
-            border : "var(--borderWidth) solid var(--accent1)",
-            borderRadius : "var(--borderRadius)",
+            backgroundColor : "var(--standout4)",
         },
+        style_standard : "<base>",
+        style_border : "<base>",
+        style_paddingMedium : "<base>",
         element : "input"
     },
     {   // button
@@ -150,6 +145,9 @@ let elements = [
         },
         generate : "<base>",
         style : "<submit>",
+        style_standard : "<base>",
+        style_border : "<base>",
+        style_paddingMedium : "<base>",
         element : "input"
     },
     {   // submit
@@ -167,20 +165,15 @@ let elements = [
         },
         generate : "<base>",
         style : {
-            transition: "var(--transition)",
-            fontFamily : "var(--font)",
-            padding : "8px",
-            margin : "5px",
             color : "var(--standout4)",
             cursor : "pointer",
-
-            border : "var(--borderWidth) solid var(--accent1)",
-            borderRadius : "var(--borderRadius)",
-            hover_borderColor : "var(--accent2)",
 
             backgroundColor : "var(--accent1)",
             hover_backgroundColor : "var(--accent2)",
         },
+        style_standard : "<base>",
+        style_border : "<base>",
+        style_paddingMedium : "<base>",
         element : "input"
     }
 ];

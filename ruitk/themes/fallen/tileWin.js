@@ -27,7 +27,8 @@ let elements = [
             height : "100%",
             objectFit : "cover",
             zIndex : "-1",
-        }
+        },
+        style_standard : "<base>",
     }, { // tile
         name : "tile",
         function : (info, element) => {
@@ -40,12 +41,16 @@ let elements = [
             let outerTile = document.createElement("div");
             outerTile.id = info.outerTileId;
             
+            let outerStyle = element.style.outerTile;
+            outerStyle = Merge.dicts(outerStyle, element.style_standard, []);
+            outerStyle = Merge.dicts(outerStyle, element.style_border, []);
+
             outerTile.style.left = "0%";
             outerTile.style.top = "0%";
-            outerTile.style.width = `calc(100% - (${Style.query("marginLeft", element.style.outerTile)} + ${Style.query("marginRight", element.style.outerTile)}))`;
-            outerTile.style.height = `calc(100% - (${Style.query("marginTop", element.style.outerTile)} + ${Style.query("marginBottom", element.style.outerTile)}))`;
+            outerTile.style.width = `calc(100% - (${outerStyle.margin} * 2))`;
+            outerTile.style.height = `calc(100% - (${outerStyle.margin} * 2))`;
 
-            Style.style(outerTile, element.style.outerTile);
+            Style.style(outerTile, outerStyle);
 
             let innerTile = document.createElement("div");
             outerTile.appendChild(innerTile);
@@ -70,39 +75,25 @@ let elements = [
             innerTile.style.width = "100%";
             innerTile.style.height = "100%";
 
-            Style.style(innerTile, element.style.innerTile);
+            let innerStyle = element.style.innerTile;
+            innerStyle = Merge.dicts(innerStyle, element.style_standard, []);
+
+            Style.style(innerTile, innerStyle);
 
             return outerTile;
         },
         style : {
             outerTile : {
-                transition: "var(--transition)",
-                overflow : "hidden",
-                position : "relative",
-                boxSizing : "border-box",
-                margin : "10px",
-                padding : "0px",
+                margin : "var(--marginMedium)",
+                padding : "0",
 
                 // background
                 backdropFilter: "blur(2px)",
                 hover_backdropFilter: "blur(10px)",
-                
-                // border
-                borderStyle : "solid",
-                borderWidth : "var(--borderWidth)",
-                borderRadius : "var(--borderRadius)",
-                borderColor : "var(--accent1)",
-                boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
-                hover_boxShadow: "0 0 15px 2px rgba(0, 0, 0, 1)",
-                hover_borderColor : "var(--accent2)",
             },
             innerTile : {
-                transition: "var(--transition)",
-                position : "relative",
-                overflow : "hidden",
-                boxSizing : "border-box",
-                margin : "0px",
-                padding : "10px",
+                margin : "0",
+                padding : "var(--paddingMedium)",
 
                 // opacity
                 opacity : "0.55",
@@ -113,11 +104,11 @@ let elements = [
                 hover_backgroundColor : "var(--background1)",
 
                 // border
-                borderStyle : "solid",
-                borderWidth : "0px",
-                borderRadius : "0px",
+                borderWidth : "0",
             },
         },
+        style_standard : "<base>",
+        style_border : "<base>",
         handleStyle : true,
     }, { // tilewin
         name : "tileWin",

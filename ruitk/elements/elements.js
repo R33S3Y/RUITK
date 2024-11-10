@@ -408,18 +408,14 @@ function styleElement(element, elementInfo) {
     if (elementInfo.handleStyle === true) {
         return element;
     }
-    if (typeof elementInfo.style === "object" && Object.keys(elementInfo.style).length !== 0) {
-        Style.style(element, elementInfo.style);
-    }
+    let styles = elementInfo.style;
 
-    if (elementInfo.strictStyles === true) {
-        return element;
-    }
     for(let key of Object.keys(elementInfo)) {
-        if(key.startsWith("style_") && typeof elementInfo[key] === "object" && Object.keys(elementInfo[key]).length !== 0) {
-            Style.style(element, elementInfo[key]);
+        if(key.startsWith("style_") && typeof elementInfo[key] === "object" && Object.keys(elementInfo[key]).length !== 0 && elementInfo.strictStyles === false) {
+            styles = Merge.dicts(elementInfo[key], styles, []);
         }
     }
+    Style.style(element, styles);
 
     return element;
 }
