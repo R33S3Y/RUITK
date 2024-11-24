@@ -8,7 +8,9 @@
 		 - [p1, p2, p3](#p1,%20p2,%20p3)
 		 - [b, u, i](Fallen%20Summary.md#b,%20u,%20i)
 		 - [a](Fallen%20Summary.md#a)
+		 - [grid](Fallen%20Summary.md#grid)
 	 - [TileWin](Fallen%20Summary.md#TileWin)
+		 - 
 	 - [Input](Fallen%20Summary.md#Input)
 
 # Project Goals
@@ -65,16 +67,24 @@ B, u & i are for bold, underline and italic elements respectively. They also onl
 A elements work just like [b, u & i](#b,%20u,%20i) elements but with the addition of the value `href` which defaults to a empty string and sets the `element.href` value.
 
 ### grid
-Grid is an invisible grid meant for organizing and moving around elements. it uses the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) as well as: 
- - Input name - 
- - `rTemplate` - `grid.style.gridTemplateRows`
- - `cTemplate`
- - `gap`
- - `areas`
- - `justifyContent`
-
+Grid is an invisible grid meant for organizing and moving around elements. it uses the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) as well as all the ones shown here: 
+ - Input name - CSS Value Changed - Default value
+ - `rTemplate` - `grid.style.gridTemplateRows` - `"auto"`
+ - `cTemplate` - `grid.style.gridTemplateColumns` - `"auto"`
+ - `gap` - `grid.style.gridGap` - `"0"`
+ - `areas` - `grid.style.gridTemplateAreas` - `"initial"` 
+ - `justifyContent` - `grid.style.justifyContent` - `"space-between"`
 ## TileWin
 #### `tileWin.js`
+Is a small collection of elements intended for use around the `tilewin.js` lib\
+### backgroundImg
+A background image that simply exists in the background. It does not use any of the [Standard Inputs](#Standard%20Inputs). Instead of that it provides the following:
+ - `id` - sets `element.id` - Defaults to the Element name and the `element.elementCount`
+ - `img` - sets `element.src` - Defaults to the `wallpaper.jpg` provided by the fallen project. Thanks [Raphaela](https://www.instagram.com/fredyguy12_art/)!!!
+ - `alt` - sets `element.alt` - Defaults to a description of `wallpaper.jpg` 
 
 ## Input
 ### `input.js`
+There are no elements in `input.js` as of 0.8.3 as the have been moved to `staging.js` while they get there functions worked out.  
+## Staging
+### `staging.js`

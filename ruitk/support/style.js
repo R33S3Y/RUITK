@@ -80,6 +80,15 @@ export class Style {
             return cssStyles;
         }
 
+    
+        if (Array.isArray(style) === true) { // Allows us to pass in array of mutiple styles at once
+            let mergedStyle = {};
+            for (let subStyle of style) {
+                mergedStyle = Merge.dicts(subStyle, mergedStyle, []);
+            }
+            style = mergedStyle;
+        }
+
         if (typeof style !== "object" || style === null) {
             console.error("style is not dict");
             return;

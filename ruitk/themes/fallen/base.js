@@ -3,9 +3,9 @@ import { Style } from "../../support/style.js";
 
 let colors = {
     background0: "rgba(0, 0, 0, 1)", // Default Background
-    background1: "rgba(0, 0, 0, 1)", // Lighter (Focus) Background
-    background2: "", 
-    background3: "", 
+    background1: "rgba(0, 0, 0, 1)", // Lighter (Focus / Hover) Background
+    background2: "rgba(255, 240, 255, 1)", // Background for input boxes and the sort
+    background3: "rgba(255, 210, 250, 1)", // Hover Background for input boxes and the sort
 
     accent1: "rgba(20, 1, 65, 1)", // border
     accent2: "rgba(40, 2, 130, 1)", // border active
@@ -290,7 +290,7 @@ let elements = [
                 rTemplate: "auto", // default row setting
                 cTemplate: "auto", // default column setting
                 gap: "0", // gap between rows and columns
-                areas: "", // grid template areas (optional)
+                areas: "initial", // grid template areas (optional)
                 justifyContent : "space-between",
             }, info);
     
@@ -302,11 +302,11 @@ let elements = [
             grid.style.gridTemplateColumns = info.cTemplate;
             grid.style.gridGap = info.gap;
 
-            grid.style.justifyContent = info.j;
+            grid.style.justifyContent = info.justifyContent;
     
-            if (info.areas !== "") {
-                grid.style.gridTemplateAreas = info.areas;
-            }
+
+            grid.style.gridTemplateAreas = info.areas;
+
     
             return grid;
         },

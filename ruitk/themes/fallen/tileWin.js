@@ -10,12 +10,14 @@ let elements = [
         function : (info, element) => {
             info = Merge.dicts({
                 id : `${element.name}-${element.elementCount}`, // id
-                img : "/ruitk/themes/fallen/wallpaper.jpg",
+                img : new URL('./wallpaper.jpg', import.meta.url).href,
+                alt : "A background image of a girl falling into the abyss with a upsidedown city scape coming from the top of the image. Art by [Raphaela](https://www.instagram.com/fredyguy12_art/)"
             }, info);
 
             let img = document.createElement("img");
             img.id = info.id;
             img.src = info.img;
+            img.alt = info.alt;
 
             return img;
         },

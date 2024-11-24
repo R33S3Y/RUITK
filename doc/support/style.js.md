@@ -133,8 +133,7 @@ document.body.appendChild(styledElement);
 - **Dynamic Class Generation**: The function generates a unique class name for each set of styles to ensure consistency.
 - **Conditional Styles**: Handles conditional styles for states like hover, landscape, and portrait modes.
 - **Flag Handling**: Allows forcing certain styles by passing flags such as `["hover", "landscape"]`.
-
-Here’s the documentation for the `declare` function following the style you provided:
+- **Applying Multiple Styles**: You can also pass in a array of style dicts in place of the style argument. The earlier items take priority for overlapping styles. 
 
 ---
 # Query
