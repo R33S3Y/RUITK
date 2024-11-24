@@ -15,7 +15,7 @@ elements.addElements(FallenStaging.getElements());
 
 elements.append("body", elements.makeElements(`
     <backgroundImg>{}
-    <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"], tilePercentageX : [30,40,30]}, "tiles" : [
+    <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"], tilePercentageX : [30,30,40]}, "tiles" : [
         {    
             "name" : "TextWindow",
             "x" : 1,
@@ -55,13 +55,13 @@ elements.append("body", elements.makeElements(`
             "y" : 1,
             content : 
                 <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto auto auto auto" , "content" : 
-                    <radio>{"content" : "h1 h1 h1 h1 h1 h1 h1", "c" : "1", "r" : "1"}
-                    <radio>{"content" : "h2 h2 h2 h2 h2 h2 h2", "c" : "1", "r" : "2"}
-                    <radio>{"content" : "h3 h3 h3 h3 h3 h3 h3", "c" : "1", "r" : "3"}
+                    <radio>{"content" : "test text", "c" : "1", "r" : "1"}
+                    <radio>{"content" : "test text", "c" : "1", "r" : "2"}
+                    <radio>{"content" : "test text", "c" : "1", "r" : "3"}
 
-                    <checkbox>{"content" : "p1 p1 p1 p1 p1 p1 p1", "c" : "1", "r" : "4"}
-                    <checkbox>{"content" : "p2 p2 p2 p2 p2 p2 p2", "c" : "1", "r" : "5"}
-                    <checkbox>{"content" : "p3 p3 p3 p3 p3 p3 p3", "c" : "1", "r" : "6"}
+                    <checkbox>{"content" : "test text", "c" : "1", "r" : "4"}
+                    <checkbox>{"content" : "test text", "c" : "1", "r" : "5"}
+                    <checkbox>{"content" : "test text", "c" : "1", "r" : "6"}
 
                     <dropdown>{options : ["1", "2", "3"], "c" : "2", "r" : "1"}
 

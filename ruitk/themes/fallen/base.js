@@ -3,9 +3,9 @@ import { Style } from "../../support/style.js";
 
 let colors = {
     background0: "rgba(0, 0, 0, 1)", // Default Background
-    background1: "rgba(0, 0, 0, 1)", // Lighter (Focus) Background
-    background2: "", 
-    background3: "", 
+    background1: "rgba(0, 0, 0, 1)", // Lighter (Focus / Hover) Background
+    background2: "rgba(255, 240, 255, 1)", // Background for input boxes and the sort
+    background3: "rgba(255, 210, 250, 1)", // Hover Background for input boxes and the sort
 
     accent1: "rgba(20, 1, 65, 1)", // border
     accent2: "rgba(40, 2, 130, 1)", // border active

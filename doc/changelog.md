@@ -2,8 +2,14 @@
 #### Fallen Changes
  - Added a file called `staging.js` for tests and in development of elements
  - Moved all elements from `input.js` to `staging.js`
+ - Fiddled around with checkbox and radio buttons
 #### documentation Changes
- - 
+ - Added documentation the following fallen elements:
+	 - [grid](fallen/Fallen%20Summary.md#grid)
+	 - [backgroundImg](fallen/Fallen%20Summary.md#backgroundImg)
+ - Added a note about the `style.js` change into the documentation
+#### style.js changes
+ - Add the ability to pass in a list into the style function
 ## 0.8.2
 #### element.js Changes
  - bug fixed the `style_` feature
@@ -167,7 +173,7 @@
 #### style.js changes
  - Added 16 new flags to style.js - [Full list](support/style.js.md######All%20Flags)
 #### documentation Changes 
- - Fixed links in [README](README.md)
+ - Fixed links in [README](../README.md)
 
 ## 0.3.3
 #### style.js changes

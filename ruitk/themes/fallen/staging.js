@@ -23,7 +23,7 @@ let elements = [
         style : {
             width : "100%",
             color : "var(--accent3)",
-            backgroundColor : "var(--standout4)",
+            backgroundColor : "var(--background2)",
         },
         style_standard : "<base>",
         style_border : "<base>",
@@ -38,40 +38,86 @@ let elements = [
                 checked : false,
             }, info);
 
+            let checkbox = document.createElement("input");
+            checkbox.type = "radio";
+            checkbox.checked = info.checked;
+            
+            checkbox = Style.style(checkbox, [element.style, element.style_standard, element.style_paddingMedium, element.style_border]);
+
+
+            if (info.content) {
+                if (typeof info.content === "string") {
+                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+                }
+                if (Array.isArray(info.content) === false) {
+                    info.content = [info.content];
+                }
+            } else {
+                info.content = [];
+            }
+            info.content.unshift(checkbox);
+
             let e = element.generate(info, element);
-            e.type = "radio";
-            e.name = info.name;
-            e.checked = info.checked;
 
             return e;
         },
         generate : "<base>",
         style : {
-            accentColor : "var(--accent1)",
-            backgroundColor : "var(--standout4)",
+            appearance: "none",
+            background : "var(--background2)",
+            hover_background : "var(--background3)",
         },
         style_standard : "<base>",
         style_paddingMedium : "<base>",
-        element : "input"
+        style_border : "<base>",
+        element : "label",
+        handleStyle : true,
     },
     {   // checkbox
         name : "checkbox",
         function : (info, element) => {
             info = Merge.dicts({
+                name : "",
                 checked : false,
             }, info);
 
+            let checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = info.checked;
+            
+            checkbox = Style.style(checkbox, [element.style, element.style_standard, element.style_paddingMedium, element.style_border]);
+
+
+            if (info.content) {
+                if (typeof info.content === "string") {
+                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+                }
+                if (Array.isArray(info.content) === false) {
+                    info.content = [info.content];
+                }
+            } else {
+                info.content = [];
+            }
+            info.content.unshift(checkbox);
+
             let e = element.generate(info, element);
-            e.type = "checkbox";
-            e.checked = info.checked;
 
             return e;
         },
         generate : "<base>",
-        style : "<radio>",
+        style : {
+            appearance: "none",
+            background : "var(--background2)",
+            hover_background : "var(--background3)",
+            borderRadius : "0",
+            checked_background : "var(--accent1)",
+            checked_hover_background : "var(--accent2)",
+        },
         style_standard : "<base>",
         style_paddingMedium : "<base>",
-        element : "input"
+        style_border : "<base>",
+        element : "label",
+        handleStyle : true,
     },
     {   // dropdown
         name : "dropdown",
@@ -83,10 +129,18 @@ let elements = [
             let e = document.createElement("select");
             e.id = `${element.name}-${element.elementCount}`;
 
+            let selectStyles = Merge.dicts(element.style, element.style_standard);
+            selectStyles = Merge.dicts(selectStyles, element.style_border);
+            selectStyles = Merge.dicts(selectStyles, element.style_paddingMedium);
+
+            e = Style.style(e, selectStyles);
+
+            let optionStyles = Merge.dicts(element.style_option, element.style_standard);
             for (let option of info.options) {
                 let optionElement = document.createElement("option");
                 optionElement.value = option.value || option;
                 optionElement.textContent = option.label || option;
+                optionElement = Style.style(optionElement, optionStyles);
                 e.appendChild(optionElement);
             }
 
@@ -94,10 +148,12 @@ let elements = [
         },
         generate : "<base>",
         style : "<combo>",
+        style_option : "<combo>",
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        element : "select"
+        element : "select",
+        handleStyle : true,
     },
     {   // combo box
         name : "combo",
@@ -125,7 +181,11 @@ let elements = [
         generate : "<base>",
         style : {
             color : "var(--accent3)",
-            backgroundColor : "var(--standout4)",
+            backgroundColor : "var(--background2)",
+        },
+        style_option : {
+            color : "var(--accent3)",
+            backgroundColor : "var(--background2)",
         },
         style_standard : "<base>",
         style_border : "<base>",
