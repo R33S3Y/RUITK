@@ -1,3 +1,6 @@
+## 0.8.4
+#### support changes
+ - made a dependency called `convert.js` for converting strings between casing types eg: `camelCase` to `snake_case`
 ## 0.8.3
 #### Fallen Changes
  - Added a file called `staging.js` for tests and in development of elements
