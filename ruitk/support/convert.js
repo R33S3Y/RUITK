@@ -13,16 +13,25 @@ export class Convert {
         const wordsArray = toArray(str, oldType); // Convert input string to an array of words
         // Convert the array to the intended type using appropriate conversion function
         switch (type) {
-            case 1 || "normal words" || "normalWords":
+            case 1:
+            case "normal words":
+            case "normalWords":
                 return toNormalWords(wordsArray);
-            case 2 || "dashed-case" || "dashedCase":
+            case 2:
+            case "dashed-case":
+            case "dashedCase":
                 return toDashedCase(wordsArray);
-            case 3 || "snake_case" || "snakeCase":
+            case 3:
+            case "snake_case":
+            case "snakeCase":
                 return toSnakeCase(wordsArray);
-            case 4 || "camelCase":
+            case 4:
+            case "camelCase":
                 return toCamelCase(wordsArray);
             default:
-                throw new Error("Invalid conversion type");
+                console.error("Invalid conversion type");
+                console.debug(type);
+                return str;
         }
     }
 }
