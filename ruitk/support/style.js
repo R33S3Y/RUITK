@@ -1,4 +1,5 @@
 import { Merge } from "./merger.js";
+import { Convert } from "./convert.js";
 
 export class Style {
     static style(element, style, forceOnFlags = "") {
@@ -142,7 +143,7 @@ export class Style {
             return element;
         }
         
-        let styleText = ""; 
+        
 
         // landscape true
         if(this.isLandscape() === true || forceOnFlags.includes("landscape") === true) {
@@ -178,98 +179,118 @@ export class Style {
          * 
          * To all one person who will read this, your welcome future r33s3y.
          */
+        let pseudoElements = [
+            // Pseudo-Classes
+            "hover",              // Matches elements when hovered
+            "active",             // Matches elements when active
+            "focus",              // Matches elements when focused
+            "visited",            // Matches visited links
+            "link",               // Matches unvisited links
+            "first-child",        // Matches the first child of an element
+            "last-child",         // Matches the last child of an element
+            //"nth-child(n)",       // Matches the nth child of an element
+            //"nth-last-child(n)",  // Matches the nth child from the end
+            "only-child",         // Matches elements that are the only child
+            "empty",              // Matches elements with no children
+            //"not(selector)",      // Matches elements not matching the selector
+            "checked",            // Matches checked input elements
+            "enabled",            // Matches enabled input elements
+            "disabled",           // Matches disabled input elements
+            "root",               // Matches the root element of the document
+            "target",             // Matches an element targeted by the URL fragment
+            "first-of-type",      // Matches the first element of its type
+            "last-of-type",       // Matches the last element of its type
+            //"nth-of-type(n)",     // Matches the nth element of its type
+            //"nth-last-of-type(n)",// Matches the nth element of its type from the end
+            "only-of-type",       // Matches elements that are the only of their type
+            "valid",              // Matches input elements with valid values
+            "invalid",            // Matches input elements with invalid values
+            "in-range",           // Matches inputs within the specified range
+            "out-of-range",       // Matches inputs outside the specified range
+            "required",           // Matches required input elements
+            "optional",           // Matches optional input elements
+            "read-only",          // Matches read-only elements
+            "read-write",         // Matches editable elements
 
-        let flagInfo = [{
-            name : "active",
-            prefix : ":",
-            style : null
-        },{
-            name : "after",
-            prefix : "::",
-            style : null
-        },{
-            name : "before",
-            prefix : "::",
-            style : null
-        },{
-            name : "checked",
-            prefix : ":",
-            style : null
-        },{
-            name : "default",
-            prefix : ":",
-            style : null
-        },{
-            name : "disabled",
-            prefix : ":",
-            style : null
-        },{
-            name : "empty",
-            prefix : ":",
-            style : null
-        },{
-            name : "enabled",
-            prefix : ":",
-            style : null
-        },{
-            name : "focus",
-            prefix : ":",
-            style : null
-        },{
-            name : "hover",
-            prefix : ":",
-            style : null
-        },{
-            name : "indeterminate",
-            prefix : ":",
-            style : null
-        },{
-            name : "invalid",
-            prefix : ":",
-            style : null
-        },{
-            name : "link",
-            prefix : ":",
-            style : null
-        },{
-            name : "optional",
-            prefix : ":",
-            style : null
-        },{
-            name : "required",
-            prefix : ":",
-            style : null
-        },{
-            name : "valid",
-            prefix : ":",
-            style : null
-        },{
-            name : "visited",
-            prefix : ":",
-            style : null
-        }];
+            // Pseudo-Elements (Double-Colon Syntax)
+            "before",
+            "after",
+            "first-line",
+            "first-letter",
+            "placeholder",
+            "selection",
+            "marker",
+            "backdrop",
+            "cue",
+            "spelling-error",
+            "grammar-error",
+        ];
+        let specialPseudoElements = [
+            "after",
+            "before",
+            "first-letter",
+            "first-line",
+            "placeholder",
+            "selection",
+            "marker",
+            "backdrop",
+            "cue",
+            "spelling-error",
+            "grammar-error",
+            //"part(name)",          // Shadow DOM
+            //"slotted(selector)",   // Shadow DOM
+            "view-transition-group",     // View Transitions API
+            "view-transition-image-pair", // View Transitions API
+            "view-transition-old",        // View Transitions API
+            "view-transition-new"         // View Transitions API
+        ];
 
-        // get flags
-        for (let flag of flagInfo) {
-            flag.style = getFlageditems(style, flag.name);
-        }
-
-        // everything else
-        styleText += `.${className} {\n${compileStyles(style)}}\n\n`;
-        
-        // apply flags
-        for (let flag of flagInfo) {
-            if (flag.style !== null) {
-                if(forceOnFlags.includes(flag.name) === false) {
-                    styleText += `.${className}${flag.prefix}${flag.name} {\n${compileStyles(flag.style)}}\n\n`;
+        let partlyCompiled = {};
+        function makeFlagStr (flags) {
+            let flagStr = "";
+            for (let flag of flags) {
+                flag = Convert.convert(flag, "dashedCase");
+                if (specialPseudoElements.includes(flag)) {
+                    flagStr += `::${flag}`;
                 } else {
-                    styleText += `.${className} {\n${compileStyles(flag.style)}}\n\n`;
+                    flagStr += `:${flag}`;
                 }
-                
+            }
+            return flagStr;
+        }
+        // stage 1 of 2: in key flags
+        for (let key of Object.keys(style)) {
+            let flags = key.split("_");
+            let styleName = flags.pop();
+            if (styleName.includes(pseudoElements)) {
+                flags.push(styleName);
+                let flagStr = makeFlagStr(flags);
+                if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
+                    partlyCompiled[`.${className}${flagStr}`] = [];
+                }
+                for (let styleKey of Object.keys(style[key])) {
+                    partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleKey, "dashedCase")} : ${style[key][styleKey]};`);
+                }
+            } else {
+                let flagStr = makeFlagStr(flags);
+                if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
+                    partlyCompiled[`.${className}${flagStr}`] = [];
+                }
+                partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleName, "dashedCase")} : ${style[key]};`);
             }
         }
+        // stage 2 of 2:
+        let styleText = ""; 
+        for (let key of Object.keys(partlyCompiled)) {
+            let areaStr = `${key} {\n`;
+            for (let style of partlyCompiled[key]) {
+                areaStr += `    ${style}\n`;
+            }
+            areaStr += "}\n";
+            console.debug(areaStr);
+            styleText += areaStr;
+        }
         
-
         styleElement.textContent += styleText;
         return element;
     }

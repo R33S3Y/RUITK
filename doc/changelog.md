@@ -1,3 +1,9 @@
+## 0.8.4
+#### support changes
+ - made a dependency called `convert.js` for converting strings between casing types eg: `camelCase` to `snake_case`
+#### style.js changes
+ - rewrote how the style function to support multiple flags at the same time.
+ - added support for all css Pseudo-Classes that dont take args
 ## 0.8.3
 #### Fallen Changes
  - Added a file called `staging.js` for tests and in development of elements

@@ -45,23 +45,43 @@ CSS:
 Well then you can use flags. Here's a list of all current flags:
 ###### All Flags
 **Selectors** - A list of currently supported css selectors - [List of css selectors - mdn web docs_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors)
- - **active**
- - **after**
- - **before**
- - **checked**
- - **default**
- - **disabled**
- - **empty**
- - **enabled**
- - **focus**
- - **hover**
- - **indeterminate**
- - **invalid**
- - **link**
- - **optional**
- - **required**
- - **valid**
- - **visited**
+ - hover              
+ - active             
+ - focus              
+ - visited            
+ - link               
+ - first-child        
+ - last-child         
+ - only-child         
+ - empty              
+ - checked            
+ - enabled            
+ - disabled           
+ - root               
+ - target             
+ - first-of-type      
+ - last-of-type       
+ - only-of-type       
+ - valid              
+ - invalid            
+ - in-range           
+ - out-of-range       
+ - required           
+ - optional           
+ - read-only          
+ - read-write         
+
+ - before
+ - after
+ - first-line
+ - first-letter
+ - placeholder
+ - selection
+ - marker
+ - backdrop
+ - cue
+ - spelling-error
+ - grammar-error
 **Other**
  - **portrait** - only apply this style when `window.innerHeight > window.innerWidth === true`
  - **landscape** - only apply this style when `window.innerWidth >= window.innerHeight === true`
