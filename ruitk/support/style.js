@@ -246,14 +246,7 @@ export class Style {
         ];
 
         let partlyCompiled = {};
-        // stage 1 of 2: flag subdicts
-
-        // TODO!!!
-
-        // stage 1 of 2: in key flags
-        for (let key of Object.keys(style)) {
-            let flags = key.split("_");
-            let styleName = flags.pop();
+        function makeFlagStr (flags) {
             let flagStr = "";
             for (let flag of flags) {
                 flag = Convert.convert(flag, "dashedCase");
@@ -263,10 +256,28 @@ export class Style {
                     flagStr += `:${flag}`;
                 }
             }
-            if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
-                partlyCompiled[`.${className}${flagStr}`] = [];
+            return flagStr;
+        }
+        // stage 1 of 2: in key flags
+        for (let key of Object.keys(style)) {
+            let flags = key.split("_");
+            let styleName = flags.pop();
+            if (styleName.includes(pseudoElements)) {
+                flags.push(styleName);
+                let flagStr = makeFlagStr(flags);
+                if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
+                    partlyCompiled[`.${className}${flagStr}`] = [];
+                }
+                for (let styleKey of Object.keys(style[key])) {
+                    partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleKey, "dashedCase")} : ${style[key][styleKey]};`);
+                }
+            } else {
+                let flagStr = makeFlagStr(flags);
+                if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
+                    partlyCompiled[`.${className}${flagStr}`] = [];
+                }
+                partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleName, "dashedCase")} : ${style[key]};`);
             }
-            partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleName, "dashedCase")} : ${style[key]};`);
         }
         // stage 2 of 2:
         let styleText = ""; 
