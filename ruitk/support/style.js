@@ -168,17 +168,7 @@ export class Style {
             style = Merge.dicts(style, jsHoverFlags);
         }
 
-        /**
-         * The reason why we have a seprate get & apply phases for flags like hover is because when:
-         * 
-         * forceOnFlags.includes("hover") === true
-         * 
-         * we need to overwrite the flagless css. CSS will set the style to be whatever was stated last, 
-         * meaning we can overwrite just by apply the hover styles last. 
-         * But we need to remove all styles with flags before we can apply the main styles, so we do get first.
-         * 
-         * To all one person who will read this, your welcome future r33s3y.
-         */
+        
         let pseudoElements = [
             // Pseudo-Classes
             "hover",              // Matches elements when hovered
@@ -246,14 +236,17 @@ export class Style {
         ];
 
         let partlyCompiled = {};
-        function makeFlagStr (flags) {
+        function makeFlagStr (flags, forceOnFlags) {
             let flagStr = "";
             for (let flag of flags) {
-                flag = Convert.convert(flag, "dashedCase");
+                if(forceOnFlags.includes(flag)) {
+                    continue;
+                }
+                let flagConvert = Convert.convert(flag, "dashedCase");
                 if (specialPseudoElements.includes(flag)) {
-                    flagStr += `::${flag}`;
+                    flagStr += `::${flagConvert}`;
                 } else {
-                    flagStr += `:${flag}`;
+                    flagStr += `:${flagConvert}`;
                 }
             }
             return flagStr;
@@ -264,21 +257,36 @@ export class Style {
             let styleName = flags.pop();
             if (styleName.includes(pseudoElements)) {
                 flags.push(styleName);
-                let flagStr = makeFlagStr(flags);
+                let flagStr = makeFlagStr(flags, forceOnFlags);
                 if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
                     partlyCompiled[`.${className}${flagStr}`] = [];
                 }
                 for (let styleKey of Object.keys(style[key])) {
-                    partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleKey, "dashedCase")} : ${style[key][styleKey]};`);
+                    if (forceOnFlags.some(item => flags.includes(item))) {
+                        partlyCompiled[`.${className}${flagStr}`].unshift(`${Convert.convert(styleKey, "dashedCase")} : ${style[key][styleKey]};`);
+                    } else {
+                        partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleKey, "dashedCase")} : ${style[key][styleKey]};`);
+                    }
                 }
             } else {
-                let flagStr = makeFlagStr(flags);
+                let flagStr = makeFlagStr(flags, forceOnFlags);
+                if (flags)
                 if (partlyCompiled[`.${className}${flagStr}`] === undefined) {
                     partlyCompiled[`.${className}${flagStr}`] = [];
                 }
-                partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleName, "dashedCase")} : ${style[key]};`);
+                if (forceOnFlags.some(item => flags.includes(item))) {
+                    partlyCompiled[`.${className}${flagStr}`].unshift(`${Convert.convert(styleName, "dashedCase")} : ${style[key]};`);
+                } else {
+                    partlyCompiled[`.${className}${flagStr}`].push(`${Convert.convert(styleName, "dashedCase")} : ${style[key]};`);
+                }
             }
         }
+        /**
+         * For forceOnFlags handling
+         * CSS will set the style to be whatever was stated last, therefore items torward the end of the list have higher priority.
+         * 
+         * So if we push standard items to the start and forceOn items to the back we guaranty that they will overwite all standard items
+         */
         // stage 2 of 2:
         let styleText = ""; 
         for (let key of Object.keys(partlyCompiled)) {
