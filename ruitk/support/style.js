@@ -287,7 +287,6 @@ export class Style {
                 areaStr += `    ${style}\n`;
             }
             areaStr += "}\n";
-            console.debug(areaStr);
             styleText += areaStr;
         }
         

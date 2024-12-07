@@ -42,8 +42,8 @@ let elements = [
             checkbox.type = "radio";
             checkbox.checked = info.checked;
             
-            checkbox = Style.style(checkbox, [element.style, element.style_standard, element.style_paddingMedium, element.style_border]);
-
+            checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
+            
 
             if (info.content) {
                 if (typeof info.content === "string") {
@@ -58,15 +58,29 @@ let elements = [
             info.content.unshift(checkbox);
 
             let e = element.generate(info, element);
-
+            e = Style.style(e, element.style.label);
             return e;
         },
         generate : "<base>",
+
         style : {
-            appearance: "none",
-            background : "var(--background2)",
-            hover_background : "var(--background3)",
+            box : {
+                appearance: "none",
+
+                cursor : "pointer",
+
+                background : "var(--background2)",
+                hover_background : "var(--background3)",
+                
+                checked_background : "var(--accent1)",
+                checked_hover_background : "var(--accent2)",
+            },
+            label : {
+                display : "inline-flex",
+                alignItems : "center",
+            },
         },
+
         style_standard : "<base>",
         style_paddingMedium : "<base>",
         style_border : "<base>",
@@ -85,8 +99,8 @@ let elements = [
             checkbox.type = "checkbox";
             checkbox.checked = info.checked;
             
-            checkbox = Style.style(checkbox, [element.style, element.style_standard, element.style_paddingMedium, element.style_border]);
-
+            checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
+            
 
             if (info.content) {
                 if (typeof info.content === "string") {
@@ -101,17 +115,27 @@ let elements = [
             info.content.unshift(checkbox);
 
             let e = element.generate(info, element);
-
+            e = Style.style(e, element.style.label);
             return e;
         },
         generate : "<base>",
         style : {
-            appearance: "none",
-            background : "var(--background2)",
-            hover_background : "var(--background3)",
-            borderRadius : "0",
-            checked_background : "var(--accent1)",
-            checked_hover_background : "var(--accent2)",
+            box : {
+                appearance: "none",
+
+                cursor : "pointer",
+                borderRadius : "0",
+
+                background : "var(--background2)",
+                hover_background : "var(--background3)",
+                
+                checked_background : "var(--accent1)",
+                checked_hover_background : "var(--accent2)",
+            },
+            label : {
+                display : "inline-flex",
+                alignItems : "center",
+            },
         },
         style_standard : "<base>",
         style_paddingMedium : "<base>",
