@@ -6,6 +6,8 @@
  - added support for all css Pseudo-Classes that dont take args
 #### documentation Changes
  - updated the documentation for [style.js](support/style.js.md)
+#### Fallen Changes
+ - More small improvements in `staging.js`
 ## 0.8.3
 #### Fallen Changes
  - Added a file called `staging.js` for tests and in development of elements
