@@ -49,42 +49,14 @@ In Fallen there's a Element called `base` although if you do call it [element.js
  - `yAline` - Defaults to an empty string - Has 3 values "top", "center" & "bottom" if these values are passed in it will snap vertically to that part of the parent
  - `textAlign` - Defaults to "left" - sets `element.innertext`
  - `position` - Defaults to "relative" but if `x`, `y`, `w`, `h`, `xAline` or `yAline` are changed it will instead default to "absolute" - sets `element.style.position`
- 
-The following elements do not accept these as input: 
-**In `tileWin.js`**:
- - `backgroundImg`
- - `tile`
-## Base
-#### `base.js`
-Base is meant to act as a dependency for other files as such it only contains some of the most basic elements.
-### h1, h2, h3
-All accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and output an h1, h2 & h3 elements respectively.
-### p1, p2, p3
-Also accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and output various shapes and sizes of p elements.
-### b, u, i
-B, u & i are for bold, underline and italic elements respectively. They also only accept the [Standard Inputs](#Standard%20Inputs). **Note:**  These element expects to be nested in p1, p2, p3, h1, h2 ,h3 elements for sizing info.
-### a
-A elements work just like [b, u & i](#b,%20u,%20i) elements but with the addition of the value `href` which defaults to a empty string and sets the `element.href` value.
 
-### grid
-Grid is an invisible grid meant for organizing and moving around elements. it uses the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) as well as all the ones shown here: 
- - Input name - CSS Value Changed - Default value
- - `rTemplate` - `grid.style.gridTemplateRows` - `"auto"`
- - `cTemplate` - `grid.style.gridTemplateColumns` - `"auto"`
- - `gap` - `grid.style.gridGap` - `"0"`
- - `areas` - `grid.style.gridTemplateAreas` - `"initial"` 
- - `justifyContent` - `grid.style.justifyContent` - `"space-between"`
-## TileWin
-#### `tileWin.js`
-Is a small collection of elements intended for use around the `tilewin.js` lib\
-### backgroundImg
-A background image that simply exists in the background. It does not use any of the [Standard Inputs](#Standard%20Inputs). Instead of that it provides the following:
- - `id` - sets `element.id` - Defaults to the Element name and the `element.elementCount`
- - `img` - sets `element.src` - Defaults to the `wallpaper.jpg` provided by the fallen project. Thanks [Raphaela](https://www.instagram.com/fredyguy12_art/)!!!
- - `alt` - sets `element.alt` - Defaults to a description of `wallpaper.jpg` 
+## Modules
+In fallen we use js files to store elements as such we have broken up the element documentation into separate files. If you're not sure how to import them look [here](Fallen%20Summary.md#Files).
+ - [base.js](base.js.md)
+ - [tilewin.js](tilewin.js.md)
+ - [input.js](input.js.md)
+ - [staging.js](staging.js.md)
 
-## Input
-### `input.js`
-There are no elements in `input.js` as of 0.8.3 as the have been moved to `staging.js` while they get there functions worked out.  
-## Staging
-### `staging.js`
+
+
+

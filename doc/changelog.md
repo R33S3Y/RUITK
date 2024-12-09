@@ -1,3 +1,7 @@
+## 0.8.5
+#### documentation Changes
+-  made documentation for [convert.js](support/convert.js.md)
+- reorganized the documentation for [fallen](fallen/Fallen%20Summary.md)
 ## 0.8.4
 #### support changes
  - made a dependency called `convert.js` for converting strings between casing types eg: `camelCase` to `snake_case`

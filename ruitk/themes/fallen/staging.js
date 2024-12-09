@@ -43,13 +43,12 @@ let elements = [
             checkbox.checked = info.checked;
             
             checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
-            
+
 
             if (info.content) {
                 if (typeof info.content === "string") {
                     info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
-                }
-                if (Array.isArray(info.content) === false) {
+                } else if (Array.isArray(info.content) === false) {
                     info.content = [info.content];
                 }
             } else {
@@ -105,8 +104,7 @@ let elements = [
             if (info.content) {
                 if (typeof info.content === "string") {
                     info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
-                }
-                if (Array.isArray(info.content) === false) {
+                } else if (Array.isArray(info.content) === false) {
                     info.content = [info.content];
                 }
             } else {
