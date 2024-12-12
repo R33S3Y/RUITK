@@ -8,7 +8,7 @@ export class Convert {
      * 5 : single
      */
     
-    static convert(str, type) {
+    static convert(str, type = "camelCase") {
         const oldType = detect(str);
         const wordsArray = toArray(str, oldType); // Convert input string to an array of words
         // Convert the array to the intended type using appropriate conversion function
@@ -93,8 +93,13 @@ function toSnakeCase(array) {
 }
 function toCamelCase(array) {
     let str = "";
-    for (let subStr of array) {
-        str += (str.charAt(0).toUpperCase() + str.slice(1));
+    for (let i = 0; i < array.length; i++) {
+        const subStr = array[i];
+        if (i === 0) {
+            str += subStr.toLowerCase();
+        } else {
+            str += subStr.charAt(0).toUpperCase() + subStr.slice(1).toLowerCase();
+        }
     }
-    return str.slice(0, -1);
+    return str;
 }

@@ -1,6 +1,10 @@
+# 0.9
+#### support changes
+ - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
+
 ## 0.8.5
 #### documentation Changes
--  made documentation for [convert.js](support/convert.js.md)
+- made documentation for [convert.js](support/convert.js.md)
 - reorganized the documentation for [fallen](fallen/Fallen%20Summary.md)
 ## 0.8.4
 #### support changes

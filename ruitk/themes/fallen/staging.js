@@ -1,5 +1,6 @@
 import { Merge } from "../../support/merger.js";
 import { Style } from "../../support/style.js";
+import { Convert } from "../../support/convert.js";
 
 let elements = [
     {   // textbox
@@ -34,8 +35,18 @@ let elements = [
         name : "radio",
         function : (info, element) => {
             info = Merge.dicts({
-                question : "",
-                options : [],
+                question : "", // needed
+                options : [], // needed
+            }, info);
+
+            let optionValues = [];
+            for (let option of info.options) {
+                optionValues.push(Convert.convert(option, "camelCase"));
+            }
+
+            info = Merge.dicts({
+                name : Convert.convert(info.question, "camelCase"),
+                optionValues : optionValues,
             }, info);
 
             let e = [];
@@ -57,10 +68,11 @@ let elements = [
             let i = 0;
             for (let option of info.options) {
                 let fakeInfo = {};
-
                 fakeInfo.id = `box-${element.elementCount}-${i}`;
-                i ++;
                 fakeInfo.content = option;
+                fakeInfo.name = info.name;
+                fakeInfo.value = info.optionValues[i];
+                i ++;
 
                 let box = element.makeOneBox(fakeInfo, element);
 
@@ -82,9 +94,15 @@ let elements = [
         },
         generate : "<base>",
         makeOneBox : (info, element) => {
+            info = Merge.dicts({
+                name : "",
+                value : "",
+            }, info);
 
             let checkbox = document.createElement("input");
             checkbox.type = element.name; // yes I know this is a cheeky work around but this function is only going to be used for radio and checkbox
+            checkbox.name = info.name;
+            checkbox.value = info.value;
             
             checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
 
@@ -100,7 +118,7 @@ let elements = [
             }
             info.content.unshift(checkbox);
 
-            
+
             let e = element.generate(info, element);
             e = Style.style(e, element.style.label);
 
