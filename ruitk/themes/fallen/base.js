@@ -66,9 +66,10 @@ let elements = [
                 yAline : "",
                 textAlign : "left",
                 position : "",
+                element : element.element
             }, info);
         
-            let e = document.createElement(element.element);
+            let e = document.createElement(info.element);
             e.id = info.id;
             
             e.style.textAlign = info.textAlign;

@@ -55,16 +55,11 @@ elements.append("body", elements.makeElements(`
             "y" : 1,
             content : 
                 <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto auto auto auto" , "content" : 
-                    <radio>{"content" : "test text", "c" : "1", "r" : "1"}
-                    <radio>{"content" : "test text", "c" : "1", "r" : "2"}
-                    <radio>{"content" : "test text", "c" : "1", "r" : "3"}
-
-                    <checkbox>{"content" : "test text", "c" : "1", "r" : "4"}
-                    <checkbox>{"content" : "test text", "c" : "1", "r" : "5"}
-                    <checkbox>{"content" : "test text", "c" : "1", "r" : "6"}
-
+                    
+                    <radio>{question : "test question", options : ["1", "2", "3"], "c" : "1", "r" : "1"}
+                    <checkbox>{question : "test question", options : ["1", "2", "3"], "c" : "1", "r" : "4"}
+                    
                     <dropdown>{options : ["1", "2", "3"], "c" : "2", "r" : "1"}
-
                     <combo>{options : ["1", "2", "3"], "c" : "2", "r" : "4"}
                 }
         }

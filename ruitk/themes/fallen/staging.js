@@ -34,34 +34,78 @@ let elements = [
         name : "radio",
         function : (info, element) => {
             info = Merge.dicts({
-                name : "",
-                checked : false,
+                question : "",
+                options : [],
             }, info);
 
+            let e = [];
+
+            // question handling
+            if (typeof info.question === "string") {
+                info.question = element.makeElements(`<h3>{ content : "${info.question}" }`)
+            }
+            if (Array.isArray(info.question) === false) {
+                info.question = [info.question];
+            }
+            for (let item of info.question) {
+                e.push(item);
+            }
+            
+            // form
+            let form = element.generate(Merge.dicts(info, {element : "form"}, []), element);
+
+            let i = 0;
+            for (let option of info.options) {
+                let fakeInfo = {};
+
+                fakeInfo.id = `box-${element.elementCount}-${i}`;
+                i ++;
+                fakeInfo.content = option;
+
+                let box = element.makeOneBox(fakeInfo, element);
+
+                if (Array.isArray(box) === false) {
+                    box = [box];
+                }
+                for (let item of box) {
+                    if (typeof item === "string") {
+                        form.innerHTML += item; 
+                    } else if (item instanceof HTMLElement) {
+                        form.appendChild(item); 
+                    }
+                }
+            }
+            e.push(form);
+
+            return e;
+            
+        },
+        generate : "<base>",
+        makeOneBox : (info, element) => {
+
             let checkbox = document.createElement("input");
-            checkbox.type = "radio";
-            checkbox.checked = info.checked;
+            checkbox.type = element.name; // yes I know this is a cheeky work around but this function is only going to be used for radio and checkbox
             
             checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
-
 
             if (info.content) {
                 if (typeof info.content === "string") {
                     info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
-                } else if (Array.isArray(info.content) === false) {
-                    info.content = [info.content];
                 }
+                if (Array.isArray(info.content) === false) {
+                    info.content = [info.content];
+                } // no need for content handling other than orgnization as is handle in the generate function
             } else {
                 info.content = [];
             }
             info.content.unshift(checkbox);
 
+            
             let e = element.generate(info, element);
             e = Style.style(e, element.style.label);
+
             return e;
         },
-        generate : "<base>",
-
         style : {
             box : {
                 appearance: "none",
@@ -104,7 +148,8 @@ let elements = [
             if (info.content) {
                 if (typeof info.content === "string") {
                     info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
-                } else if (Array.isArray(info.content) === false) {
+                }
+                if (Array.isArray(info.content) === false) {
                     info.content = [info.content];
                 }
             } else {
