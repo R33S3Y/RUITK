@@ -143,9 +143,32 @@ export class Elements {
                 elementInfo.elementCount =  this.elementCount;
 
                 this.elementCount ++;
-    
-                let element = elementInfo.function(dict, elementInfo);
-                
+
+                let element;
+                try {
+                    element = elementInfo.function(dict, elementInfo);
+                } catch (e) {
+                    let errorStr = 
+`Failed to render element: "${elementInfo.name}"
+error = "${e}"
+
+info = ${JSON.stringify(dict)}
+
+element = ${JSON.stringify(elementInfo)}`;
+                    console.error(errorStr);                    
+
+                    element = document.createElement("h3");
+                    element.innerHTML = errorStr.replace(/\n/g, "<br>");
+
+                    elementInfo = {
+                        handleStyle : false,
+                        style : {
+                            color : "red",
+                            fontSize : "0.75em"
+                        }
+                    };
+                }
+
                 if (Array.isArray(element) === false) {
                     element = [element];
                 }
@@ -155,6 +178,7 @@ export class Elements {
                         thing = styleElement(thing, elementInfo);
                     }
                 }
+                
                 
                 currentStr = currentStr.replace(currentElement.str, "").trim();
                 

@@ -3,6 +3,7 @@
  - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
  - Added a new dependency called `tester.js` for input validation
 #### element.js Changes
+ - Added error handling to for failed elements previously 1 failure would cause everything to fail to render
  - Added some ascii art to init
 
 ## 0.8.5
