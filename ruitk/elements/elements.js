@@ -1,11 +1,31 @@
 import { Merge } from "../support/merger.js";
 import { Style } from "../support/style.js";
 
+let logo = `      
+             This Project was made with:                        
+                                                                
+         ██████╗ ██╗   ██╗██╗████████╗██╗  ██╗                  
+         ██╔══██╗██║   ██║██║╚══██╔══╝██║ ██╔╝                  
+         ██████╔╝██║   ██║██║   ██║   █████╔╝                   
+         ██╔══██╗██║   ██║██║   ██║   ██╔═██╗                   
+         ██║  ██║╚██████╔╝██║   ██║   ██║  ██╗                  
+         ╚═╝  ╚═╝ ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝                  
+                                                                
+             https://github.com/R33S3Y/RUITK/                   
+        A simple ui library/toolkit for websites.               
+             Licensed under GPL-3.0 license.                    
+                                                                
+Main Dev -          [R33S3Y](https://github.com/R33S3Y)         
+ Arist  - [Raphaela](https://www.instagram.com/fredyguy12_art/) 
+                                                                 
+`
+
 export class Elements {
     constructor() {
         this.elements = [];
         this.elementCount = 0;
         this.initFunctions();
+        console.info(logo);
     }
 
     addElements(elements = []) {

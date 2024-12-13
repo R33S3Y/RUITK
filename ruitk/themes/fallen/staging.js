@@ -1,6 +1,7 @@
 import { Merge } from "../../support/merger.js";
 import { Style } from "../../support/style.js";
 import { Convert } from "../../support/convert.js";
+import { Tester } from "../../support/tester.js";
 
 let elements = [
     {   // textbox
@@ -39,16 +40,26 @@ let elements = [
                 options : [], // needed
             }, info);
 
-            let optionValues = [];
+            let values = [];
             for (let option of info.options) {
-                optionValues.push(Convert.convert(option, "camelCase"));
+                values.push(Convert.convert(option, "camelCase"));
             }
 
             info = Merge.dicts({
                 name : Convert.convert(info.question, "camelCase"),
-                optionValues : optionValues,
+                values : values,
             }, info);
 
+            Tester.dicts({
+                question : { type: "string", full: true }, // needed
+                options : { type: "array", full: true }, // needed
+                name : "string",
+                values : "array",
+            }, info, `${element.name} Element: `);
+
+
+
+            
             let e = [];
 
             // question handling
@@ -71,7 +82,7 @@ let elements = [
                 fakeInfo.id = `box-${element.elementCount}-${i}`;
                 fakeInfo.content = option;
                 fakeInfo.name = info.name;
-                fakeInfo.value = info.optionValues[i];
+                fakeInfo.value = info.values[i];
                 i ++;
 
                 let box = element.makeOneBox(fakeInfo, element);

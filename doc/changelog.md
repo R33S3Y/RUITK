@@ -1,6 +1,9 @@
 # 0.9
 #### support changes
  - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
+ - Added a new dependency called `tester.js` for input validation
+#### element.js Changes
+ - Added some ascii art to init
 
 ## 0.8.5
 #### documentation Changes
