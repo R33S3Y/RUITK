@@ -60,9 +60,7 @@ elements.append("body", elements.makeElements(`
                     <checkbox>{question : "2. Test Question", options : ["JS", "CSS", "HTML"], "c" : "1", "r" : "2"}
                     
                     <dropdown>{options : ["1", "2", "3"], "c" : "2", "r" : "1"}
-                    <combo>{options : ["1", "2", "3"], "c" : "2", "r" : "2"}
-
-                    <submit>{"c" : "1", "r" : "3"}    
+                    <combo>{options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
                 }
         }
     ]}

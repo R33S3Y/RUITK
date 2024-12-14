@@ -62,14 +62,15 @@ let elements = [
                 h : "auto",
                 c : "",
                 r : "",
-                xAline : "",
-                yAline : "",
+                xAlign : "",
+                yAlign : "",
                 textAlign : "left",
                 position : "",
                 element : element.element
             }, info);
         
             let e = document.createElement(info.element);
+            delete info.element;
             e.id = info.id;
             
             e.style.textAlign = info.textAlign;
@@ -89,7 +90,7 @@ let elements = [
             }
 
 
-            if (info.x === "" && info.y === "" && info.xAline === "" && info.yAline === "" && info.w === "auto" && info.h === "auto" ) {// all defaults
+            if (info.x === "" && info.y === "" && info.xAlign === "" && info.yAlign === "" && info.w === "auto" && info.h === "auto" ) {// all defaults
                 e.style.position = "relative";
             } else {
                 e.style.position = "absolute";
@@ -114,14 +115,14 @@ let elements = [
                 bottom: 100
             };
             // Handle horizontal alignment
-            if (info.xAline !== "") {
-                let xPercent = convert[info.xAline];
+            if (info.xAlign !== "") {
+                let xPercent = convert[info.xAlign];
                 e.style.left = `${xPercent}%`;
                 e.style.transform += `translateX(-${xPercent}%)`;
             }
             // Handle vertical alignment
-            if (info.yAline !== "") {
-                let yPercent = convert[info.yAline];
+            if (info.yAlign !== "") {
+                let yPercent = convert[info.yAlign];
                 e.style.top = `${yPercent}%`;
                 e.style.transform += ` translateY(-${yPercent}%)`;
             }

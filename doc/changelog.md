@@ -1,4 +1,6 @@
 # 0.9
+#### Fallen Changes
+ - Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
 #### support changes
  - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
  - Added a new dependency called `tester.js` for input validation

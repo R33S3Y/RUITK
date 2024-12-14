@@ -45,8 +45,8 @@ In Fallen there's a Element called `base` although if you do call it [element.js
  - `h` - Defaults to "auto" - sets `element.style.height`
  - `c` - Defaults to an empty string - sets `element.style.gridColumn`
  - `r` - Defaults to an empty string - sets `element.style.gridRow`
- - `xAline` - Defaults to an empty string - Has 3 values "left", "center" & "right" if these values are passed in it will snap horizontally to that part of the parent
- - `yAline` - Defaults to an empty string - Has 3 values "top", "center" & "bottom" if these values are passed in it will snap vertically to that part of the parent
+ - `xAlign` - Defaults to an empty string - Has 3 values "left", "center" & "right" if these values are passed in it will snap horizontally to that part of the parent
+ - `yAlign` - Defaults to an empty string - Has 3 values "top", "center" & "bottom" if these values are passed in it will snap vertically to that part of the parent
  - `textAlign` - Defaults to "left" - sets `element.innertext`
  - `position` - Defaults to "relative" but if `x`, `y`, `w`, `h`, `xAline` or `yAline` are changed it will instead default to "absolute" - sets `element.style.position`
 
