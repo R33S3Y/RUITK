@@ -54,13 +54,15 @@ elements.append("body", elements.makeElements(`
             "x" : 2,
             "y" : 1,
             content : 
-                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto auto auto auto" , "content" : 
+                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto" , "content" : 
                     
-                    <radio>{question : "test question", options : ["1", "2", "3"], "c" : "1", "r" : "1"}
-                    <checkbox>{question : "test question", options : ["1", "2", "3"], "c" : "1", "r" : "4"}
+                    <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
+                    <checkbox>{question : "2. Test Question", options : ["JS", "CSS", "HTML"], "c" : "1", "r" : "2"}
                     
                     <dropdown>{options : ["1", "2", "3"], "c" : "2", "r" : "1"}
-                    <combo>{options : ["1", "2", "3"], "c" : "2", "r" : "4"}
+                    <combo>{options : ["1", "2", "3"], "c" : "2", "r" : "2"}
+
+                    <submit>{"c" : "1", "r" : "3"}    
                 }
         }
     ]}

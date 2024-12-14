@@ -35,47 +35,69 @@ let elements = [
     {   // radio
         name : "radio",
         function : (info, element) => {
+            // input testing
             info = Merge.dicts({
-                question : "", // needed
-                options : [], // needed
+                question : "",
+                options : [],
             }, info);
+
+            info.question = element.parse(info.question);
+            info.options = element.parse(info.options);
+            if (info.name) {
+                info.name = element.parse(info.name);
+            }
+            if (info.values) {
+                info.values = element.parse(info.values);   
+            }
 
             let values = [];
             for (let option of info.options) {
                 values.push(Convert.convert(option, "camelCase"));
             }
-
             info = Merge.dicts({
                 name : Convert.convert(info.question, "camelCase"),
                 values : values,
-            }, info);
+            }, info, []);
 
             Tester.dicts({
-                question : { type: "string", full: true }, // needed
-                options : { type: "array", full: true }, // needed
+                question : { type: "string", full: true },
+                options : { type: "array", full: true },
                 name : "string",
                 values : "array",
             }, info, `${element.name} Element: `);
 
 
 
-            
-            let e = [];
+            let gridInfo = JSON.parse(JSON.stringify(info));
+            delete gridInfo.question;
+            delete gridInfo.options;
+            delete gridInfo.name;
+            delete gridInfo.values;
+
+            let gridInfoStr = "";
+            for (let key in gridInfo) {
+                gridInfoStr += `${key} : ${gridInfo[key]}, `;
+            }
+            let form = element.makeElements(`<grid>{ ${gridInfoStr}}`);
 
             // question handling
             if (typeof info.question === "string") {
-                info.question = element.makeElements(`<h3>{ content : "${info.question}" }`)
+                info.question = element.makeElements(`<h3>{ content : "${info.question}" }`);
             }
             if (Array.isArray(info.question) === false) {
                 info.question = [info.question];
             }
             for (let item of info.question) {
-                e.push(item);
+                if (typeof item === "string") {
+                    form.innerHTML += item; 
+                } else if (item instanceof HTMLElement) {
+                    form.appendChild(item); 
+                }
             }
             
-            // form
-            let form = element.generate(Merge.dicts(info, {element : "form"}, []), element);
 
+
+            // form
             let i = 0;
             for (let option of info.options) {
                 let fakeInfo = {};
@@ -98,12 +120,9 @@ let elements = [
                     }
                 }
             }
-            e.push(form);
 
-            return e;
-            
+            return form;
         },
-        generate : "<base>",
         makeOneBox : (info, element) => {
             info = Merge.dicts({
                 name : "",
@@ -135,6 +154,11 @@ let elements = [
 
             return e;
         },
+        parseLevel : 1,
+
+        generate : "<base>",
+        element : "label",
+
         style : {
             box : {
                 appearance: "none",
@@ -152,45 +176,22 @@ let elements = [
                 alignItems : "center",
             },
         },
-
         style_standard : "<base>",
         style_paddingMedium : "<base>",
         style_border : "<base>",
-        element : "label",
         handleStyle : true,
+        
     },
     {   // checkbox
         name : "checkbox",
-        function : (info, element) => {
-            info = Merge.dicts({
-                name : "",
-                checked : false,
-            }, info);
 
-            let checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.checked = info.checked;
-            
-            checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
-            
+        function : "<radio>",
+        makeOneBox : "<radio>",
+        parseLevel : 1,
 
-            if (info.content) {
-                if (typeof info.content === "string") {
-                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
-                }
-                if (Array.isArray(info.content) === false) {
-                    info.content = [info.content];
-                }
-            } else {
-                info.content = [];
-            }
-            info.content.unshift(checkbox);
-
-            let e = element.generate(info, element);
-            e = Style.style(e, element.style.label);
-            return e;
-        },
         generate : "<base>",
+        element : "label",
+        
         style : {
             box : {
                 appearance: "none",
@@ -212,7 +213,6 @@ let elements = [
         style_standard : "<base>",
         style_paddingMedium : "<base>",
         style_border : "<base>",
-        element : "label",
         handleStyle : true,
     },
     {   // dropdown

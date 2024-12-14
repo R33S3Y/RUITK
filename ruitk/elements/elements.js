@@ -1,5 +1,6 @@
 import { Merge } from "../support/merger.js";
 import { Style } from "../support/style.js";
+import { Tester } from "../support/tester.js";
 
 let logo = `      
              This Project was made with:                        
@@ -127,7 +128,7 @@ export class Elements {
                 elementInfo = resolveElementObject(elementInfo, this.elements);
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
-                let dict
+                let dict;
                 if(elementInfo.parseLevel === 0) {
                     dict = dictStr;
                 } else {
@@ -149,12 +150,18 @@ export class Elements {
                     element = elementInfo.function(dict, elementInfo);
                 } catch (e) {
                     let errorStr = 
-`Failed to render element: "${elementInfo.name}"
-error = "${e}"
+`renderElements Function: Failed to render element: "${elementInfo.name}"
+Error : 
+${e.message}
 
-info = ${JSON.stringify(dict)}
+Info : 
+${JSON.stringify(dict)}
 
-element = ${JSON.stringify(elementInfo)}`;
+Element : 
+${JSON.stringify(elementInfo)}
+
+Callstack : 
+${e.stack}`;
                     console.error(errorStr);                    
 
                     element = document.createElement("h3");
@@ -192,6 +199,16 @@ element = ${JSON.stringify(elementInfo)}`;
         };
     
         this.parse = (str, softParse = false) => {
+            //if (str === undefined || str === null) {
+            //    return str; // all of these cases are caught by the following test but I think it's better for these case to be handed off smoothly
+            //}
+            Tester.dicts({
+                str : "string",
+                softParse : "boolean",
+            }, {
+                str, softParse
+            }, "parse Function: ");
+
             let info = [];
             str = str.trim();
             while(str.length > 0) {

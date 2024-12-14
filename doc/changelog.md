@@ -5,7 +5,7 @@
 #### element.js Changes
  - Added error handling to for failed elements previously 1 failure would cause everything to fail to render
  - Added some ascii art to init
-
+ - Added input filtering for the parse function 
 ## 0.8.5
 #### documentation Changes
 - made documentation for [convert.js](support/convert.js.md)
