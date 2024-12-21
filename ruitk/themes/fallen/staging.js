@@ -36,37 +36,7 @@ let elements = [
         name : "radio",
         function : (info, element) => {
             // input testing
-            info = Merge.dicts({
-                question : "",
-                options : [],
-            }, info);
-
-            info.question = element.parse(info.question);
-            info.options = element.parse(info.options);
-            if (info.name) {
-                info.name = element.parse(info.name);
-            }
-            if (info.values) {
-                info.values = element.parse(info.values);   
-            }
-
-            let values = [];
-            for (let option of info.options) {
-                values.push(Convert.convert(option, "camelCase"));
-            }
-            info = Merge.dicts({
-                name : Convert.convert(info.question, "camelCase"),
-                values : values,
-            }, info, []);
-
-            Tester.dicts({
-                question : { type: "string", full: true },
-                options : { type: "array", full: true },
-                name : "string",
-                values : "array",
-            }, info, `${element.name} Element: `);
-
-
+            info = element.inputTest(info, element);
 
             let gridInfo = JSON.parse(JSON.stringify(info));
             delete gridInfo.question;
@@ -154,6 +124,40 @@ let elements = [
 
             return e;
         },
+        inputTest : (info, element) => {
+            // input testing
+            info = Merge.dicts({
+                question : "",
+                options : [],
+            }, info);
+
+            info.question = element.parse(info.question);
+            info.options = element.parse(info.options);
+            if (info.name) {
+                info.name = element.parse(info.name);
+            }
+            if (info.values) {
+                info.values = element.parse(info.values);   
+            }
+
+            let values = [];
+            for (let option of info.options) {
+                values.push(Convert.convert(option, "camelCase"));
+            }
+            info = Merge.dicts({
+                name : Convert.convert(info.question, "camelCase"),
+                values : values,
+            }, info, []);
+
+            Tester.dicts({
+                question : { type: "string", full: true },
+                options : { type: "array", full: true },
+                name : "string",
+                values : "array",
+            }, info, `${element.name} Element: `);
+
+            return info;
+        },
         parseLevel : 1,
 
         generate : "<base>",
@@ -187,6 +191,7 @@ let elements = [
 
         function : "<radio>",
         makeOneBox : "<radio>",
+        inputTest : "<radio>",
         parseLevel : 1,
 
         generate : "<base>",
@@ -217,29 +222,25 @@ let elements = [
     },
     {   // dropdown
         name : "dropdown",
+        inputTest : "<radio>",
         function : (info, element) => {
-            info = Merge.dicts({
-                options : []
-            }, info);
+            info = element.inputTest(info, element);
 
             let e = document.createElement("select");
             e.id = `${element.name}-${element.elementCount}`;
 
-            let selectStyles = Merge.dicts(element.style, element.style_standard);
-            selectStyles = Merge.dicts(selectStyles, element.style_border);
-            selectStyles = Merge.dicts(selectStyles, element.style_paddingMedium);
+            e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
 
-            e = Style.style(e, selectStyles);
-
-            let optionStyles = Merge.dicts(element.style_option, element.style_standard);
-            for (let option of info.options) {
+            for (let i = 0; i < info.options.length; i++) {
+                let option = info.options[i];
+                let value = info.values[i];
+                
                 let optionElement = document.createElement("option");
-                optionElement.value = option.value || option;
-                optionElement.textContent = option.label || option;
-                optionElement = Style.style(optionElement, optionStyles);
+                optionElement.value = value;
+                optionElement.textContent = option;
+                optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
                 e.appendChild(optionElement);
             }
-
             return e;
         },
         generate : "<base>",
