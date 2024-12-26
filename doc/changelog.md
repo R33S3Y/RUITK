@@ -1,13 +1,19 @@
 # 0.9
 #### Fallen Changes
  - Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
+ - Completed the following elements in staging
+	 - `radio`
+	 - `checkbox`
+	 - `dropdown`
+	 - `combo`
 #### support changes
  - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
+ - Added some input filtering to `convert.js`
  - Added a new dependency called `tester.js` for input validation
 #### element.js Changes
  - Added error handling to for failed elements previously 1 failure would cause everything to fail to render
- - Added some ascii art to init
- - Added input filtering for the parse function 
+ - Added some ASCII art to init
+ - Added input filtering for the parse function
 ## 0.8.5
 #### documentation Changes
 - made documentation for [convert.js](support/convert.js.md)

@@ -208,9 +208,12 @@ ${e.stack}`;
             }, {
                 str, softParse
             }, "parse Function: ");
-
             let info = [];
             str = str.trim();
+            if(str.length === 0) {
+                console.warn("parse Function: Input str is empty!!!");
+                return "";
+            }
             while(str.length > 0) {
                 
                 let itemEnd = 0;
@@ -272,28 +275,38 @@ ${e.stack}`;
                     continue;
                 }
 
-                if (itemType === "element") {
-                    item = this.renderElements(item);
-                    info = info.concat(item);
-                } else if (itemType === "dict") {
-                    let dict = {};
-                    for (let key of Object.keys(item)) {
-                        dict[key] = this.parse(item[key]);
-                    }
-                    info.push(dict);
-                } else if (itemType === "array") {
-                    let array = [];
-                    for (let thing of item) {
-                        array.push(this.parse(thing));
-                    }
-                    info.push(array);
-                } else {
-                    item = JSON.parse(item);
-                    info.push(item);
+                switch (itemType) {
+                    case "element":
+                        item = this.renderElements(item);
+                        info = info.concat(item);
+                        break;
+                    case "dict":
+                        let dict = {};
+                        for (let key of Object.keys(item)) {
+                            dict[key] = this.parse(item[key]);
+                        }
+                        info.push(dict);
+                        break;
+                    case "array":
+                        let array = [];
+                        for (let thing of item) {
+                            array.push(this.parse(thing));
+                        }
+                        info.push(array);
+                        break;
+                    case "str":
+                        item = item.slice(1, -1);
+                        info.push(item);
+                        break;
+                    default:
+                        item = JSON.parse(item);
+                        info.push(item);
+                        break;
                 }
+
             }
 
-            if (info.length === 1) {
+            if (info.length <= 1) {
                 info = info[0];
             }
             return info;

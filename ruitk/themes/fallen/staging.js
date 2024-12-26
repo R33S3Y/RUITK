@@ -38,34 +38,7 @@ let elements = [
             // input testing
             info = element.inputTest(info, element);
 
-            let gridInfo = JSON.parse(JSON.stringify(info));
-            delete gridInfo.question;
-            delete gridInfo.options;
-            delete gridInfo.name;
-            delete gridInfo.values;
-
-            let gridInfoStr = "";
-            for (let key in gridInfo) {
-                gridInfoStr += `${key} : ${gridInfo[key]}, `;
-            }
-            let form = element.makeElements(`<grid>{ ${gridInfoStr}}`);
-
-            // question handling
-            if (typeof info.question === "string") {
-                info.question = element.makeElements(`<h3>{ content : "${info.question}" }`);
-            }
-            if (Array.isArray(info.question) === false) {
-                info.question = [info.question];
-            }
-            for (let item of info.question) {
-                if (typeof item === "string") {
-                    form.innerHTML += item; 
-                } else if (item instanceof HTMLElement) {
-                    form.appendChild(item); 
-                }
-            }
-            
-
+            let form = element.makeGridandTitle(info, element);
 
             // form
             let i = 0;
@@ -128,7 +101,7 @@ let elements = [
             // input testing
             info = Merge.dicts({
                 question : "",
-                options : [],
+                options : "[]",
             }, info);
 
             info.question = element.parse(info.question);
@@ -157,6 +130,36 @@ let elements = [
             }, info, `${element.name} Element: `);
 
             return info;
+        },
+        makeGridandTitle : (info, element) => {
+            let gridInfo = JSON.parse(JSON.stringify(info));
+            delete gridInfo.question;
+            delete gridInfo.options;
+            delete gridInfo.name;
+            delete gridInfo.values;
+            delete gridInfo.list;
+
+            let gridInfoStr = "";
+            for (let key in gridInfo) {
+                gridInfoStr += `${key} : ${gridInfo[key]}, `;
+            }
+            let form = element.makeElements(`<grid>{ ${gridInfoStr}}`);
+
+            // question handling
+            if (typeof info.question === "string") {
+                info.question = element.makeElements(`<h3>{ content : "${info.question}" }`);
+            }
+            if (Array.isArray(info.question) === false) {
+                info.question = [info.question];
+            }
+            for (let item of info.question) {
+                if (typeof item === "string") {
+                    form.innerHTML += item; 
+                } else if (item instanceof HTMLElement) {
+                    form.appendChild(item); 
+                }
+            }
+            return form;
         },
         parseLevel : 1,
 
@@ -192,6 +195,7 @@ let elements = [
         function : "<radio>",
         makeOneBox : "<radio>",
         inputTest : "<radio>",
+        makeGridandTitle : "<radio>",
         parseLevel : 1,
 
         generate : "<base>",
@@ -223,11 +227,15 @@ let elements = [
     {   // dropdown
         name : "dropdown",
         inputTest : "<radio>",
+        makeGridandTitle : "<radio>",
         function : (info, element) => {
             info = element.inputTest(info, element);
 
+            let form = element.makeGridandTitle(info, element);
+
             let e = document.createElement("select");
             e.id = `${element.name}-${element.elementCount}`;
+            e.name = info.name;
 
             e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
 
@@ -241,41 +249,14 @@ let elements = [
                 optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
                 e.appendChild(optionElement);
             }
-            return e;
+            form.appendChild(e);
+            return form;
         },
+        parseLevel : 1,
+
         generate : "<base>",
-        style : "<combo>",
-        style_option : "<combo>",
-        style_standard : "<base>",
-        style_border : "<base>",
-        style_paddingMedium : "<base>",
         element : "select",
-        handleStyle : true,
-    },
-    {   // combo box
-        name : "combo",
-        function : (info, element) => {
-            info = Merge.dicts({
-                list : `${element.name}${element.elementCount}`,
-                options : []
-            }, info);
 
-            let e = element.generate(info, element);
-            e.type = "text";
-            e.setAttribute("list", info.list);
-
-            let dataList = document.createElement("datalist");
-            dataList.id = info.list;
-            for (let option of info.options || []) {
-                let optionElement = document.createElement("option");
-                optionElement.value = option;
-                dataList.appendChild(optionElement);
-            }
-
-            e.appendChild(dataList);
-            return e;
-        },
-        generate : "<base>",
         style : {
             color : "var(--accent3)",
             backgroundColor : "var(--background2)",
@@ -287,7 +268,62 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        element : "input"
+        handleStyle : true,
+    },
+    {   // combo box
+        name : "combo",
+        inputTest : "<radio>",
+        makeGridandTitle : "<radio>",
+        function : (info, element) => {
+            info = element.inputTest(info, element);
+
+            info = Merge.dicts({
+                list : `"${element.name}-${element.elementCount}-datalist"`,
+            }, info);
+            info.list = element.parse(info.list);
+            Tester.dicts({
+                list : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
+
+            let form = element.makeGridandTitle(info, element);
+
+            let e = element.generate(info, element);
+            e.name = info.name;
+
+            e.type = "text";
+            e.setAttribute("list", info.list);
+
+            e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+
+            let dataList = document.createElement("datalist");
+            dataList.id = info.list;
+            for (let i = 0; i < info.options.length; i++) {
+                let option = info.options[i];
+                let value = info.values[i];
+                
+                let optionElement = document.createElement("option");
+                optionElement.value = value;
+                optionElement.textContent = option;
+                optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
+                dataList.appendChild(optionElement);
+            }
+
+            e.appendChild(dataList);
+
+            form.appendChild(e);
+            return form;
+        },
+        parseLevel : 1,
+        
+        generate : "<base>",
+        element : "input",
+
+        style : "<dropdown>",
+        style_option : "<dropdown>",
+        style_standard : "<base>",
+        style_border : "<base>",
+        style_paddingMedium : "<base>",
+        handleStyle : true,
     },
     {   // button
         name : "button",
