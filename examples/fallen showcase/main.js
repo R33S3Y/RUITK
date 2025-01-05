@@ -54,7 +54,7 @@ elements.append("body", elements.makeElements(`
             "x" : 2,
             "y" : 1,
             content : 
-                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto" , "content" : 
+                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto" , "content" : 
                     
                     <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
                     <checkbox>{question : "3. Test Question", options : ["JS", "CSS", "HTML"], "c" : "2", "r" : "1"}

@@ -3,15 +3,7 @@
  - [Files](Fallen%20Summary.md#Files)
  - [Elements](Fallen%20Summary.md#Elements)
 	 - [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
-	 - [Base](Fallen%20Summary.md#Base)
-		 - [h1, h2, h3](#h1,%20h2,%20h3)
-		 - [p1, p2, p3](#p1,%20p2,%20p3)
-		 - [b, u, i](Fallen%20Summary.md#b,%20u,%20i)
-		 - [a](Fallen%20Summary.md#a)
-		 - [grid](Fallen%20Summary.md#grid)
-	 - [TileWin](Fallen%20Summary.md#TileWin)
-		 - 
-	 - [Input](Fallen%20Summary.md#Input)
+	 - [Modules](Fallen%20Summary.md#Modules)
 
 # Project Goals
 Fallen is collection of premade configurable elements for [element.js](element.js.md) with a constant theme and assets.
