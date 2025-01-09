@@ -1,6 +1,7 @@
 # 0.9
 #### Fallen Changes
  - Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
+ - Made it so zoom actually zooms
  - Completed the following elements in staging
 	 - `radio`
 	 - `checkbox`
@@ -14,6 +15,10 @@
  - Added error handling to for failed elements previously 1 failure would cause everything to fail to render
  - Added some ASCII art to init
  - Added input filtering for the parse function
+#### documentation Changes
+ - Completed documentation the following fallen elements
+	 - `radio`
+	 - `checkbox`
 ## 0.8.5
 #### documentation Changes
 - made documentation for [convert.js](support/convert.js.md)

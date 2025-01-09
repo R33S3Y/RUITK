@@ -29,24 +29,24 @@ let config = {
 
     font : "Arial, Helvetica, sans-serif",
        
-    fontSizeH1 : "3.2vw",
-    fontSizeH2 : "2.5vw",
-    fontSizeH3 : "2vw",
-    fontSizeP1 : "1.5vw",
-    fontSizeP2 : "1vw",
-    fontSizeP3 : "0.75vw",
+    fontSizeH1 : 3.2,
+    fontSizeH2 : 2.5,
+    fontSizeH3 : 2,
+    fontSizeP1 : 1.5,
+    fontSizeP2 : 1,
+    fontSizeP3 : 0.75,
 
-    borderRadius : "1vw",
-    borderWidth : "0.25vw",
+    borderRadius : 1,
+    borderWidth : 0.25,
 
-    marginSmall : "0.1vw",
-    paddingSmall : "0.1vw",
+    marginSmall : 0.1,
+    paddingSmall : 0.1,
 
-    marginMedium : "0.6vw",
-    paddingMedium : "0.6vw",
+    marginMedium : 0.6,
+    paddingMedium : 0.6,
 
-    marginLarge : "1vw",
-    paddingLarge : "1vw",
+    marginLarge : 1,
+    paddingLarge : 1,
 };
 
 let elements = [
@@ -133,7 +133,7 @@ let elements = [
             transition: "var(--transition)",
             fontFamily : "var(--font)",
             focus_outline : "3px solid var(--standout3)",
-            fontSize : "1vw",
+            fontSize : "var(--fontSizeP2)",
             position : "relative",
             overflow : "hidden",
             boxSizing : "border-box",
@@ -321,7 +321,19 @@ let elements = [
 
 function init () {
     Style.declare(colors);
-    Style.declare(config);
+    let zoomer = () => {
+        let hold = {};
+        for (let key in config) {
+            if (typeof config[key] === "number") {
+                hold[key] = `${config[key] * window.devicePixelRatio}vw`;
+                continue;
+            };
+            hold[key] = config[key];
+        };
+        Style.declare(hold);
+    };
+    zoomer();
+    window.addEventListener('resize', zoomer);
 }
 
 export class FallenBase {
