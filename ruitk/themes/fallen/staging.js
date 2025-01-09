@@ -329,12 +329,12 @@ let elements = [
         name : "button",
         function : (info, element) => {
             info = Merge.dicts({
-                text : "Click me"
+                callback : "() => {return};",
             }, info);
 
             let e = element.generate(info, element);
-            e.type = "button";
-            e.value = info.text;
+            
+            e.addEventListener('click', info.callback);
 
             return e;
         },
@@ -343,7 +343,7 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        element : "input"
+        element : "button"
     },
     {   // submit
         name : "submit",
