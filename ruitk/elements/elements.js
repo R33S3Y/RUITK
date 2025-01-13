@@ -215,6 +215,9 @@ ${e.stack}`;
                 return "";
             }
             while(str.length > 0) {
+
+                // this has issues with functions with 2 or more args (looks like differnt issues bettewn arrows and standard)
+                // but is 10:46pm so I'm giving up for now
                 
                 let itemEnd = 0;
                 let itemType = "";
@@ -307,6 +310,8 @@ ${e.stack}`;
                     case "function":
                     case "arrowFunction":
                         item = parseFunction(item);
+                        info.push(item);
+                        break;
                     default:
                         item = JSON.parse(item);
                         info.push(item);
@@ -440,7 +445,7 @@ function getDictOrArrayEnd(str) {
         }
     }
     if (end === 0) {
-        console.error(`${bracketType} brackets not closed propery in ${str}`);
+        console.error(`${bracketType} brackets not closed propery in ${str}`); // if this error is triggered it causes the whole thing to shit itself
         return 0;
     }
     return end + 1;
@@ -513,11 +518,12 @@ function styleElement(element, elementInfo) {
 function parseFunction(funcString) {
     try {
         // Match the arrow function syntax
-        let arrowFunctionMatch = funcString.match(/^(.*)=>\s*{(.*)}$/s);
+        let arrowFunctionMatch = funcString.match(/^\((.*)\)\s*=>\s*{(.*)}$/s);
         if (arrowFunctionMatch) {
             let args = arrowFunctionMatch[1].trim();
+            args = softParseInfo(args);
             let body = arrowFunctionMatch[2].trim();
-            return new Function(args, body);
+            return new Function(...args, body);
         }
 
         // Match the traditional function syntax
@@ -530,7 +536,7 @@ function parseFunction(funcString) {
 
         throw new Error("Invalid function format");
     } catch (err) {
-        console.error("Failed to parse function:", err.message);
+        console.error("parse function: Error:", err.message);
         return null;
     }
 }

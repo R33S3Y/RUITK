@@ -62,6 +62,7 @@ elements.append("body", elements.makeElements(`
                     <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2"}
                     <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
                 }
+                <button>{content: "hello World", callback: () => {console.log("Hello World! I am button!")}}
         }
     ]}
 `));

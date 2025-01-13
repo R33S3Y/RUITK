@@ -329,7 +329,7 @@ let elements = [
         name : "button",
         function : (info, element) => {
             info = Merge.dicts({
-                callback : "() => {return};",
+                callback : () => {console.warn("button element: missing callback function")},
             }, info);
 
             let e = element.generate(info, element);
