@@ -232,16 +232,7 @@ ${e.stack}`;
                 } else if (str.startsWith("<")) { // is element
                     itemType = "element";
                     
-                    let dictStart = str.indexOf("{");
-                    if (dictStart === -1) {
-                        console.error("Opening curly brace '{' not found in the string");
-                        if (info.length === 1) {
-                            info = info[0];
-                        }
-                        return info;
-                    }
-                    itemEnd = getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
-                            
+                    itemEnd = getItemWithCutEnd(str);  
                 } else if (!isNaN(str.charAt(0))) { //is number
                     itemType = "number";
 
@@ -255,9 +246,24 @@ ${e.stack}`;
                         }
                     }
                     itemEnd = i;
+                } else if (str.indexOf("=>") !== -1 && str.indexOf("=>") < str.indexOf("{")) { // arrow function
+                    itemType = "arrowFunction";
+
+                    itemEnd = getItemWithCutEnd(str);  
+                } else if (str.startsWith("function")) { // function
+                    itemType = "function";
+
+                    itemEnd = getItemWithCutEnd(str);  
                 } else {
                     console.error("str type not found");
                     console.debug(`str : "${str}"`);
+                    if (info.length === 1) {
+                        info = info[0];
+                    }
+                    return info;
+                }
+
+                if (itemEnd === -1) {
                     if (info.length === 1) {
                         info = info[0];
                     }
@@ -298,6 +304,9 @@ ${e.stack}`;
                         item = item.slice(1, -1);
                         info.push(item);
                         break;
+                    case "function":
+                    case "arrowFunction":
+                        item = parseFunction(item);
                     default:
                         item = JSON.parse(item);
                         info.push(item);
@@ -391,6 +400,14 @@ function softParseInfo(str) {
     } else {
         return keyValuePairs;
     }
+};
+function getItemWithCutEnd(str) {
+    let dictStart = str.indexOf("{");
+    if (dictStart === -1) {
+        console.error("Opening curly brace '{' not found in the string");
+        return -1;
+    }
+    return getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
 };
 function getDictOrArrayEnd(str) {
     str = str.trim();
@@ -492,4 +509,28 @@ function styleElement(element, elementInfo) {
     Style.style(element, styles);
 
     return element;
+}
+function parseFunction(funcString) {
+    try {
+        // Match the arrow function syntax
+        let arrowFunctionMatch = funcString.match(/^(.*)=>\s*{(.*)}$/s);
+        if (arrowFunctionMatch) {
+            let args = arrowFunctionMatch[1].trim();
+            let body = arrowFunctionMatch[2].trim();
+            return new Function(args, body);
+        }
+
+        // Match the traditional function syntax
+        let functionMatch = funcString.match(/^function\s*(.*?)\((.*?)\)\s*{([\s\S]*)}$/);
+        if (functionMatch) {
+            let args = functionMatch[2].trim();
+            let body = functionMatch[3].trim();
+            return new Function(args, body);
+        }
+
+        throw new Error("Invalid function format");
+    } catch (err) {
+        console.error("Failed to parse function:", err.message);
+        return null;
+    }
 }

@@ -13,6 +13,7 @@
  - Added a new dependency called `tester.js` for input validation
 #### element.js Changes
  - Added error handling to for failed elements previously 1 failure would cause everything to fail to render
+ - Added support for functions and arrow functions
  - Added some ASCII art to init
  - Added input filtering for the parse function
 #### documentation Changes
