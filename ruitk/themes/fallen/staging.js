@@ -23,9 +23,12 @@ let elements = [
         },
         generate : "<base>",
         style : {
-            width : "100%",
+            //width : "100%",
             color : "var(--accent3)",
             backgroundColor : "var(--background2)",
+            fontSize : "var(--fontSizeP1)",
+            paddingTop : "var(--paddingSmall)",
+            paddingBottom : "var(--paddingSmall)",
         },
         style_standard : "<base>",
         style_border : "<base>",
@@ -332,6 +335,17 @@ let elements = [
                 callback : () => {console.warn("button element: missing callback function")},
             }, info);
 
+            if (info.content) {
+                if (typeof info.content === "string") {
+                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+                }
+                if (Array.isArray(info.content) === false) {
+                    info.content = [info.content];
+                } // no need for content handling other than orgnization as is handle in the generate function
+            } else {
+                info.content = [];
+            }
+
             let e = element.generate(info, element);
             
             e.addEventListener('click', info.callback);
@@ -349,12 +363,23 @@ let elements = [
         name : "submit",
         function : (info, element) => {
             info = Merge.dicts({
-                content : "Submit",
+                callback : () => {console.warn("submit element: missing callback function")},
             }, info);
 
+            if (info.content) {
+                if (typeof info.content === "string") {
+                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+                }
+                if (Array.isArray(info.content) === false) {
+                    info.content = [info.content];
+                } // no need for content handling other than orgnization as is handle in the generate function
+            } else {
+                info.content = [];
+            }
+
             let e = element.generate(info, element);
-            e.type = "submit";
-            e.value = info.content;
+            
+            e.addEventListener('click', info.callback);
 
             return e;
         },
@@ -365,11 +390,14 @@ let elements = [
 
             backgroundColor : "var(--accent1)",
             hover_backgroundColor : "var(--accent2)",
+
+            paddingTop : "var(--paddingSmall)",
+            paddingBottom : "var(--paddingSmall)",
         },
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        element : "input"
+        element : "button"
     }
 ];
 

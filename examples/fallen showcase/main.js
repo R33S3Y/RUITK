@@ -47,7 +47,7 @@ elements.append("body", elements.makeElements(`
                 <grid>{"cTemplate" : "auto", "rTemplate" : "auto auto auto" , "content" : 
                     <textbox>{"placeholder" : "Email", "c" : "1", "r" : "1"}
                     <textbox>{"placeholder" : "Password", "c" : "1", "r" : "2"}
-                    <submit>{"c" : "1", "r" : "3"}    
+                    <submit>{content : "Submit", "c" : "1", "r" : "3"}    
                 }
         }, {    
             "name" : "Tile the 2nd",
