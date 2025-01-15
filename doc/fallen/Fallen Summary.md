@@ -3,15 +3,7 @@
  - [Files](Fallen%20Summary.md#Files)
  - [Elements](Fallen%20Summary.md#Elements)
 	 - [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
-	 - [Base](Fallen%20Summary.md#Base)
-		 - [h1, h2, h3](#h1,%20h2,%20h3)
-		 - [p1, p2, p3](#p1,%20p2,%20p3)
-		 - [b, u, i](Fallen%20Summary.md#b,%20u,%20i)
-		 - [a](Fallen%20Summary.md#a)
-		 - [grid](Fallen%20Summary.md#grid)
-	 - [TileWin](Fallen%20Summary.md#TileWin)
-		 - 
-	 - [Input](Fallen%20Summary.md#Input)
+	 - [Modules](Fallen%20Summary.md#Modules)
 
 # Project Goals
 Fallen is collection of premade configurable elements for [element.js](element.js.md) with a constant theme and assets.
@@ -45,8 +37,8 @@ In Fallen there's a Element called `base` although if you do call it [element.js
  - `h` - Defaults to "auto" - sets `element.style.height`
  - `c` - Defaults to an empty string - sets `element.style.gridColumn`
  - `r` - Defaults to an empty string - sets `element.style.gridRow`
- - `xAline` - Defaults to an empty string - Has 3 values "left", "center" & "right" if these values are passed in it will snap horizontally to that part of the parent
- - `yAline` - Defaults to an empty string - Has 3 values "top", "center" & "bottom" if these values are passed in it will snap vertically to that part of the parent
+ - `xAlign` - Defaults to an empty string - Has 3 values "left", "center" & "right" if these values are passed in it will snap horizontally to that part of the parent
+ - `yAlign` - Defaults to an empty string - Has 3 values "top", "center" & "bottom" if these values are passed in it will snap vertically to that part of the parent
  - `textAlign` - Defaults to "left" - sets `element.innertext`
  - `position` - Defaults to "relative" but if `x`, `y`, `w`, `h`, `xAline` or `yAline` are changed it will instead default to "absolute" - sets `element.style.position`
 

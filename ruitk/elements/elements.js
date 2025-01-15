@@ -1,11 +1,32 @@
 import { Merge } from "../support/merger.js";
 import { Style } from "../support/style.js";
+import { Tester } from "../support/tester.js";
+
+let logo = `      
+             This Project was made with:                        
+                                                                
+         ██████╗ ██╗   ██╗██╗████████╗██╗  ██╗                  
+         ██╔══██╗██║   ██║██║╚══██╔══╝██║ ██╔╝                  
+         ██████╔╝██║   ██║██║   ██║   █████╔╝                   
+         ██╔══██╗██║   ██║██║   ██║   ██╔═██╗                   
+         ██║  ██║╚██████╔╝██║   ██║   ██║  ██╗                  
+         ╚═╝  ╚═╝ ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝                  
+                                                                
+             https://github.com/R33S3Y/RUITK/                   
+        A simple ui library/toolkit for websites.               
+             Licensed under GPL-3.0 license.                    
+                                                                
+Main Dev -          [R33S3Y](https://github.com/R33S3Y)         
+ Arist  - [Raphaela](https://www.instagram.com/fredyguy12_art/) 
+                                                                 
+`
 
 export class Elements {
     constructor() {
         this.elements = [];
         this.elementCount = 0;
         this.initFunctions();
+        console.info(logo);
     }
 
     addElements(elements = []) {
@@ -107,7 +128,7 @@ export class Elements {
                 elementInfo = resolveElementObject(elementInfo, this.elements);
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
-                let dict
+                let dict;
                 if(elementInfo.parseLevel === 0) {
                     dict = dictStr;
                 } else {
@@ -123,9 +144,38 @@ export class Elements {
                 elementInfo.elementCount =  this.elementCount;
 
                 this.elementCount ++;
-    
-                let element = elementInfo.function(dict, elementInfo);
-                
+
+                let element;
+                try {
+                    element = elementInfo.function(dict, elementInfo);
+                } catch (e) {
+                    let errorStr = 
+`renderElements Function: Failed to render element: "${elementInfo.name}"
+Error : 
+${e.message}
+
+Info : 
+${JSON.stringify(dict)}
+
+Element : 
+${JSON.stringify(elementInfo)}
+
+Callstack : 
+${e.stack}`;
+                    console.error(errorStr);                    
+
+                    element = document.createElement("h3");
+                    element.innerHTML = errorStr.replace(/\n/g, "<br>");
+
+                    elementInfo = {
+                        handleStyle : false,
+                        style : {
+                            color : "red",
+                            fontSize : "0.75em"
+                        }
+                    };
+                }
+
                 if (Array.isArray(element) === false) {
                     element = [element];
                 }
@@ -135,6 +185,7 @@ export class Elements {
                         thing = styleElement(thing, elementInfo);
                     }
                 }
+                
                 
                 currentStr = currentStr.replace(currentElement.str, "").trim();
                 
@@ -148,9 +199,25 @@ export class Elements {
         };
     
         this.parse = (str, softParse = false) => {
+            //if (str === undefined || str === null) {
+            //    return str; // all of these cases are caught by the following test but I think it's better for these case to be handed off smoothly
+            //}
+            Tester.dicts({
+                str : "string",
+                softParse : "boolean",
+            }, {
+                str, softParse
+            }, "parse Function: ");
             let info = [];
             str = str.trim();
+            if(str.length === 0) {
+                console.warn("parse Function: Input str is empty!!!");
+                return "";
+            }
             while(str.length > 0) {
+
+                // this has issues with functions with 2 or more args (looks like differnt issues bettewn arrows and standard)
+                // but is 10:46pm so I'm giving up for now
                 
                 let itemEnd = 0;
                 let itemType = "";
@@ -168,16 +235,7 @@ export class Elements {
                 } else if (str.startsWith("<")) { // is element
                     itemType = "element";
                     
-                    let dictStart = str.indexOf("{");
-                    if (dictStart === -1) {
-                        console.error("Opening curly brace '{' not found in the string");
-                        if (info.length === 1) {
-                            info = info[0];
-                        }
-                        return info;
-                    }
-                    itemEnd = getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
-                            
+                    itemEnd = getItemWithCutEnd(str);  
                 } else if (!isNaN(str.charAt(0))) { //is number
                     itemType = "number";
 
@@ -191,9 +249,24 @@ export class Elements {
                         }
                     }
                     itemEnd = i;
+                } else if (str.indexOf("=>") !== -1 && str.indexOf("=>") < str.indexOf("{")) { // arrow function
+                    itemType = "arrowFunction";
+
+                    itemEnd = getItemWithCutEnd(str);  
+                } else if (str.startsWith("function")) { // function
+                    itemType = "function";
+
+                    itemEnd = getItemWithCutEnd(str);  
                 } else {
                     console.error("str type not found");
                     console.debug(`str : "${str}"`);
+                    if (info.length === 1) {
+                        info = info[0];
+                    }
+                    return info;
+                }
+
+                if (itemEnd === -1) {
                     if (info.length === 1) {
                         info = info[0];
                     }
@@ -211,28 +284,43 @@ export class Elements {
                     continue;
                 }
 
-                if (itemType === "element") {
-                    item = this.renderElements(item);
-                    info = info.concat(item);
-                } else if (itemType === "dict") {
-                    let dict = {};
-                    for (let key of Object.keys(item)) {
-                        dict[key] = this.parse(item[key]);
-                    }
-                    info.push(dict);
-                } else if (itemType === "array") {
-                    let array = [];
-                    for (let thing of item) {
-                        array.push(this.parse(thing));
-                    }
-                    info.push(array);
-                } else {
-                    item = JSON.parse(item);
-                    info.push(item);
+                switch (itemType) {
+                    case "element":
+                        item = this.renderElements(item);
+                        info = info.concat(item);
+                        break;
+                    case "dict":
+                        let dict = {};
+                        for (let key of Object.keys(item)) {
+                            dict[key] = this.parse(item[key]);
+                        }
+                        info.push(dict);
+                        break;
+                    case "array":
+                        let array = [];
+                        for (let thing of item) {
+                            array.push(this.parse(thing));
+                        }
+                        info.push(array);
+                        break;
+                    case "str":
+                        item = item.slice(1, -1);
+                        info.push(item);
+                        break;
+                    case "function":
+                    case "arrowFunction":
+                        item = parseFunction(item);
+                        info.push(item);
+                        break;
+                    default:
+                        item = JSON.parse(item);
+                        info.push(item);
+                        break;
                 }
+
             }
 
-            if (info.length === 1) {
+            if (info.length <= 1) {
                 info = info[0];
             }
             return info;
@@ -318,6 +406,14 @@ function softParseInfo(str) {
         return keyValuePairs;
     }
 };
+function getItemWithCutEnd(str) {
+    let dictStart = str.indexOf("{");
+    if (dictStart === -1) {
+        console.error("Opening curly brace '{' not found in the string");
+        return -1;
+    }
+    return getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
+};
 function getDictOrArrayEnd(str) {
     str = str.trim();
     let indentAmount = 0;
@@ -349,7 +445,7 @@ function getDictOrArrayEnd(str) {
         }
     }
     if (end === 0) {
-        console.error(`${bracketType} brackets not closed propery in ${str}`);
+        console.error(`${bracketType} brackets not closed propery in ${str}`); // if this error is triggered it causes the whole thing to shit itself
         return 0;
     }
     return end + 1;
@@ -418,4 +514,29 @@ function styleElement(element, elementInfo) {
     Style.style(element, styles);
 
     return element;
+}
+function parseFunction(funcString) {
+    try {
+        // Match the arrow function syntax
+        let arrowFunctionMatch = funcString.match(/^\((.*)\)\s*=>\s*{(.*)}$/s);
+        if (arrowFunctionMatch) {
+            let args = arrowFunctionMatch[1].trim();
+            args = softParseInfo(args);
+            let body = arrowFunctionMatch[2].trim();
+            return new Function(...args, body);
+        }
+
+        // Match the traditional function syntax
+        let functionMatch = funcString.match(/^function\s*(.*?)\((.*?)\)\s*{([\s\S]*)}$/);
+        if (functionMatch) {
+            let args = functionMatch[2].trim();
+            let body = functionMatch[3].trim();
+            return new Function(args, body);
+        }
+
+        throw new Error("Invalid function format");
+    } catch (err) {
+        console.error("parse function: Error:", err.message);
+        return null;
+    }
 }

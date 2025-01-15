@@ -45,28 +45,24 @@ elements.append("body", elements.makeElements(`
             "content" :
                 <h1>{"content" : "Sign in", "textAlign" : "center"}
                 <grid>{"cTemplate" : "auto", "rTemplate" : "auto auto auto" , "content" : 
-                    <textbox>{"placeholder" : "Email", "c" : "1", "r" : "1"}
-                    <textbox>{"placeholder" : "Password", "c" : "1", "r" : "2"}
-                    <submit>{"c" : "1", "r" : "3"}    
+                    <textbox>{name : "email", "placeholder" : "Email", "c" : "1", "r" : "1"}
+                    <textbox>{name : "password", "placeholder" : "Password", "c" : "1", "r" : "2"}
+                    <submit>{content : "Submit", "c" : "1", "r" : "3", callback: (form) => {console.log(form)}}    
                 }
         }, {    
             "name" : "Tile the 2nd",
             "x" : 2,
             "y" : 1,
             content : 
-                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto auto auto auto" , "content" : 
-                    <radio>{"content" : "test text", "c" : "1", "r" : "1"}
-                    <radio>{"content" : "test text", "c" : "1", "r" : "2"}
-                    <radio>{"content" : "test text", "c" : "1", "r" : "3"}
-
-                    <checkbox>{"content" : "test text", "c" : "1", "r" : "4"}
-                    <checkbox>{"content" : "test text", "c" : "1", "r" : "5"}
-                    <checkbox>{"content" : "test text", "c" : "1", "r" : "6"}
-
-                    <dropdown>{options : ["1", "2", "3"], "c" : "2", "r" : "1"}
-
-                    <combo>{options : ["1", "2", "3"], "c" : "2", "r" : "4"}
+                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto" , "content" : 
+                    
+                    <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
+                    <checkbox>{question : "3. Test Question", options : ["JS", "CSS", "HTML"], "c" : "2", "r" : "1"}
+                    
+                    <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2"}
+                    <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
                 }
+                <button>{content: "hello World", callback: () => {console.log("Hello World! I am button!")}}
         }
     ]}
 `));
