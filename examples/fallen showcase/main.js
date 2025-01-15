@@ -45,9 +45,9 @@ elements.append("body", elements.makeElements(`
             "content" :
                 <h1>{"content" : "Sign in", "textAlign" : "center"}
                 <grid>{"cTemplate" : "auto", "rTemplate" : "auto auto auto" , "content" : 
-                    <textbox>{"placeholder" : "Email", "c" : "1", "r" : "1"}
-                    <textbox>{"placeholder" : "Password", "c" : "1", "r" : "2"}
-                    <submit>{content : "Submit", "c" : "1", "r" : "3"}    
+                    <textbox>{name : "email", "placeholder" : "Email", "c" : "1", "r" : "1"}
+                    <textbox>{name : "password", "placeholder" : "Password", "c" : "1", "r" : "2"}
+                    <submit>{content : "Submit", "c" : "1", "r" : "3", callback: (form) => {console.log(form)}}    
                 }
         }, {    
             "name" : "Tile the 2nd",

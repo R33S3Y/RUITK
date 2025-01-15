@@ -7,6 +7,8 @@
 	 - `checkbox`
 	 - `dropdown`
 	 - `combo`
+	 - `button`
+	 - `submit`
 #### support changes
  - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
  - Added some input filtering to `convert.js`

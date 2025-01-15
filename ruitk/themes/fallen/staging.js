@@ -9,6 +9,7 @@ let elements = [
         function : (info, element) => {
             info = Merge.dicts({
                 placeholder : "Enter text",
+                name : "",
                 form : "default",
                 content : "",
             }, info);
@@ -16,20 +17,19 @@ let elements = [
             let e = element.generate(info, element);
             e.type = "text";
             e.placeholder = info.placeholder;
+            e.name = info.name;
             if(info.content) {
                 e.value = info.content;
             }
             e.dataset.form = info.form;
+            e.dataset.type = element.name;
             return e;
         },
         generate : "<base>",
         style : {
-            //width : "100%",
             color : "var(--accent3)",
             backgroundColor : "var(--background2)",
             fontSize : "var(--fontSizeP1)",
-            paddingTop : "var(--paddingSmall)",
-            paddingBottom : "var(--paddingSmall)",
         },
         style_standard : "<base>",
         style_border : "<base>",
@@ -68,6 +68,7 @@ let elements = [
                 }
             }
             form.dataset.form = info.form;
+            form.dataset.type = element.name;
             return form;
         },
         makeOneBox : (info, element) => {
@@ -245,6 +246,7 @@ let elements = [
             e.id = `${element.name}-${element.elementCount}`;
             e.name = info.name;
             e.dataset.form = info.form;
+            e.dataset.type = element.name;
 
             e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
 
@@ -300,6 +302,7 @@ let elements = [
             let e = element.generate(info, element);
             e.name = info.name;
             e.dataset.form = info.form;
+            e.dataset.type = element.name;
             e.type = "text";
             e.setAttribute("list", info.list);
 
@@ -378,12 +381,49 @@ let elements = [
 
             let callback = () => {
                 let formElements = document.querySelectorAll(`[data-form="${info.form}"]`);
-
+                let output = {};
                 for (let formElement of formElements) {
-                    if (formElement.type) {// textbox
-
+                    switch (formElement.dataset.type) {
+                        case "textbox":
+                        case "dropdown":
+                        case "combo":
+                            if (output[formElement.name] !== undefined) {
+                                console.error(`submit Element: "${formElement.name}" is not a unique name`);
+                                break;
+                            }
+                            output[formElement.name] = formElement.value;
+                            break;
+                        case "radio":
+                            let name = "";
+                            let value = "";
+                            let radioButtons = formElement.querySelectorAll('input[type="radio"]');
+                            for (let radio of radioButtons) {
+                                if (radio.checked) {
+                                    output[radio.name] = radio.value;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "checkbox":
+                            let checkboxName = "";
+                            let checkboxValue = [];
+                            let checkboxButtons = formElement.querySelectorAll('input[type="checkbox"]');
+                            for (let checkbox of checkboxButtons) {
+                                if (checkbox.checked) {
+                                    checkboxName = checkbox.name;
+                                    checkboxValue.push(checkbox.value);
+                                }
+                            }
+                            output[checkboxName] = checkboxValue;
+                            break;
+                        case "submit":
+                            break;
+                        default:
+                            console.error("submit Element: Could not find type of form element");
+                            console.debug(formElement);
                     }
                 }
+                info.callback(output);
             };
 
             if (info.content) {
@@ -399,6 +439,7 @@ let elements = [
 
             let e = element.generate(info, element);
             e.dataset.form = info.form;
+            e.dataset.type = element.name;
             
             e.addEventListener('click', callback);
 
