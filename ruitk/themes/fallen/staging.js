@@ -9,6 +9,7 @@ let elements = [
         function : (info, element) => {
             info = Merge.dicts({
                 placeholder : "Enter text",
+                form : "default",
                 content : "",
             }, info);
 
@@ -18,7 +19,7 @@ let elements = [
             if(info.content) {
                 e.value = info.content;
             }
-
+            e.dataset.form = info.form;
             return e;
         },
         generate : "<base>",
@@ -66,7 +67,7 @@ let elements = [
                     }
                 }
             }
-
+            form.dataset.form = info.form;
             return form;
         },
         makeOneBox : (info, element) => {
@@ -104,10 +105,13 @@ let elements = [
             // input testing
             info = Merge.dicts({
                 question : "",
+                form : '"default"',
                 options : "[]",
             }, info);
 
+
             info.question = element.parse(info.question);
+            info.form = element.parse(info.form);
             info.options = element.parse(info.options);
             if (info.name) {
                 info.name = element.parse(info.name);
@@ -141,6 +145,7 @@ let elements = [
             delete gridInfo.name;
             delete gridInfo.values;
             delete gridInfo.list;
+            delete gridInfo.form;
 
             let gridInfoStr = "";
             for (let key in gridInfo) {
@@ -239,6 +244,7 @@ let elements = [
             let e = document.createElement("select");
             e.id = `${element.name}-${element.elementCount}`;
             e.name = info.name;
+            e.dataset.form = info.form;
 
             e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
 
@@ -252,6 +258,7 @@ let elements = [
                 optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
                 e.appendChild(optionElement);
             }
+            
             form.appendChild(e);
             return form;
         },
@@ -292,7 +299,7 @@ let elements = [
 
             let e = element.generate(info, element);
             e.name = info.name;
-
+            e.dataset.form = info.form;
             e.type = "text";
             e.setAttribute("list", info.list);
 
@@ -310,10 +317,11 @@ let elements = [
                 optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
                 dataList.appendChild(optionElement);
             }
-
+            
             e.appendChild(dataList);
-
+            
             form.appendChild(e);
+
             return form;
         },
         parseLevel : 1,
@@ -332,7 +340,7 @@ let elements = [
         name : "button",
         function : (info, element) => {
             info = Merge.dicts({
-                callback : () => {console.warn("button element: missing callback function")},
+                callback : () => {console.warn("button Element: missing callback function")},
             }, info);
 
             if (info.content) {
@@ -363,8 +371,20 @@ let elements = [
         name : "submit",
         function : (info, element) => {
             info = Merge.dicts({
-                callback : () => {console.warn("submit element: missing callback function")},
+                callback : () => {console.warn("submit Element: missing callback function")},
+                content : "Submit",
+                form : "default",
             }, info);
+
+            let callback = () => {
+                let formElements = document.querySelectorAll(`[data-form="${info.form}"]`);
+
+                for (let formElement of formElements) {
+                    if (formElement.type) {// textbox
+
+                    }
+                }
+            };
 
             if (info.content) {
                 if (typeof info.content === "string") {
@@ -378,8 +398,9 @@ let elements = [
             }
 
             let e = element.generate(info, element);
+            e.dataset.form = info.form;
             
-            e.addEventListener('click', info.callback);
+            e.addEventListener('click', callback);
 
             return e;
         },
