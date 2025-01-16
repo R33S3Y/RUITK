@@ -11,12 +11,3 @@ RUITK is a simple ui library/toolkit for websites. Providing a wrapper for prema
  - [Raphaela](https://www.instagram.com/fredyguy12_art/) - Artist
 ## Change Log
 You can see the change log [Here](doc/changelog.md).
-
-## Docs
- - [changelog](doc/changelog.md)
- - [element.js](doc/element.js.md)
- - [tileWin.js](doc/tileWin.js.md)
- - [style.js](doc/support/style.js.md)
- - [support Library's Explanation](doc/support/support%20Library's%20Explanation.md)
- - [Fallen Summary](doc/fallen/Fallen%20Summary.md)
- - [The Base Element](doc/fallen/The%20Base%20Element.md)

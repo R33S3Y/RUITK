@@ -1,3 +1,9 @@
+## 0.9.1
+#### documentation Changes
+ - Removed docs section of [README](../README.md) due to it being out of date
+#### element.js Changes
+ - Fixed an issue breaking multi charter args
+
 # 0.9
 #### Fallen Changes
  - Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
