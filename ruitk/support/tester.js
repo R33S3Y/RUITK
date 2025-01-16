@@ -12,30 +12,36 @@ export class Tester {
         let issues = {};
 
         for (let key in template) {
-            let expected = template[key];
-
             if (!(key in actual)) {
                 issues[key] = `Key '${key}' is missing`;
-            } else if (typeof expected === "string" && !isType(actual[key], expected)) {
-                issues[key] = `Key '${key}' is expected to be of type '${expected}', but got '${typeof actual[key]}'`;
-            } else if (typeof expected === "object") {
-                let { type, empty, full } = expected;
+                continue;
+            }
 
-                if (!isType(actual[key], type)) {
-                    issues[key] = `Key '${key}' is expected to be of type '${type}', but got '${getType(actual[key])}'`;
-                } else {
-                    if (empty === false && !actual[key]) {
-                        issues[key] = `Key '${key}' cannot be empty`;
-                    } else if (empty === true && actual[key]) {
-                        issues[key] = `Key '${key}' must be empty`;
-                    }
-                    if (full === false && actual[key]) {
-                        issues[key] = `Key '${key}' must not be full`;
-                    } else if (full === true && !actual[key]) {
-                        issues[key] = `Key '${key}' must be full`;
-                    }
+            let expected = template[key];
+            
+            if (typeof expected === "string" || Array.isArray(expected) === true) {
+                expected = {type : expected};
+            }
+
+            let { type, empty, full } = expected;
+            if(Array.isArray(type) === false) {
+                type = [type];
+            }
+            if (!isTypes(actual[key], type)) {
+                issues[key] = `Key '${key}' is expected to be of type/s '(${JSON.stringify(type).slice(1, -1)})', but got '${getType(actual[key])}'`;
+            } else {
+                if (empty === false && !actual[key]) {
+                    issues[key] = `Key '${key}' cannot be empty`;
+                } else if (empty === true && actual[key]) {
+                    issues[key] = `Key '${key}' must be empty`;
+                }
+                if (full === false && actual[key]) {
+                    issues[key] = `Key '${key}' must not be full`;
+                } else if (full === true && !actual[key]) {
+                    issues[key] = `Key '${key}' must be full`;
                 }
             }
+            
         }
 
         for (let key in issues) {
@@ -50,6 +56,13 @@ export class Tester {
     }
 }
 
+function isTypes (value, types) {
+    for (let type of types) {
+        if (isType(value, type) === true) return true;
+    }
+    return false;
+}
+
 
 /**
 * Checks if a value matches a specified type.
@@ -62,8 +75,9 @@ function isType(value, type) {
     if (type === "map") return value instanceof Map;
     if (type === "set") return value instanceof Set;
     if (type === "HTMLElement") return value instanceof HTMLElement;
+    if (type === "function") return value instanceof Function;
     if (type === "dict") return typeof value === "object" && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement);
-    return typeof value === type && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement);
+    return typeof value === type && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement) && !(value instanceof Function);
 }
 
 /**
@@ -76,6 +90,7 @@ function getType(value) {
     if (value instanceof Map) return "map";
     if (value instanceof Set) return "set";
     if (value instanceof HTMLElement) return "HTMLElement";
+    if (value instanceof Function) return "function";
     if (typeof value === "object" && value !== null && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement)) return "dict";
-    return typeof value && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement);
+    return typeof value;
 }
