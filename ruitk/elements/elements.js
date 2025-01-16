@@ -521,7 +521,7 @@ function parseFunction(funcString) {
         let arrowFunctionMatch = funcString.match(/^\((.*)\)\s*=>\s*{(.*)}$/s);
         if (arrowFunctionMatch) {
             let args = arrowFunctionMatch[1].trim();
-            args = softParseInfo(args);
+            args = softParseInfo(`[${args}]`);
             let body = arrowFunctionMatch[2].trim();
             return new Function(...args, body);
         }

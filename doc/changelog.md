@@ -1,3 +1,15 @@
+## 0.9.1
+#### documentation Changes
+ - Removed docs section of [README](../README.md) due to it being out of date
+#### element.js Changes
+ - Fixed an issue breaking multi charter args
+#### support changes
+ - Fixed issue with error reporting in `tester.js` 
+ - Added the ability to input multiple types in the type key in `tester.js` 
+ - Added type "function" in `tester.js` 
+#### documentation Changes
+ - Added documentation for `tester.js`
+
 # 0.9
 #### Fallen Changes
  - Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
