@@ -41,7 +41,6 @@ export class Tester {
                     issues[key] = `Key '${key}' must be full`;
                 }
             }
-            
         }
 
         for (let key in issues) {

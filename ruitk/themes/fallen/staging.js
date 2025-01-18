@@ -14,6 +14,12 @@ let elements = [
                 content : "",
             }, info);
 
+            Tester.dicts({
+                form : "string",
+                content : ["string", "HTMLElement", "array"],
+            }, info, `${element.name} Element: `);
+
+
             let e = element.generate(info, element);
             e.type = "text";
             e.placeholder = info.placeholder;
@@ -343,8 +349,15 @@ let elements = [
         name : "button",
         function : (info, element) => {
             info = Merge.dicts({
-                callback : () => {console.warn("button Element: missing callback function")},
+                callback : () => {console.warn("submit Element: missing callback function")},
+                content : "Submit",
             }, info);
+
+            Tester.dicts({
+                callback : "function",
+                content : ["string", "HTMLElement"],
+            }, info, `${element.name} Element: `);
+
 
             if (info.content) {
                 if (typeof info.content === "string") {
@@ -378,6 +391,12 @@ let elements = [
                 content : "Submit",
                 form : "default",
             }, info);
+
+            Tester.dicts({
+                callback : "function",
+                content : ["string", "HTMLElement"],
+                form : "string",
+            }, info, `${element.name} Element: `);
 
             let callback = () => {
                 let formElements = document.querySelectorAll(`[data-form="${info.form}"]`);
