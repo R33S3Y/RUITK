@@ -8,29 +8,41 @@ let elements = [
         name : "textbox",
         function : (info, element) => {
             info = Merge.dicts({
+                question : "",
                 placeholder : "Enter text",
-                name : "",
                 form : "default",
-                content : "",
+                type : "text",
+                spellcheck : false,
+            }, info);
+
+            info = Merge.dicts({
+                name : Convert.convert(info.question, "camelCase"),
             }, info);
 
             Tester.dicts({
-                form : "string",
-                content : ["string", "HTMLElement", "array"],
+                form : { type: "string", full: true },
+                placeholder : "string",
+                type : "string",
+                spellcheck : "boolean",
+                question : "string",
+                name :  { type: "string", full: true },
             }, info, `${element.name} Element: `);
 
-
+            let form = element.makeGridandTitle(info, element);
             let e = element.generate(info, element);
             e.type = "text";
             e.placeholder = info.placeholder;
             e.name = info.name;
-            if(info.content) {
-                e.value = info.content;
-            }
+            e.type = info.type;
+            e.spellcheck = `${info.spellcheck}`;
+            e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+
             e.dataset.form = info.form;
             e.dataset.type = element.name;
-            return e;
+            form.appendChild(e);
+            return form;
         },
+        makeGridandTitle : "<radio>",
         generate : "<base>",
         style : {
             color : "var(--accent3)",
@@ -40,7 +52,8 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        element : "input"
+        element : "input",
+        handleStyle : true,
     },
     {   // radio
         name : "radio",
@@ -137,10 +150,11 @@ let elements = [
             }, info, []);
 
             Tester.dicts({
-                question : { type: "string", full: true },
+                question : "string",
                 options : { type: "array", full: true },
-                name : "string",
-                values : "array",
+                name :  { type: "string", full: true },
+                values : { type: "array", full: true },
+                form : { type: "string", full: true },
             }, info, `${element.name} Element: `);
 
             return info;
@@ -153,6 +167,9 @@ let elements = [
             delete gridInfo.values;
             delete gridInfo.list;
             delete gridInfo.form;
+            delete gridInfo.placeholder;
+            delete gridInfo.spellcheck;
+            delete gridInfo.type;
 
             let gridInfoStr = "";
             for (let key in gridInfo) {

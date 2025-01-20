@@ -12,7 +12,7 @@ export class Convert {
     
     static convert(str, type = "camelCase") {
         Tester.dicts({
-            str : { type : "string", full: true }
+            str : "string",
         }, { str }, "convert Function: ")
         const oldType = detect(str);
         const wordsArray = toArray(str, oldType); // Convert input string to an array of words
