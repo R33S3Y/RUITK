@@ -50,7 +50,7 @@ elements.append("body", elements.makeElements(`
                     <submit>{content : "Submit", "c" : "1", "r" : "3", callback: (form) => {console.log(form)}}    
                 }
         }, {    
-            "name" : "Tile the 2nd",
+            "name" : "Form Test",
             "x" : 2,
             "y" : 1,
             content : 

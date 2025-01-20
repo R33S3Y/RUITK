@@ -1,3 +1,9 @@
+## 0.9.2
+#### Fallen Changes
+ - Added more `tester.js` checks to staging
+ - Finished the `textbox` element
+#### support changes
+ - Dropped the requirement for a str to not be empty
 ## 0.9.1
 #### documentation Changes
  - Removed docs section of [README](../README.md) due to it being out of date
