@@ -1,6 +1,8 @@
 ## 0.9.3
 #### documentation Changes
  - Wrote documentation for elements in [staging.js](fallen/staging.js.md)
+#### Fallen Changes
+ - Moved all elements in staging to input
 
 ## 0.9.2
 #### Fallen Changes
