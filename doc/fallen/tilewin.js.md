@@ -1,4 +1,4 @@
-## TileWin
+# TileWin
 #### `tileWin.js`
 Is a small collection of elements intended for use around the `tilewin.js` lib
 ### backgroundImg

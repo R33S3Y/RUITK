@@ -1,3 +1,7 @@
+## 0.9.3
+#### documentation Changes
+ - Wrote documentation for elements in [staging.js](fallen/staging.js.md)
+
 ## 0.9.2
 #### Fallen Changes
  - Added more `tester.js` checks to staging

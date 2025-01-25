@@ -1,5 +1,6 @@
 ## Base
 #### `base.js`
+
 Base is meant to act as a dependency for other files as such it only contains some of the most basic elements.
 ### h1, h2, h3
 All accept the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs) and output an h1, h2 & h3 elements respectively.
