@@ -8,6 +8,7 @@ let elements = [
         name : "textbox",
         function : (info, element) => {
             info = Merge.dicts({
+                id : `"${element.name}-${element.elementCount}"`,
                 question : "",
                 placeholder : "Enter text",
                 form : "default",
@@ -20,6 +21,7 @@ let elements = [
             }, info);
 
             Tester.dicts({
+                id : { type: "string", full: true },
                 form : { type: "string", full: true },
                 placeholder : "string",
                 type : "string",
@@ -47,7 +49,7 @@ let elements = [
         style : {
             color : "var(--accent3)",
             backgroundColor : "var(--background2)",
-            fontSize : "var(--fontSizeP1)",
+            fontSize : "var(--fontSizeP2)",
         },
         style_standard : "<base>",
         style_border : "<base>",
@@ -295,10 +297,12 @@ let elements = [
         style : {
             color : "var(--accent3)",
             backgroundColor : "var(--background2)",
+            fontSize : "var(--fontSizeP2)",
         },
         style_option : {
             color : "var(--accent3)",
             backgroundColor : "var(--background2)",
+            fontSize : "var(--fontSizeP2)",
         },
         style_standard : "<base>",
         style_border : "<base>",

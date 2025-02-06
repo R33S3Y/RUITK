@@ -1,3 +1,7 @@
+## 0.9.4
+#### element.js Changes
+ - Changed type error handling in the parse function so instead of early exiting the
+
 ## 0.9.3
 #### documentation Changes
  - Wrote documentation for elements in [staging.js](fallen/staging.js.md)

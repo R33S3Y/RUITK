@@ -258,12 +258,10 @@ ${e.stack}`;
 
                     itemEnd = getItemWithCutEnd(str);  
                 } else {
-                    console.error("str type not found");
+                    console.warn("str type not found assuming type str");
                     console.debug(`str : "${str}"`);
-                    if (info.length === 1) {
-                        info = info[0];
-                    }
-                    return info;
+                    itemType = "str";
+                    itemEnd = str.length;
                 }
 
                 if (itemEnd === -1) {
