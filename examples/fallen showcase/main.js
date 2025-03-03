@@ -65,6 +65,10 @@ elements.append("body", elements.makeElements(`
                     <button>{content : "hello World", callback : () => {console.log("Hello World! I am button!")}}
                     <search>{}
                 }
+                <grid>{"cTemplate" : "auto auto auto auto", "rTemplate" : "auto auto auto auto" , "content" : 
+                    
+                    <icon>{"c" : "1", "r" : "1"}
+                }
         }
     ]}
 `));

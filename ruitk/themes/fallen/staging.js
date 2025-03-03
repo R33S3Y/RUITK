@@ -29,14 +29,34 @@ let elements = [
         },
         parseLevel : 1, 
     },
-    {
+    { // icon
         name: "icon",
         function: (info, element) => {
-            
+            info = Merge.dicts({
+                name: "globe", // Default icon name
+                size: "24px",  // Default size
+                color: "var(--standout1)", // Default color
+            }, info);
+    
+            let e = element.generate(info, element);
+            e.classList.add("icon", `icon_${info.name}`);
+            e.style.fontSize = info.size;
+            e.style.color = info.color;
+    
+            return e;
         },
+        generate: "<base>",
         style: {
-            
+            display: "inline-flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontFamily: "icon", // Uses the font provided by Breeze
+            fontWeight: "normal",
+            fontStyle: "normal",
+            textRendering: "auto",
+            lineHeight: "1",
         },
+        element: "i"
     },
     {
         name: "img",
