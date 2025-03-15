@@ -238,12 +238,12 @@ Makes a `@font-face` thing. so you can have custom fonts.
 #### Usage
 ```js
 Style.fontFace({
-	fontFamily:"icons",
-	src:`url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
+	fontFamily : "icons",
+	src : `url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
 		url("https://cdn.kde.org/breeze-icons/icons.tff") format("truetype");
 		url("https://cdn.kde.org/breeze-icons/icons.svg") format("svg")`,
-	fontWeight:normal,
-	fontStyle:normal,
+	fontWeight : "normal",
+	fontStyle : "normal",
 });
 ```
 

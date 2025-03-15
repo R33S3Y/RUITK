@@ -1,8 +1,11 @@
 ## 0.9.4
 #### style.js changes
  - Added `fontFace` func
+#### Fallen Changes
+ - Added new `icon` element in `staging.js`
 #### documentation Changes
  - Added documentation for `fontFace`
+ - Added documentation for the `icon` element
 
 ## 0.9.3
 #### documentation Changes

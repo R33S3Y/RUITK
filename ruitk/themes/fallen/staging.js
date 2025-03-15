@@ -34,21 +34,21 @@ let elements = [
         function: (info, element) => {
             info = Merge.dicts({
                 name: "globe", // Default icon name
-                size: "24px",  // Default size
-                color: "var(--standout1)", // Default color
+                size: "var(--fontSizeP1)",  // Default size
+                color: "var(--standout4)", // Default color
             }, info);
             
             Style.fontFace({
-                fontFamily:"icons",
-                src:`url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
+                fontFamily : "icons",
+                src : `url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
                     url("https://cdn.kde.org/breeze-icons/icons.tff") format("truetype");
                     url("https://cdn.kde.org/breeze-icons/icons.svg") format("svg")`,
-                fontWeight:normal,
-                fontStyle:normal,
+                fontWeight : "normal",
+                fontStyle : "normal",
             });
     
             let e = element.generate(info, element);
-            e.classList.add("icon", `icon_${info.name}`);
+            e.innerHTML = Convert.convert(info.name, "dashedCase")
             e.style.fontSize = info.size;
             e.style.color = info.color;
     
@@ -59,7 +59,7 @@ let elements = [
             display: "inline-flex",
             justifyContent: "center",
             alignItems: "center",
-            fontFamily: "icon", // Uses the font provided by Breeze
+            fontFamily: "icons", // Uses the font provided by Breeze
             fontWeight: "normal",
             fontStyle: "normal",
             textRendering: "auto",

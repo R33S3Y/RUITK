@@ -174,13 +174,13 @@ export class Style {
         if (Object.keys(partlyCompile) >= 1) {
             console.warn("fontFace Function: fontFace doesn't support most flags! \n Only portrait and landscape are supported");
         }
-
+        
         // stage 2 of 2:
-        let areaStr = `@font-face {\n`;
-        for (let style of partlyCompiled[hash]) {
+        let areaStr = `@font-face {\n    /*hash: "${hash}"  This is needed for style.js (yes really)*/\n`;
+        for (let style of partlyCompiled[`.${hash}`]) {
             areaStr += `    ${style}\n`;
         }
-        areaStr += "}\n"
+        areaStr += "}\n";
         
         styleElement.textContent += areaStr;
         return;

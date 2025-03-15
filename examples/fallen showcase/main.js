@@ -67,7 +67,7 @@ elements.append("body", elements.makeElements(`
                 }
                 <grid>{"cTemplate" : "auto auto auto auto", "rTemplate" : "auto auto auto auto" , "content" : 
                     
-                    
+                    <icon>{"c" : "1", "r" : "1"}
                 }
         }
     ]}
