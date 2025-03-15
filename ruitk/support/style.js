@@ -80,6 +80,36 @@ export class Style {
         return element;
     }
 
+    static query(value, style) {
+        if (!style) {
+            console.error("style input not valid on doesn't exist")
+            return;
+        }
+
+        let forceOnFlags = value.split("_");
+        value = forceOnFlags[forceOnFlags.length-1];
+        forceOnFlags.splice(forceOnFlags.length-1, 1);
+        if (forceOnFlags.length === 0) {
+            forceOnFlags.push("");
+        }
+
+        // should have hover support - Has hover support now!!!
+        let element = Style.style(document.createElement("div"), style, forceOnFlags);
+        // Append the element to the document body to ensure styles are applied
+        document.body.appendChild(element);
+
+        // Get the computed styles of the element
+        let computedStyles = getComputedStyle(element);
+
+        // Retrieve the value of the specified CSS property
+        let result = computedStyles[value];
+
+        // Clean up: remove the temporary element from the document
+        document.body.removeChild(element);
+        
+        return result;
+    }
+
     static isPortrait() {
         return window.innerHeight > window.innerWidth;
     }

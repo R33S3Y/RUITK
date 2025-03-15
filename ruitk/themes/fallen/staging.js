@@ -37,6 +37,15 @@ let elements = [
                 size: "24px",  // Default size
                 color: "var(--standout1)", // Default color
             }, info);
+            
+            Style.fontFace({
+                fontFamily:"icons",
+                src:`url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
+                    url("https://cdn.kde.org/breeze-icons/icons.tff") format("truetype");
+                    url("https://cdn.kde.org/breeze-icons/icons.svg") format("svg")`,
+                fontWeight:normal,
+                fontStyle:normal,
+            });
     
             let e = element.generate(info, element);
             e.classList.add("icon", `icon_${info.name}`);

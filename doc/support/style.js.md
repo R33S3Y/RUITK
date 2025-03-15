@@ -192,7 +192,7 @@ console.log(result); // Outputs the computed value of the hover_backgroundColor 
 # Declare
 ### `Style.declare(vars)`
 
-The `declare` function dynamically updates or adds CSS custom properties (variables) to the `:root` selector in a `<style>` element. It either merges new variables with existing ones or adds new properties if they don't already exist. This function is useful for managing CSS variables programmatically, ensuring that all variable definitions are up-to-date.
+The `declare` function makes and updates CSS vars. Allowing you to use them to use them in other `style.js`
 
 #### Usage
 
@@ -229,6 +229,23 @@ styledElement = Style.style(element, styles);
 #### Notes
 - **CSS Custom Properties**: This function targets the `:root` selector to define global CSS variables.
 - **Existing Variables**: If `:root` variables already exist, they are updated with new values; otherwise, the new variables are appended.
-- **Dynamic Style Management**: The function uses a `<style>` element to manage CSS variable definitions, ensuring that they are reflected in the document's styles.
 
 ---
+# Font face
+### `Style.fontFace(style)`
+
+Makes a `@font-face` thing. so you can have custom fonts.
+#### Usage
+```js
+Style.fontFace({
+	fontFamily:"icons",
+	src:`url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
+		url("https://cdn.kde.org/breeze-icons/icons.tff") format("truetype");
+		url("https://cdn.kde.org/breeze-icons/icons.svg") format("svg")`,
+	fontWeight:normal,
+	fontStyle:normal,
+});
+```
+
+#### Notes
+ - **Flag support:** Only the portrait and landscape flags are supported
