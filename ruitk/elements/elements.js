@@ -258,8 +258,9 @@ ${e.stack}`;
 
                     itemEnd = getItemWithCutEnd(str);  
                 } else {
-                    console.warn("str type not found assuming type str");
+                    console.warn("parse Function: str type not found assuming type str");
                     console.debug(`str : "${str}"`);
+                    str = `"${str}"`
                     itemType = "str";
                     itemEnd = str.length;
                 }

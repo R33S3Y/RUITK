@@ -8,8 +8,8 @@ let elements = [
         name: "search",
         function: (info, element) => {
             info = Merge.dicts({
-                id : `"search-${element.elementCount}"`,
-                callback : () => {console.warn("search Element: missing callback function")},
+                id : `"${element.name}-${element.elementCount}"`,
+                callback : (value) => {console.warn("search Element: missing callback function")},
             }, info);
 
             let textboxInfo = JSON.parse(JSON.stringify(info));
@@ -20,13 +20,44 @@ let elements = [
                 textboxInfoStr += `${key} : ${textboxInfo[key]}, `;
             }
 
-            let e = element.makeElements(`<textbox>{${textboxInfo}}`)
+            let e = element.makeElements(`<textbox>{${textboxInfoStr}}`);
+
+            function handleKeyDown(event, callback) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevents new lines in multi-line inputs
+            
+                    const input = event.target;
+                    const lastValue = input.dataset.lastValue || "";
+            
+                    if (input.value !== lastValue) {
+                        input.dataset.lastValue = input.value; // Update stored value
+                        callback(input.value);
+                    }
+                }
+            }
+            e.addEventListener("keydown", (event) => handleKeyDown(event, info.callback));
+            
+            let icon = element.makeElements(`<icon>{name : "editFind", color : "var(--accent3)", c : 2, r : 2}`);
+
+            function handleClick(callback) {
+                const input = document.getElementById(element.parse(info.id));
+                const lastValue = input.dataset.lastValue || "";
+            
+                if (input.value !== lastValue) {
+                    input.dataset.lastValue = input.value; // Update stored value
+                    callback(input.value);
+                }
+            }
+            icon.addEventListener("click", () => handleClick(info.callback));
+
+            e.appendChild(icon);
 
             return e;
         },
         style: {
         
         },
+        style_standard : "<base>",
         parseLevel : 1, 
     },
     { // icon
@@ -65,6 +96,7 @@ let elements = [
             textRendering: "auto",
             lineHeight: "1",
         },
+        style_standard : "<base>",
         element: "i"
     },
     {
@@ -81,7 +113,22 @@ let elements = [
         style: {
             
         },
-    }
+        style_standard : "<base>",
+    },
+    {
+        name: "markdown",
+        function: (info, element) => {
+            info = Merge.dicts({
+                str : "",
+            }, info);
+
+            
+        },
+        style: {
+            
+        },
+        style_standard : "<base>",
+    },
 ];
 
 export class FallenStaging {

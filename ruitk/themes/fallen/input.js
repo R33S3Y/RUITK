@@ -9,6 +9,7 @@ let elements = [
         function : (info, element) => {
             info = Merge.dicts({
                 id : `"${element.name}-${element.elementCount}"`,
+                idRoot : "",
                 question : "",
                 placeholder : "Enter text",
                 form : "default",
@@ -22,6 +23,7 @@ let elements = [
 
             Tester.dicts({
                 id : { type: "string", full: true },
+                idRoot : "string",
                 form : { type: "string", full: true },
                 placeholder : "string",
                 type : "string",
@@ -126,6 +128,8 @@ let elements = [
         inputTest : (info, element) => {
             // input testing
             info = Merge.dicts({
+                id : `"${element.name}-${element.elementCount}"`,
+                idRoot : "",
                 question : "",
                 form : '"default"',
                 options : "[]",
@@ -152,6 +156,8 @@ let elements = [
             }, info, []);
 
             Tester.dicts({
+                id : { type: "string", full: true },
+                idRoot : "string",
                 question : "string",
                 options : { type: "array", full: true },
                 name :  { type: "string", full: true },
@@ -173,6 +179,8 @@ let elements = [
             delete gridInfo.spellcheck;
             delete gridInfo.type;
 
+            gridInfo.id = gridInfo.idRoot;
+            
             let gridInfoStr = "";
             for (let key in gridInfo) {
                 gridInfoStr += `${key} : ${gridInfo[key]}, `;
