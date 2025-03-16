@@ -1,3 +1,16 @@
+## 0.9.4
+#### style.js changes
+ - Added `fontFace` func
+#### Fallen Changes
+ - Added new `icon` element in `staging.js`
+ - Changed how id's are handled in `input.js` to be more consistent
+ - Added an option called `idRoot` to most elements in `input.js`
+#### element.js Changes
+ - Fixed a bug that caused the first and last chars to be removed when having to assume type str.
+#### documentation Changes
+ - Added documentation for `fontFace`
+ - Added documentation for the `icon` element
+
 ## 0.9.3
 #### documentation Changes
  - Wrote documentation for elements in [staging.js](fallen/staging.js.md)

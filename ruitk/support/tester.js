@@ -28,7 +28,7 @@ export class Tester {
                 type = [type];
             }
             if (!isTypes(actual[key], type)) {
-                issues[key] = `Key '${key}' is expected to be of type/s '(${JSON.stringify(type).slice(1, -1)})', but got '${getType(actual[key])}'`;
+                issues[key] = `Key '${key}' is expected to be of type/s (${JSON.stringify(type).slice(1, -1)}), but got '${getType(actual[key])}'`;
             } else {
                 if (empty === false && !actual[key]) {
                     issues[key] = `Key '${key}' cannot be empty`;

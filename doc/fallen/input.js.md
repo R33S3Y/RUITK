@@ -1,12 +1,12 @@
 ## Input
 ### `input.js`
-There are no elements in `input.js` as of 0.8.3 as the have been moved to `staging.js` while they get there functions worked out.  
-
+`input.js` contains elements for user input. All element here accept [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 
 ### Textbox
 
 - **Purpose**: Creates a single-line text input field.
 - **Inputs**:
+    - `idRoot` (optional): sets the Id of the grid element that holds this element. `id` sets the id of the input element instead
     - `question` (optional): Displayed label for the textbox.
     - `name` (optional): Name attribute for the group (defaults to `camelCase` of `question`).
     - `placeholder` (default: `"Enter text"`): Placeholder text for the input.
@@ -23,6 +23,7 @@ There are no elements in `input.js` as of 0.8.3 as the have been moved to `stagi
 
 - **Purpose**: Creates a group of radio buttons for user selection.
 - **Inputs**:
+	- `idRoot` (optional): sets the Id of the grid element that holds this element. `id` sets the id of the input element instead
     - `question` (optional): The question to display above the radio buttons.
     - `options`: List of options for the user to select.
     - `name` (optional): Name attribute for the group (defaults to `camelCase` of `question`).
@@ -49,6 +50,7 @@ There are no elements in `input.js` as of 0.8.3 as the have been moved to `stagi
 
 - **Purpose**: Creates a dropdown menu for user selection.
 - **Inputs**:
+	- `idRoot` (optional): sets the Id of the grid element that holds this element. `id` sets the id of the input element instead
     - `question` (optional): The question to display above the dropdown.
     - `options`: List of dropdown options.
     - `name` (optional): Name attribute for the dropdown.
