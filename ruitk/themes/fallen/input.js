@@ -38,6 +38,7 @@ let elements = [
             e.placeholder = info.placeholder;
             e.name = info.name;
             e.type = info.type;
+            e.style.gridRow = 2;
             e.spellcheck = `${info.spellcheck}`;
             e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
 
@@ -49,7 +50,8 @@ let elements = [
         makeGridandTitle : "<radio>",
         generate : "<base>",
         style : {
-            color : "var(--accent3)",
+            color : "var(--accent1)",
+            hover_color : "var(--accent2)",
             backgroundColor : "var(--background2)",
             fontSize : "var(--fontSizeP2)",
         },
@@ -77,7 +79,7 @@ let elements = [
                 fakeInfo.value = info.values[i];
                 i ++;
 
-                let box = element.makeOneBox(fakeInfo, element);
+                let box = element.makeOneBox(fakeInfo, element, i+2);
 
                 if (Array.isArray(box) === false) {
                     box = [box];
@@ -94,10 +96,12 @@ let elements = [
             form.dataset.type = element.name;
             return form;
         },
-        makeOneBox : (info, element) => {
+        makeOneBox : (info, element, r = 2) => {
             info = Merge.dicts({
                 name : "",
                 value : "",
+                c : 1,
+                r : r,
             }, info);
 
             let checkbox = document.createElement("input");
@@ -109,7 +113,7 @@ let elements = [
 
             if (info.content) {
                 if (typeof info.content === "string") {
-                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+                    info.content = element.makeElements(`<p1>{ content : "${info.content}"}`)
                 }
                 if (Array.isArray(info.content) === false) {
                     info.content = [info.content];
@@ -185,11 +189,11 @@ let elements = [
             for (let key in gridInfo) {
                 gridInfoStr += `${key} : ${gridInfo[key]}, `;
             }
-            let form = element.makeElements(`<grid>{ ${gridInfoStr}}`);
+            let form = element.makeElements(`<grid>{ ${gridInfoStr}, cTemplate : "auto auto" }`);
 
             // question handling
             if (typeof info.question === "string") {
-                info.question = element.makeElements(`<h3>{ content : "${info.question}" }`);
+                info.question = element.makeElements(`<h3>{ content : "${info.question}", c : 1, r : 1 }`);
             }
             if (Array.isArray(info.question) === false) {
                 info.question = [info.question];
@@ -278,6 +282,7 @@ let elements = [
             let e = document.createElement("select");
             e.id = `${element.name}-${element.elementCount}`;
             e.name = info.name;
+            e.style.gridRow = 2;
             e.dataset.form = info.form;
             e.dataset.type = element.name;
 
@@ -303,14 +308,13 @@ let elements = [
         element : "select",
 
         style : {
-            color : "var(--accent3)",
+            color : "var(--accent1)",
+            hover_color : "var(--accent2)",
             backgroundColor : "var(--background2)",
             fontSize : "var(--fontSizeP2)",
         },
         style_option : {
-            color : "var(--accent3)",
-            backgroundColor : "var(--background2)",
-            fontSize : "var(--fontSizeP2)",
+            
         },
         style_standard : "<base>",
         style_border : "<base>",
@@ -336,6 +340,7 @@ let elements = [
 
             let e = element.generate(info, element);
             e.name = info.name;
+            e.style.gridRow = 2;
             e.dataset.form = info.form;
             e.dataset.type = element.name;
             e.type = "text";

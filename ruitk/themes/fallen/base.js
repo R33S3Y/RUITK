@@ -27,14 +27,14 @@ let colors = {
 let config = { 
     transition : "all 0.2s ease-in-out",
 
-    font : "Arial, Helvetica, sans-serif",
+    font : "ui-sans-serif,-apple-system,system-ui,Segoe UI,Helvetica,Apple Color Emoji,Arial,sans-serif,Segoe UI Emoji,Segoe UI Symbol",
        
-    fontSizeH1 : 3.2,
-    fontSizeH2 : 2.5,
-    fontSizeH3 : 2,
-    fontSizeP1 : 1.5,
-    fontSizeP2 : 1,
-    fontSizeP3 : 0.75,
+    fontSizeH1 : 2.5,
+    fontSizeH2 : 2.0,
+    fontSizeH3 : 1.5,
+    fontSizeP1 : 1.0,
+    fontSizeP2 : 0.8,
+    fontSizeP3 : 0.6,
 
     borderRadius : 1,
     borderWidth : 0.25,
