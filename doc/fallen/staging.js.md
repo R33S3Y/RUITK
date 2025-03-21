@@ -14,3 +14,13 @@ The `staging.js` module serves as a testing and preparation area for new UI elem
     - Accepts standard inputs
 
 ---
+### Search
+
+- **Purpose**: Provides a [Textbox](input.js.md#Textbox) with a callbacks that is run when the user press the search icon or enter but only if there's a difference in the text inputted
+- **Inputs**:
+    - `callback` (defaults to a console warning) 
+- **Behaviour**:
+    - Accepts standard inputs
+    - Accepts the same inputs as [Textbox](input.js.md#Textbox) and has the same requirements
+
+---
