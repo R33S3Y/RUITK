@@ -1,9 +1,14 @@
+### 0.9.5.1
+#### Fallen Changes
+ - Fixed bug in `search`
 ## 0.9.5
 #### Fallen Changes
  - Changed font and font sizes
  - Changed text color for `input.js` 
  - Added option `hoverColor` to `icon` in `staging.js`
  - Added new `search` element in `staging.js`
+#### documentation Changes
+- Added documentation for the `search` element
 
 ## 0.9.4
 #### style.js changes
