@@ -4,6 +4,8 @@
  - Changed text color for `input.js` 
  - Added option `hoverColor` to `icon` in `staging.js`
  - Added new `search` element in `staging.js`
+#### documentation Changes
+- Added documentation for the `search` element
 
 ## 0.9.4
 #### style.js changes

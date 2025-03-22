@@ -9,7 +9,7 @@ let elements = [
         function: (info, element) => {
             info = Merge.dicts({
                 id : `"${element.name}-${element.elementCount}"`,
-                callback : (value) => {console.warn("search Element: missing callback function")},
+                callback : `(value) => {console.warn("search Element: missing callback function")}`,
             }, info);
 
             let textboxInfo = JSON.parse(JSON.stringify(info));
@@ -21,6 +21,8 @@ let elements = [
             }
 
             let e = element.makeElements(`<textbox>{${textboxInfoStr}}`);
+
+            info.callback = element.parse(info.callback);
 
             function handleKeyDown(event, callback) {
                 if (event.key === "Enter") {
