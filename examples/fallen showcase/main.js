@@ -72,3 +72,7 @@ elements.append("body", elements.makeElements(`
         }
     ]}
 `));
+
+import { Markdown } from "../../ruitk/support/markdown.js";
+
+console.log(Markdown.markdown("sss###sss"));

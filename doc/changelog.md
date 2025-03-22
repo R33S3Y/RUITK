@@ -1,3 +1,10 @@
+## 0.9.5
+#### Fallen Changes
+ - Changed font and font sizes
+ - Changed text color for `input.js` 
+ - Added option `hoverColor` to `icon` in `staging.js`
+ - Added new `search` element in `staging.js`
+
 ## 0.9.4
 #### style.js changes
  - Added `fontFace` func
