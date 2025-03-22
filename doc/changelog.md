@@ -1,3 +1,6 @@
+### 0.9.5.1
+#### Fallen Changes
+ - Fixed bug in `search`
 ## 0.9.5
 #### Fallen Changes
  - Changed font and font sizes
