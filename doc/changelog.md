@@ -1,3 +1,9 @@
+## 0.9.6
+#### element.js Changes
+ - Added some input filtering to prevent unneeded warnings from the parse function
+#### Fallen Changes
+ - Added new `img` element in `staging.js`
+
 ### 0.9.5.1
 #### Fallen Changes
  - Fixed bug in `search`

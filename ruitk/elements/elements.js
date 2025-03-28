@@ -212,6 +212,7 @@ ${e.stack}`;
             str = str.trim();
             if(str.length === 0) {
                 console.warn("parse Function: Input str is empty!!!");
+                console.trace("Stack trace:");
                 return "";
             }
             while(str.length > 0) {
@@ -260,7 +261,8 @@ ${e.stack}`;
                 } else {
                     console.warn("parse Function: str type not found assuming type str");
                     console.debug(`str : "${str}"`);
-                    str = `"${str}"`
+                    console.trace("Stack trace:");
+                    str = `"${str}"`;
                     itemType = "str";
                     itemEnd = str.length;
                 }
@@ -291,14 +293,21 @@ ${e.stack}`;
                     case "dict":
                         let dict = {};
                         for (let key of Object.keys(item)) {
-                            dict[key] = this.parse(item[key]);
+                            dict[key] = "";
+                            if (item[key] !== "") { // this is done to make sure parse does not throw a warning
+                                dict[key] = this.parse(item[key]);
+                            }
                         }
                         info.push(dict);
                         break;
                     case "array":
                         let array = [];
                         for (let thing of item) {
-                            array.push(this.parse(thing));
+                            let hold = "";
+                            if (thing !== "") {
+                                hold = this.parse(thing);
+                            }
+                            array.push(hold);
                         }
                         info.push(array);
                         break;

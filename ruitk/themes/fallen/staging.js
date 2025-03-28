@@ -12,6 +12,11 @@ let elements = [
                 callback : `(value) => {console.warn("search Element: missing callback function")}`,
             }, info);
 
+            Tester.dicts({
+                id : { type: "string", full: true },
+                callback : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
+
             let textboxInfo = JSON.parse(JSON.stringify(info));
 
 
@@ -74,6 +79,13 @@ let elements = [
             info = Merge.dicts({
                 hoverColor : info.color,
             }, info);
+
+            Tester.dicts({
+                name : { type: "string", full: true },
+                size : { type: "string", full: true },
+                color : { type: "string", full: true },
+                hoverColor : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
             
             Style.fontFace({
                 fontFamily : "icons",
@@ -109,70 +121,32 @@ let elements = [
     { // img
         name: "img",
         function: (info, element) => {
+            console.log(element.parse(info.alt));
             info = Merge.dicts({
-                id: `img-${element.elementCount}`,
                 src: "",
-                alt: "Image",
+                alt: "",
             }, info);
 
+            Tester.dicts({
+                src : { type: "string", full: true },
+                alt : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
+
+            let e = element.generate(info, element);
+            e.src = info.src;
+            e.alt = info.alt;
+
+            return e;
             
         },
         style: {
             
         },
+        generate: "<base>",
         style_standard : "<base>",
-    },
-    { // markdown
-        name: "markdown",
-        function: (info, element) => {
-            info = Merge.dicts({
-                str : "",
-            }, info);
-
-            let elements = [];
-
-            function findElement(str, pattern, type) {
-                let matches = [];
-                let match;
-                
-                while ((match = pattern.exec(str)) !== null) {
-                    matches.push({ str : match[0], content : match[1], index : match.index, type : type});
-                }
-                
-                return matches;
-            }
-
-            /**
-             * please note: This is intend to work the same as obsidain during edge cases
-             * with the following exemptions
-             *  - no incomplete statements Eg *italic
-             */
-            
-
-            // headings
-            elements.concat(findMatches(info.str, /^#\s+(.+)$/gm, "h1"));
-            elements.concat(findMatches(info.str, /^##\s+(.+)$/gm, "h2"));
-            elements.concat(findMatches(info.str, /^###\s+(.+)$/gm, "h3"));
-            elements.concat(findMatches(info.str, /^####\s+(.+)$/gm, "h4"));
-            elements.concat(findMatches(info.str, /^#####\s+(.+)$/gm, "h5"));
-            elements.concat(findMatches(info.str, /^######\s+(.+)$/gm, "h6"));
-
-            elements.concat(findMatches(info.str, /^(.+)\n=+$/gm, "h1"));
-            elements.concat(findMatches(info.str, /^(.+)\n--+$/gm, "h2"));
-
-            // bold
-            elements.concat(findMatches(info.str, /\*\*([^\*]+)\*\*/gm, "b"));
-            elements.concat(findMatches(info.str, /\s__(.+?)__\s/gm, "b"));
-
-            // italic
-
-            
-        },
-        style: {
-            
-        },
-        style_standard : "<base>",
-    },
+        element: "img",
+        parseLevel : 1, 
+    },   
 ];
 
 export class FallenStaging {

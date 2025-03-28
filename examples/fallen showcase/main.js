@@ -63,16 +63,14 @@ elements.append("body", elements.makeElements(`
                     <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
 
                     <button>{content : "hello World", callback : () => {console.log("Hello World! I am button!")}}
-                    <search>{}
+                    <search>{name : "search"}
                 }
-                <grid>{"cTemplate" : "auto auto auto auto", "rTemplate" : "auto auto auto auto" , "content" : 
+                <grid>{"content" : 
                     
                     <icon>{"c" : "1", "r" : "1"}
+                    <img>{ src : "/examples/fallen showcase/testImg.jpg", c : "1", r : "2", w : "5vw", position : "relative", 
+                    alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
                 }
         }
     ]}
 `));
-
-import { Markdown } from "../../ruitk/support/markdown.js";
-
-console.log(Markdown.markdown("sss###sss"));
