@@ -121,7 +121,6 @@ let elements = [
     { // img
         name: "img",
         function: (info, element) => {
-            console.log(element.parse(info.alt));
             info = Merge.dicts({
                 src: "",
                 alt: "",
@@ -145,7 +144,6 @@ let elements = [
         generate: "<base>",
         style_standard : "<base>",
         element: "img",
-        parseLevel : 1, 
     },   
 ];
 

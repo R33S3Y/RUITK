@@ -227,6 +227,9 @@ ${e.stack}`;
                 if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
                     itemType = "str";
                     itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
+                    if (itemEnd === 1) {
+                        itemEnd = -1;
+                    }
                 } else if (str.startsWith("{")) { // dict
                     itemType = "dict";
                     itemEnd = getDictOrArrayEnd(str);
@@ -240,7 +243,7 @@ ${e.stack}`;
                 } else if (!isNaN(str.charAt(0))) { //is number
                     itemType = "number";
 
-                    let i = 0
+                    let i = 0;
                     for (let char of str) {
                         if (!isNaN(char) || char === ".") {
                             i++;
@@ -268,6 +271,8 @@ ${e.stack}`;
                 }
 
                 if (itemEnd === -1) {
+                    console.error("parse Function: item end could not be found");
+                    console.debug(str);
                     if (info.length === 1) {
                         info = info[0];
                     }
@@ -372,8 +377,28 @@ function softParseInfo(str) {
         let braceDepth = 0;
         let bracketDepth = 0;
         let currentPart = '';
+        let inStr = false;
+        let strStartChar = "";
 
         for (let char of str) {
+
+            if (inStr === false) {
+                if (char === '"' || char === "'" || char === '`') {
+                    inStr = true;
+                    strStartChar = char;
+                    currentPart += char;
+                    continue;
+                }
+            } else {
+                if (char === strStartChar) inStr = false;
+                currentPart += char;
+                continue;
+            }
+            if (inStr === true) {
+                currentPart += char;
+                continue;
+            }
+
             if (char === '{') braceDepth++;
             if (char === '}') braceDepth--;
             if (char === '[') bracketDepth++;
