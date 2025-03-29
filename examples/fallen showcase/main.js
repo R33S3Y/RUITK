@@ -1,7 +1,7 @@
 // tools
 import { Elements } from "../../ruitk/elements/elements.js";
 let elements = new Elements();
-// styles
+// elements
 import { FallenBase } from "../../ruitk/themes/fallen/base.js";
 import { FallenTileWin } from "../../ruitk/themes/fallen/tileWin.js";
 import { FallenInput } from "../../ruitk/themes/fallen/input.js";
@@ -54,7 +54,7 @@ elements.append("body", elements.makeElements(`
             "x" : 2,
             "y" : 1,
             content : 
-                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto" , "content" : 
+                <grid>{cTemplate : "auto auto", rTemplate : "auto auto auto" , "content" : 
                     
                     <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
                     <checkbox>{question : "3. Test Question", options : ["JS", "CSS", "HTML"], "c" : "2", "r" : "1"}
@@ -67,9 +67,11 @@ elements.append("body", elements.makeElements(`
                 }
                 <grid>{"content" : 
                     
-                    <icon>{"c" : "1", "r" : "1"}
-                    <img>{ src : "/examples/fallen showcase/testImg.jpg", c : "1", r : "2", w : "5vw", position : "relative", 
+                    <icon>{ c : "1", r : "1"}
+                    <img>{ src : "/examples/fallen showcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative", 
                     alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
+                    <input>{ onClick : () => {console.log("Input Logged click")}}
+
                 }
         }
     ]}

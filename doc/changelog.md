@@ -1,11 +1,12 @@
 ## 0.9.6
 #### element.js Changes
+ - **Bugfix:** In the parse that caused malformed strings split into a list instead of failing due to being malformed
+ - **Bugfix:** Str's with comma's were getting malformed when in dict or array
  - Added some input filtering to prevent unneeded warnings from the parse function
- - **Bugfix:** in the parse that caused malformed strings split into a list instead of failing due to being malformed
- - **Bugfix:** str's with comma's were getting malformed when in dict or array
 #### Fallen Changes
  - Added new `img` element in `staging.js`
-
+#### documentation Changes
+- Added documentation for the `img` element
 ### 0.9.5.1
 #### Fallen Changes
  - Fixed bug in `search`

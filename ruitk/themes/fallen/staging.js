@@ -4,7 +4,7 @@ import { Convert } from "../../support/convert.js";
 import { Tester } from "../../support/tester.js";
 
 let elements = [
-    { // search
+    {    // search
         name: "search",
         function: (info, element) => {
             info = Merge.dicts({
@@ -66,8 +66,7 @@ let elements = [
         },
         style_standard : "<base>",
         parseLevel : 1, 
-    },
-    { // icon
+    }, { // icon
         name: "icon",
         function: (info, element) => {
             info = Merge.dicts({
@@ -117,8 +116,7 @@ let elements = [
         style_standard : "<base>",
         element: "i",
         handleStyle : true,
-    },
-    { // img
+    }, { // img
         name: "img",
         function: (info, element) => {
             info = Merge.dicts({
@@ -144,7 +142,33 @@ let elements = [
         generate: "<base>",
         style_standard : "<base>",
         element: "img",
-    },   
+    }, { // input
+        name : "input",
+        function: (info, element) => {
+            info = Merge.dicts({
+                onClick: null,
+                onEnter: null,
+                onAny: null,
+            }, info);
+
+            Tester.dicts({
+                onClick: "function",
+                onEnter: "function",
+                onAny: "function",
+            }, info, `${element.name} Element: `);
+
+            let e = element.generate(info, element);
+
+            return e;
+            
+        },
+        style: {
+            
+        },
+        generate: "<base>",
+        style_standard : "<base>",
+        element: "div",
+    }, 
 ];
 
 export class FallenStaging {

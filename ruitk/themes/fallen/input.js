@@ -329,7 +329,7 @@ let elements = [
             info = element.inputTest(info, element);
 
             info = Merge.dicts({
-                list : `"${element.name}-${element.elementCount}-datalist"`,
+                list : `"${element.name}-datalist-${element.elementCount}"`,
             }, info);
             info.list = element.parse(info.list);
             Tester.dicts({
