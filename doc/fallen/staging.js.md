@@ -33,3 +33,5 @@ The `staging.js` module serves as a testing and preparation area for new UI elem
 	 - `alt` (required): The alt text describing the image
 - **Behaviour:**
 	- Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
+
+---

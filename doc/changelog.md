@@ -5,6 +5,10 @@
  - Added some input filtering to prevent unneeded warnings from the parse function
 #### Fallen Changes
  - Added new `img` element in `staging.js`
+ - Added the following new [Standard Inputs](fallen/Fallen%20Summary.md#Standard%20Inputs):
+	 - `onClick`
+	 - `onEnter`
+	 - `onAny`
 #### support changes
 - Added type `null` to `tester.js`
 #### documentation Changes

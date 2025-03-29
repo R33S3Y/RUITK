@@ -142,51 +142,7 @@ let elements = [
         generate: "<base>",
         style_standard : "<base>",
         element: "img",
-    }, { // input
-        name : "input",
-        function: (info, element) => {
-            info = Merge.dicts({
-                onClick: null,
-                onEnter: null,
-                onAny: null,
-            }, info);
-
-            Tester.dicts({
-                onClick: ["function", "null"],
-                onEnter: ["function", "null"],
-                onAny: ["function", "null"],
-            }, info, `${element.name} Element: `);
-
-            let e = element.generate(info, element);
-
-            if (info.onClick !== null) e.addEventListener("click", (event) => info.onClick(event));
-            if (info.onEnter !== null) {
-                function ifEnter(event, callback) {
-                    if (event.key === "Enter") {
-                        callback(event);
-                    }
-                }
-                e.addEventListener("keydown", (event) => ifEnter(event, info.onEnter));
-            }
-            if (info.onAny !== null) {
-                for (let key in window) {
-                    if (key.startsWith("on")) {
-                        let eventType = key.slice(2); // Remove "on" prefix
-                        e.addEventListener(eventType, (event) => info.onAny(event));
-                    }
-                }
-            }
-
-            return e;
-            
-        },
-        style: {
-            
-        },
-        generate: "<base>",
-        style_standard : "<base>",
-        element: "div",
-    }, 
+    },
 ];
 
 export class FallenStaging {
