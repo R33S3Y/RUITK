@@ -71,6 +71,7 @@ function isTypes (value, types) {
 */
 function isType(value, type) {
     if (type === "array") return Array.isArray(value);
+    if (type === "null") return value === null;
     if (type === "map") return value instanceof Map;
     if (type === "set") return value instanceof Set;
     if (type === "HTMLElement") return value instanceof HTMLElement;
@@ -86,6 +87,7 @@ function isType(value, type) {
 */
 function getType(value) {
     if (Array.isArray(value)) return "array";
+    if (value === null) return "null";
     if (value instanceof Map) return "map";
     if (value instanceof Set) return "set";
     if (value instanceof HTMLElement) return "HTMLElement";

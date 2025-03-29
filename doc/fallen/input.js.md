@@ -14,7 +14,7 @@
     - `type` (default: `"text"`): Defines the input type (e.g., `"text"`, `"password"`).
     - `spellcheck` (default: `false`): Enables/disables spell checking.
 - **Behaviour**:
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
     - Automatically converts `question` to `camelCase` for use as the `name` attribute.
 
 ---
@@ -31,7 +31,7 @@
     - `form` (default: `"default"`): Associates the radio buttons with a form group.
 - **Behaviour**:
     - Generates radio buttons based on `options` and `values`.
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
     - Includes styling for labels and buttons.
     - Handles user selection within a group.
 
@@ -43,7 +43,7 @@
 - **Inputs**: Same as `radio`.
 - **Behaviour**:
     - Generates checkboxes instead of radio buttons.
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 
 ---
 
@@ -58,7 +58,7 @@
     - `values` (optional): Internal values for options.
     - `form` (default: `"default"`): Associates the dropdown with a form group.
 - **Behaviour**:
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
     - Styles the dropdown and its options.
 
 ---
@@ -71,7 +71,7 @@
     - Additional `list` attribute to link the `<datalist>` with the input field.
 - **Behaviour**:
     - Combines text input functionality with dropdown suggestions.
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 
 ---
 
@@ -83,7 +83,7 @@
     - `content` (default: `"Submit"`): Text or element to display inside the button.
 - **Behaviour**:
     - Attaches a click event listener to execute the `callback`.
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 
 ---
 
@@ -97,4 +97,4 @@
 - **Behaviour**:
     - Collects values from `textbox`, `radio`, `checkbox`, `dropdown`, and `combo` elements.
     - Executes the `callback` with the collected data.
-    - Accepts standard inputs
+    - Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)

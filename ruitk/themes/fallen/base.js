@@ -1,5 +1,6 @@
 import { Merge } from "../../support/merger.js";
 import { Style } from "../../support/style.js"; 
+import { Tester } from "../../support/tester.js";
 
 let colors = {
     background0: "rgba(0, 0, 0, 1)", // Default Background
@@ -126,7 +127,37 @@ let elements = [
                 e.style.top = `${yPercent}%`;
                 e.style.transform += ` translateY(-${yPercent}%)`;
             }
-        
+            
+            info = Merge.dicts({
+                onClick: null,
+                onEnter: null,
+                onAny: null,
+            }, info);
+
+            Tester.dicts({
+                onClick: ["function", "null"],
+                onEnter: ["function", "null"],
+                onAny: ["function", "null"],
+            }, info, `${element.name} Element: `);
+
+            if (info.onClick !== null) e.addEventListener("click", (event) => info.onClick(event));
+            if (info.onEnter !== null) {
+                function ifEnter(event, callback) {
+                    if (event.key === "Enter") {
+                        callback(event);
+                    }
+                }
+                e.addEventListener("keydown", (event) => ifEnter(event, info.onEnter));
+            }
+            if (info.onAny !== null) {
+                for (let key in window) {
+                    if (key.startsWith("on")) {
+                        let eventType = key.slice(2); // Remove "on" prefix
+                        e.addEventListener(eventType, (event) => info.onAny(event));
+                    }
+                }
+            }
+
             return e;
         },
         style_standard : {

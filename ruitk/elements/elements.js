@@ -212,6 +212,7 @@ ${e.stack}`;
             str = str.trim();
             if(str.length === 0) {
                 console.warn("parse Function: Input str is empty!!!");
+                console.trace("Stack trace:");
                 return "";
             }
             while(str.length > 0) {
@@ -226,6 +227,9 @@ ${e.stack}`;
                 if (str.startsWith('"') || str.startsWith("'") || str.startsWith("`")) {// item is str
                     itemType = "str";
                     itemEnd = str.slice(1).indexOf(str[0])+2; // 1 to make up for the slice + 1 to include the last qoute
+                    if (itemEnd === 1) {
+                        itemEnd = -1;
+                    }
                 } else if (str.startsWith("{")) { // dict
                     itemType = "dict";
                     itemEnd = getDictOrArrayEnd(str);
@@ -239,7 +243,7 @@ ${e.stack}`;
                 } else if (!isNaN(str.charAt(0))) { //is number
                     itemType = "number";
 
-                    let i = 0
+                    let i = 0;
                     for (let char of str) {
                         if (!isNaN(char) || char === ".") {
                             i++;
@@ -260,12 +264,15 @@ ${e.stack}`;
                 } else {
                     console.warn("parse Function: str type not found assuming type str");
                     console.debug(`str : "${str}"`);
-                    str = `"${str}"`
+                    console.trace("Stack trace:");
+                    str = `"${str}"`;
                     itemType = "str";
                     itemEnd = str.length;
                 }
 
                 if (itemEnd === -1) {
+                    console.error("parse Function: item end could not be found");
+                    console.debug(str);
                     if (info.length === 1) {
                         info = info[0];
                     }
@@ -291,14 +298,21 @@ ${e.stack}`;
                     case "dict":
                         let dict = {};
                         for (let key of Object.keys(item)) {
-                            dict[key] = this.parse(item[key]);
+                            dict[key] = "";
+                            if (item[key] !== "") { // this is done to make sure parse does not throw a warning
+                                dict[key] = this.parse(item[key]);
+                            }
                         }
                         info.push(dict);
                         break;
                     case "array":
                         let array = [];
                         for (let thing of item) {
-                            array.push(this.parse(thing));
+                            let hold = "";
+                            if (thing !== "") {
+                                hold = this.parse(thing);
+                            }
+                            array.push(hold);
                         }
                         info.push(array);
                         break;
@@ -363,8 +377,28 @@ function softParseInfo(str) {
         let braceDepth = 0;
         let bracketDepth = 0;
         let currentPart = '';
+        let inStr = false;
+        let strStartChar = "";
 
         for (let char of str) {
+
+            if (inStr === false) {
+                if (char === '"' || char === "'" || char === '`') {
+                    inStr = true;
+                    strStartChar = char;
+                    currentPart += char;
+                    continue;
+                }
+            } else {
+                if (char === strStartChar) inStr = false;
+                currentPart += char;
+                continue;
+            }
+            if (inStr === true) {
+                currentPart += char;
+                continue;
+            }
+
             if (char === '{') braceDepth++;
             if (char === '}') braceDepth--;
             if (char === '[') bracketDepth++;

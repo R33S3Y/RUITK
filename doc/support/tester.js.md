@@ -42,22 +42,23 @@ Supported Types:
  - "set"
  - "HTMLElement"
  - "function"
+ - "null"
 
 Example:
 ```js
-const template = {
+let template = {
     name: { type: "string", empty: false },
     age: "number",
     preferences: { type: ["array", "dict"], full: true },
 };
 
-const actual = {
+let actual = {
     name: "Alex",
     age: 25,
     preferences: ["reading", "gaming"],
 };
 
-const result = Tester.dicts(template, actual);
+let result = Tester.dicts(template, actual);
 
 console.log(result); // null (no issues)
 ```

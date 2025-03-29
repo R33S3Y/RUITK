@@ -1,4 +1,6 @@
 
+// Incomplete
+
 export class Markdown {
 
     static markdown (str) {
@@ -56,3 +58,55 @@ export class Markdown {
         }
     }
 }
+
+let element = { // markdown
+    name: "markdown",
+    function: (info, element) => {
+        info = Merge.dicts({
+            str : "",
+        }, info);
+
+        let elements = [];
+
+        function findElement(str, pattern, type) {
+            let matches = [];
+            let match;
+            
+            while ((match = pattern.exec(str)) !== null) {
+                matches.push({ str : match[0], content : match[1], index : match.index, type : type});
+            }
+            
+            return matches;
+        }
+
+        /**
+         * please note: This is intend to work the same as obsidain during edge cases
+         * with the following exemptions
+         *  - no incomplete statements Eg *italic
+         */
+        
+
+        // headings
+        elements.concat(findMatches(info.str, /^#\s+(.+)$/gm, "h1"));
+        elements.concat(findMatches(info.str, /^##\s+(.+)$/gm, "h2"));
+        elements.concat(findMatches(info.str, /^###\s+(.+)$/gm, "h3"));
+        elements.concat(findMatches(info.str, /^####\s+(.+)$/gm, "h4"));
+        elements.concat(findMatches(info.str, /^#####\s+(.+)$/gm, "h5"));
+        elements.concat(findMatches(info.str, /^######\s+(.+)$/gm, "h6"));
+
+        elements.concat(findMatches(info.str, /^(.+)\n=+$/gm, "h1"));
+        elements.concat(findMatches(info.str, /^(.+)\n--+$/gm, "h2"));
+
+        // bold
+        elements.concat(findMatches(info.str, /\*\*([^\*]+)\*\*/gm, "b"));
+        elements.concat(findMatches(info.str, /\s__(.+?)__\s/gm, "b"));
+
+        // italic
+
+        
+    },
+    style: {
+        
+    },
+    style_standard : "<base>",
+};
