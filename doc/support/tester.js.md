@@ -42,6 +42,7 @@ Supported Types:
  - "set"
  - "HTMLElement"
  - "function"
+ - "null"
 
 Example:
 ```js

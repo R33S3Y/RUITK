@@ -5,6 +5,8 @@
  - Added some input filtering to prevent unneeded warnings from the parse function
 #### Fallen Changes
  - Added new `img` element in `staging.js`
+#### support changes
+- Added type `null` to `tester.js`
 #### documentation Changes
 - Added documentation for the `img` element
 ### 0.9.5.1

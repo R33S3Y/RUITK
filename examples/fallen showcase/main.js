@@ -70,7 +70,9 @@ elements.append("body", elements.makeElements(`
                     <icon>{ c : "1", r : "1"}
                     <img>{ src : "/examples/fallen showcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative", 
                     alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
-                    <input>{ onClick : () => {console.log("Input Logged click")}}
+                    <input>{ onClick : () => {console.log("Input Area Logged click")}, onEnter : () => {console.log("Input Area Logged Enter")}, onAny : (e) => {console.log(e)}, content : 
+                        <textbox>{name : "testinput", "placeholder" : "Test Input Area"}
+                    }
 
                 }
         }
