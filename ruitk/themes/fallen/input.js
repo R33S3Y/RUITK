@@ -192,7 +192,7 @@ let elements = [
             let form = element.makeElements(`<grid>{ ${gridInfoStr}, cTemplate : "auto auto" }`);
 
             // question handling
-            if (typeof info.question === "string") {
+            if (typeof info.question === "string" && info.question !== "") {
                 info.question = element.makeElements(`<h3>{ content : "${info.question}", c : 1, r : 1 }`);
             }
             if (Array.isArray(info.question) === false) {

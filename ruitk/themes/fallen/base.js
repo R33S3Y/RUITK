@@ -40,8 +40,8 @@ let config = {
     borderRadius : 1,
     borderWidth : 0.25,
 
-    marginSmall : 0.1,
-    paddingSmall : 0.1,
+    marginSmall : 0.2,
+    paddingSmall : 0.2,
 
     marginMedium : 0.6,
     paddingMedium : 0.6,
@@ -90,12 +90,8 @@ let elements = [
                 }
             }
 
-
-            if (info.x === "" && info.y === "" && info.xAlign === "" && info.yAlign === "" && info.w === "auto" && info.h === "auto" ) {// all defaults
-                e.style.position = "relative";
-            } else {
-                e.style.position = "absolute";
-            }
+            e.style.position = "relative";
+            
             if (info.position !== "") {
                 e.style.position = info.position;
             }

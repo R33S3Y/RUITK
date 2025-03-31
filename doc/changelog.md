@@ -1,3 +1,10 @@
+## 0.9.7
+#### Fallen Changes
+ - Removed auto absolute position
+ - Changed how `input.js` handles the [Standard Inputs](fallen/Fallen%20Summary.md#Standard%20Inputs) - Todo
+ - Moved `search` to `input.js` - Todo
+ - Added some padding to icons
+ - Fixed a bug causing empty `h3` elements from `input.js`
 ## 0.9.6
 #### element.js Changes
  - **Bugfix:** In the parse that caused malformed strings split into a list instead of failing due to being malformed

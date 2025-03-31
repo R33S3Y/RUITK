@@ -98,7 +98,7 @@ let elements = [
             let e = element.generate(info, element);
             e.innerHTML = Convert.convert(info.name, "dashedCase")
             e.style.fontSize = info.size;
-            e = Style.style(e, [{color : info.color, hover_color : info.hoverColor}, element.style]);
+            e = Style.style(e, [{color : info.color, hover_color : info.hoverColor}, element.style, element.style_standard, element.style_paddingSmall]);
     
             return e;
         },
@@ -114,6 +114,7 @@ let elements = [
             lineHeight: "1",
         },
         style_standard : "<base>",
+        style_paddingSmall : "<base>",
         element: "i",
         handleStyle : true,
     }, { // img
