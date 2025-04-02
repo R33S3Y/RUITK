@@ -40,7 +40,7 @@ In Fallen there's a Element called `base` although if you do call it [element.js
  - `xAlign` - Defaults to an empty string - Has 3 values "left", "center" & "right" if these values are passed in it will snap horizontally to that part of the parent
  - `yAlign` - Defaults to an empty string - Has 3 values "top", "center" & "bottom" if these values are passed in it will snap vertically to that part of the parent
  - `textAlign` - Defaults to "left" - sets `element.innertext`
- - `position` - Defaults to "relative" but if `x`, `y`, `w`, `h`, `xAline` or `yAline` are changed it will instead default to "absolute" - sets `element.style.position`
+ - `position` - Defaults to "relative" - sets `element.style.position`
  - `onClick` - Defaults to null - Runs callback when the user clicks on the element
  - `onEnter` - Defaults to null - Runs the callback when the user presses enter in the element
  - `onAny` - Defaults to null - Runs the callback on anything happening with the element 

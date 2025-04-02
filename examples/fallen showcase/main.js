@@ -54,19 +54,18 @@ elements.append("body", elements.makeElements(`
             "x" : 2,
             "y" : 1,
             content : 
-                <grid>{cTemplate : "auto auto", rTemplate : "auto auto auto" , "content" : 
+                <grid>{cTemplate : "50% 50%", rTemplate : "auto auto auto" , "content" : 
                     
                     <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
                     <checkbox>{question : "3. Test Question", options : ["JS", "CSS", "HTML"], "c" : "2", "r" : "1"}
                     
-                    <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2"}
+                    <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2", w : "100%"}
                     <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
 
                     <button>{content : "hello World", callback : () => {console.log("Hello World! I am button!")}}
                     <search>{name : "search"}
                 }
                 <grid>{"content" : 
-                    
                     <icon>{ c : "1", r : "1"}
                     <img>{ src : "/examples/fallen showcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative", 
                     alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
