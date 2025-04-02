@@ -9,17 +9,25 @@ let elements = [
         function : (info, element) => {
             info = Merge.dicts({
                 id : `"${element.name}-${element.elementCount}"`,
-                idRoot : "",
-                question : "",
-                placeholder : "Enter text",
-                form : "default",
-                type : "text",
-                spellcheck : false,
+                idRoot : "''",
+                question : "''",
+                placeholder : "'Enter text'",
+                form : "'default'",
+                type : "'text'",
+                spellcheck : "false",
+            }, info);
+            
+            info = Merge.dicts({
+                name : `"${Convert.convert(element.parse(info.question), "camelCase")}"`,
             }, info);
 
-            info = Merge.dicts({
-                name : Convert.convert(info.question, "camelCase"),
-            }, info);
+            info.id = element.parse(info.id);
+            info.question = element.parse(info.question);
+            info.placeholder = element.parse(info.placeholder);
+            info.form = element.parse(info.form);
+            info.type = element.parse(info.type);
+            info.spellcheck = element.parse(info.spellcheck);
+            info.name = element.parse(info.name);
 
             Tester.dicts({
                 id : { type: "string", full: true },
@@ -33,7 +41,7 @@ let elements = [
             }, info, `${element.name} Element: `);
 
             let form = element.makeGridandTitle(info, element);
-            let e = element.generate(info, element);
+            let e = element.generate({ id : info.id, w : "calc(100% - (var(--marginMedium) + var(--paddingMedium)))"}, element);
             e.type = "text";
             e.placeholder = info.placeholder;
             e.name = info.name;
@@ -60,6 +68,7 @@ let elements = [
         style_paddingMedium : "<base>",
         element : "input",
         handleStyle : true,
+        parseLevel : 1,
     },
     {   // radio
         name : "radio",
@@ -184,12 +193,16 @@ let elements = [
             delete gridInfo.type;
 
             gridInfo.id = gridInfo.idRoot;
+            gridInfo = Merge.dicts({
+                justifyContent : "'flex-start'",
+                cTemplate : "'1fr auto'",
+            }, gridInfo, []);
             
             let gridInfoStr = "";
             for (let key in gridInfo) {
                 gridInfoStr += `${key} : ${gridInfo[key]}, `;
             }
-            let form = element.makeElements(`<grid>{ ${gridInfoStr}, cTemplate : "auto auto" }`);
+            let form = element.makeElements(`<grid>{ ${gridInfoStr} }`);
 
             // question handling
             if (typeof info.question === "string" && info.question !== "") {
@@ -285,6 +298,7 @@ let elements = [
             e.style.gridRow = 2;
             e.dataset.form = info.form;
             e.dataset.type = element.name;
+            e.style.width = "calc(100% - (var(--marginMedium) + var(--paddingMedium)))";
 
             e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
 
@@ -338,7 +352,7 @@ let elements = [
 
             let form = element.makeGridandTitle(info, element);
 
-            let e = element.generate(info, element);
+            let e = element.generate({ id : info.id, w : "calc(100% - (var(--marginMedium) + var(--paddingMedium)))"}, element);
             e.name = info.name;
             e.style.gridRow = 2;
             e.dataset.form = info.form;
@@ -447,8 +461,6 @@ let elements = [
                             output[formElement.name] = formElement.value;
                             break;
                         case "radio":
-                            let name = "";
-                            let value = "";
                             let radioButtons = formElement.querySelectorAll('input[type="radio"]');
                             for (let radio of radioButtons) {
                                 if (radio.checked) {

@@ -212,7 +212,6 @@ ${e.stack}`;
             str = str.trim();
             if(str.length === 0) {
                 console.warn("parse Function: Input str is empty!!!");
-                console.trace("Stack trace:");
                 return "";
             }
             while(str.length > 0) {
@@ -261,14 +260,20 @@ ${e.stack}`;
                     itemType = "function";
 
                     itemEnd = getItemWithCutEnd(str);  
+                } else if (str.startsWith("false") || str.startsWith("true") || str.startsWith("null")) {
+                    itemType = "literal";
+
+                    itemEnd = 4;
+                    if (str.startsWith("false")) {
+                        itemEnd = 5;
+                    }
                 } else {
                     console.warn("parse Function: str type not found assuming type str");
                     console.debug(`str : "${str}"`);
-                    console.trace("Stack trace:");
                     str = `"${str}"`;
                     itemType = "str";
                     itemEnd = str.length;
-                }
+                } 
 
                 if (itemEnd === -1) {
                     console.error("parse Function: item end could not be found");
@@ -324,6 +329,17 @@ ${e.stack}`;
                     case "arrowFunction":
                         item = parseFunction(item);
                         info.push(item);
+                        break;
+                    case "literal":
+                        if (item === "false") {
+                            info.push(false);
+                        }
+                        if (item === "true") {
+                            info.push(true);
+                        }
+                        if (item === "null") {
+                            info.push(null);
+                        }
                         break;
                     default:
                         item = JSON.parse(item);
