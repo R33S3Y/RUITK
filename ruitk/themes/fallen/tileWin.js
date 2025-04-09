@@ -137,9 +137,12 @@ let elements = [
                 tile = Merge.dicts({
                     content : "",
                     name : "",
-                    x : 0,
-                    y : 0,
+                    x : "0",
+                    y : "0",
                 }, tile);
+
+                tile.x = element.parse(tile.x);
+                tile.y = element.parse(tile.y);
 
                 let content = tile.content;
                 if (info.disableTileElement === false) {
@@ -150,7 +153,7 @@ let elements = [
                 }
                 tileWin.createTile(tile.name, tile.x, tile.y, content);
             }
-            return tileWin.genrate();
+            return tileWin.generate();
         },
         style : {
             

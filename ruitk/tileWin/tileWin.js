@@ -126,12 +126,12 @@ export class TileWin {
             }
         }
 
-        let parentList = this.genrate();
+        let parentList = this.generate();
 
         append(this.config.parent, parentList);
 
     }
-    genrate() {
+    generate() {
         let parentList = [];
         /**
          * Old Code (Solen From old update) to make snapResize
@@ -435,14 +435,14 @@ export class TileWin {
             }
         }
     }
-    destory(name) {
+    destroy(name) {
         for (let tile of this.tiles) {
             if (tile.name === name) {
                 tile.destory = true;
             }
         }
     }
-    destoryAll() {
+    destroyAll() {
         for (let tile of this.tiles) {
             tile.destory = true;
         }

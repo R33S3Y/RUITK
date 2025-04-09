@@ -1,3 +1,8 @@
+## 0.9.8
+#### tilewin.js
+ - Renamed `destory` to `destroy`
+ - Renamed `destoryAll` to `destroyAll`
+ - Renamed `genrate` to `generate`
 ## 0.9.7
 #### element.js Changes
  - Added support for null, true and false
