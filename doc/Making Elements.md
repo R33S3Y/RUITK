@@ -125,7 +125,7 @@ let elements = [
 				
                 tileWin.createTile(tile.name, tile.x, tile.y, content);
             }
-            return tileWin.genrate();
+            return tileWin.generate();
         },
         style : {
             
