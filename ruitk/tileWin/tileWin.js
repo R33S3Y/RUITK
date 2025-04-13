@@ -16,9 +16,7 @@ export class TileWin {
             tilePercentageY : [20,40,40],
             tileDirection : "y",
             parent : "body",
-            animateOnCreateTile : true,
             transition : "all 0.2s ease-in-out",
-            useUpdateTest : false,
         }
         this.updateConfig(); // run to make this.configStore
 
@@ -63,17 +61,17 @@ export class TileWin {
         return;
     }
 
-    createTile(name, xSnap, ySnap, content = null) {
+    createTile(name, x, y, content = null) {
         if (!name) {
             console.error(`name is falsey`);
             return;
         }
-        if (!xSnap) {
-            console.error(`x is falsey`);
+        if (!Number.isInteger(x) || x < 0) {
+            console.error(`x not a postive int or zero`);
             return;
         }
-        if (!ySnap) {
-            console.error(`y is falsey`);
+        if (!Number.isInteger(y) || y < 0) {
+            console.error(`y not a postive int or zero`);
             return;
         }
         for (let tile of this.tiles) {
@@ -81,7 +79,7 @@ export class TileWin {
                 console.error(`tile name ${name} is already in use by tile id: ${tile.id}`);
                 return;
             }
-            if (tile.xSnap === xSnap && tile.ySnap === ySnap) {
+            if (tile.xSnap === x && tile.ySnap === y) {
                 console.error(`tile ${name} is in the same location as ${tile.name} please change the x and/or y`);
                 return;
             }
@@ -92,8 +90,8 @@ export class TileWin {
             status : "unrendered",
             destory : false,
 
-            xSnap : xSnap,
-            ySnap : ySnap,
+            xSnap : x,
+            ySnap : y,
 
             snapShare : [[0,0],[1,1]],
 
