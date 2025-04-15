@@ -27,7 +27,6 @@ export class TileWin {
             position : "absolute",
         });
     }
-
     updateConfig(config = {}) {
         config = Merge.dicts(this.config, config, [0, "", [], null]);
 
@@ -43,7 +42,6 @@ export class TileWin {
 
         return;
     }
-
     updateStyle(style = {}) {
         style = Merge.dicts(this.style, style, [0, "", [], null]);
         style.boxSizing = "border-box";
@@ -444,5 +442,32 @@ export class TileWin {
         for (let tile of this.tiles) {
             tile.destory = true;
         }
+    }
+
+    move(name, x, y) {
+        if (!name) {
+            console.error(`name is falsey`);
+            return;
+        }
+        if (!Number.isInteger(x) || x < 0) {
+            console.error(`x not a postive int or zero`);
+            return;
+        }
+        if (!Number.isInteger(y) || y < 0) {
+            console.error(`y not a postive int or zero`);
+            return;
+        }
+        for (let tile of this.tiles) {
+            if (tile.name !== name) {
+                continue;
+            }
+            tile.xSnap = x;
+            tile.ySnap = y;
+            return;
+        }
+    }
+
+    list(name = "") {
+        
     }
 }
