@@ -77,10 +77,10 @@ Updates the style properties of the grid and tiles, including scrollable and fix
 
 ---
 
-### `createTile(name, x, y, content = null)`
+### `createTile(name, xSnap, ySnap, content = null)`
 
 ```js
-createTile(name, x, y, content = null)
+createTile(name, xSnap, ySnap, content = null)
 ```
 
 Creates a new tile with the specified properties and adds it to the grid. It validates the tile's name and position to ensure there are no conflicts.
@@ -88,8 +88,8 @@ Creates a new tile with the specified properties and adds it to the grid. It val
 #### Parameters:
 
 - `name`: Unique identifier for the tile.
-- `x`: X-axis position for the tile. (Must be int and 0 or greater)
-- `y`: Y-axis position for the tile. (Must be int and 0 or greater)
+- `xSnap`: X-axis position for the tile. (Must be int and 0 or greater)
+- `ySnap`: Y-axis position for the tile. (Must be int and 0 or greater)
 - `content`: Content to be displayed inside the tile (optional).
 
 ---
@@ -170,7 +170,7 @@ Marks all tiles for destruction, causing them to be removed from the grid during
 ## Usage Example
 
 ```js
-const tileWin = new TileWin();
+let tileWin = new TileWin();
 
 // Update configuration
 tileWin.updateConfig({
@@ -184,9 +184,6 @@ tileWin.createTile("tile1", 0, 0, "This is a tile.");
 
 // Append content to a tile
 tileWin.append("tile1", "More content for tile 1.");
-
-// Destroy a tile
-tileWin.destroy("tile1");
 
 // Update the layout
 tileWin.update();

@@ -28,13 +28,13 @@ tileWin.updateConfig({
 
 tileWin.createTile("1", 1, 0, elements.makeElements(`
     <tile>{ 
-        content :  <h1>{content : test 1}
+        content :  <h1>{content : "test 1"}
     }
 `));
 
 tileWin.createTile("2", 2, 0, elements.makeElements(`
     <tile>{ 
-        content :  <h1>{content : test 2}
+        content :  <h1>{content : "test 2"}
     }
 `));
 
@@ -46,3 +46,6 @@ await delay(5000);
 
 tileWin.move("2", 0, 0);
 tileWin.update();
+
+console.log(tileWin.list());
+console.log(tileWin.list("2"));

@@ -59,17 +59,17 @@ export class TileWin {
         return;
     }
 
-    createTile(name, x, y, content = null) {
+    createTile(name, xSnap, ySnap, content = null) {
         if (!name) {
             console.error(`name is falsey`);
             return;
         }
-        if (!Number.isInteger(x) || x < 0) {
-            console.error(`x not a postive int or zero`);
+        if (!Number.isInteger(xSnap) || xSnap < 0) {
+            console.error(`xSnap not a postive int or zero`);
             return;
         }
-        if (!Number.isInteger(y) || y < 0) {
-            console.error(`y not a postive int or zero`);
+        if (!Number.isInteger(ySnap) || ySnap < 0) {
+            console.error(`ySnap not a postive int or zero`);
             return;
         }
         for (let tile of this.tiles) {
@@ -77,8 +77,8 @@ export class TileWin {
                 console.error(`tile name ${name} is already in use by tile id: ${tile.id}`);
                 return;
             }
-            if (tile.xSnap === x && tile.ySnap === y) {
-                console.error(`tile ${name} is in the same location as ${tile.name} please change the x and/or y`);
+            if (tile.xSnap === xSnap && tile.ySnap === ySnap) {
+                console.error(`tile ${name} is in the same location as ${tile.name} please change the xSnap and/or ySnap`);
                 return;
             }
         }
@@ -86,10 +86,10 @@ export class TileWin {
             name : name,
             id : this.idCounter,
             status : "unrendered",
-            destory : false,
+            destroy : false,
 
-            xSnap : x,
-            ySnap : y,
+            xSnap : xSnap,
+            ySnap : ySnap,
 
             snapShare : [[0,0],[1,1]],
 
@@ -318,7 +318,7 @@ export class TileWin {
         for (let i in this.tiles) {
             let tile = this.tiles[i];
 
-            if (tile.destory === true) {
+            if (tile.destroy === true) {
                 this.tiles.splice(i, 1);
                 continue;
             }
@@ -375,6 +375,7 @@ export class TileWin {
 
                 scrollGrid.appendChild(tileElement);
             }
+            tile.status = "rendered";
             
             if (tile.content) {
                 tileElement.innerHTML = "";
@@ -418,7 +419,7 @@ export class TileWin {
         }
         for (let tile of this.tiles) {
             if (tile.name === name) {
-                tile.status = "contentChanged";
+                tile.status = "Unapplied Content";
                 tile.content = tile.content.concat(content);
             }
         }
@@ -426,7 +427,7 @@ export class TileWin {
     remove(name) {
         for (let tile of this.tiles) {
             if (tile.name === name) {
-                tile.status = "contentChanged";
+                tile.status = "Unapplied Removal";
                 tile.content = [];
             }
         }
@@ -434,40 +435,61 @@ export class TileWin {
     destroy(name) {
         for (let tile of this.tiles) {
             if (tile.name === name) {
-                tile.destory = true;
+                tile.destroy = true;
+                tile.status = "Unapplied Destroy";
             }
         }
     }
     destroyAll() {
         for (let tile of this.tiles) {
-            tile.destory = true;
+            tile.destroy = true;
+            tile.status = "Unapplied Destroy";
         }
     }
 
-    move(name, x, y) {
+    move(name, xSnap, ySnap) {
         if (!name) {
             console.error(`name is falsey`);
             return;
         }
-        if (!Number.isInteger(x) || x < 0) {
-            console.error(`x not a postive int or zero`);
+        if (!Number.isInteger(xSnap) || xSnap < 0) {
+            console.error(`xSnap not a postive int or zero`);
             return;
         }
-        if (!Number.isInteger(y) || y < 0) {
-            console.error(`y not a postive int or zero`);
+        if (!Number.isInteger(ySnap) || ySnap < 0) {
+            console.error(`ySnap not a postive int or zero`);
             return;
         }
         for (let tile of this.tiles) {
             if (tile.name !== name) {
                 continue;
             }
-            tile.xSnap = x;
-            tile.ySnap = y;
+            tile.xSnap = xSnap;
+            tile.ySnap = ySnap;
+            tile.status = "Unapplied Move";
             return;
         }
     }
 
     list(name = "") {
-        
+        let getAllNames = () => {
+            let names = [];
+            for (let tile of this.tiles) {
+                names.push(tile.name);
+            }
+            return names;
+        }
+        if (!name && name !== "") {
+            console.error(`name is falsey`);
+        }
+        if (name === "") return getAllNames();
+
+        for (let tile of this.tiles) {
+            if (tile.name === name) {
+                return tile;
+            }
+        }
+
+        return getAllNames();
     }
 }
