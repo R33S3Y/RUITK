@@ -1,7 +1,9 @@
 ## 0.9.9
 #### tilewin.js
  - Added a `move` function
- - Added a `list` function
+ - Added a `info` function
+#### documentation Changes
+ - Added documentation about `move` and `info` in [tileWin.js](tileWin.js.md)
 ## 0.9.8
 #### tilewin.js
  - Renamed `destory` to `destroy`

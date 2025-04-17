@@ -47,5 +47,5 @@ await delay(5000);
 tileWin.move("2", 0, 0);
 tileWin.update();
 
-console.log(tileWin.list());
-console.log(tileWin.list("2"));
+console.log(tileWin.info());
+console.log(tileWin.info("2"));

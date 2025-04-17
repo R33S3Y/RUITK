@@ -471,7 +471,7 @@ export class TileWin {
         }
     }
 
-    list(name = "") {
+    info(name = "") {
         let getAllNames = () => {
             let names = [];
             for (let tile of this.tiles) {

@@ -19,6 +19,8 @@ The `TileWin` class creates and manages a flexible grid layout where tiles are d
     - [remove](#remove)
     - [destroy](#destroy)
     - [destroyAll](#destroyall)
+    - [move](#`move(name,%20xSnap.%20ySnap)`)
+    - [info](#`info(name)`)
 
 ---
 
@@ -72,7 +74,6 @@ updateStyle(style = {})
 Updates the style properties of the grid and tiles, including scrollable and fixed tiles. It merges new style properties with the current ones and applies them to the elements.
 
 #### Parameters:
-
 - `style`: Object containing style properties to be updated. Follows the [Syntax of style.js](support/style.js.md#Syntax)
 
 ---
@@ -86,7 +87,6 @@ createTile(name, xSnap, ySnap, content = null)
 Creates a new tile with the specified properties and adds it to the grid. It validates the tile's name and position to ensure there are no conflicts.
 
 #### Parameters:
-
 - `name`: Unique identifier for the tile.
 - `xSnap`: X-axis position for the tile. (Must be int and 0 or greater)
 - `ySnap`: Y-axis position for the tile. (Must be int and 0 or greater)
@@ -123,7 +123,6 @@ append(name, content)
 Appends new content to a tile specified by its name. If the tile already contains content, the new content is added to it.
 
 #### Parameters:
-
 - `name`: The name of the tile to append content to.
 - `content`: The content to be appended (can be a string or an array of elements).
 
@@ -167,6 +166,57 @@ Marks all tiles for destruction, causing them to be removed from the grid during
 
 ---
 
+### `move(name, xSnap. ySnap)`
+
+```js
+move(name, xSnap, ySnap)
+```
+
+Moves a tile.
+#### Parameters:
+- `name`: The name of the tile to be moved.
+- `xSnap`: X-axis position for the tile. (Must be int and 0 or greater)
+- `ySnap`: Y-axis position for the tile. (Must be int and 0 or greater)
+
+- - -
+
+### `info(name)`
+
+```js
+info(name = "")
+```
+
+Outputs info on a tile. If no tile name is inputted it will list all tile names
+#### Parameters:
+- `name`: The name of the tile to be moved. (optional)
+#### Output Examples:
+```js
+
+console.log(tileWin.info());
+
+//outputs
+[ "tile1", "tile2" ]
+
+console.log(tileWin.info("tile2"));
+
+//outputs
+{
+	name : "tile2",
+	id : 1,
+	status : "rendered",
+	destroy : false,
+	xSnap : 0,
+	ySnap : 0,
+	snapShare : [[0,0],[1,1]],
+	x : 0,
+	y : 0,
+	w : 0,
+	h : 0,
+	content : <div id="outerTile-4" class="KJCFGABFBF">,
+}
+
+
+```
 ## Usage Example
 
 ```js
