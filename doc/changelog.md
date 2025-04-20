@@ -1,3 +1,9 @@
+
+## 0.9.10
+#### tilewin.js
+ - Simplified the `snapResize` var in the `generate` function
+ - Fixed a faulty if statement that caused a false error in the `generate` function
+ - Added the ability for scroll tiles to exceed the grid in the scroll direction
 ## 0.9.9
 #### tilewin.js
  - Added a `move` function
