@@ -1,4 +1,7 @@
 
+### 0.9.10.1
+#### Fallen Changes
+ - Added `objectFit` and `aspectRatio` to the `img` element
 ## 0.9.10
 #### tilewin.js
  - Simplified the `snapResize` var in the `generate` function

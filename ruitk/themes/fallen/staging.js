@@ -123,16 +123,22 @@ let elements = [
             info = Merge.dicts({
                 src: "",
                 alt: "",
+                objectFit: "cover",
+                aspectRatio: "auto",
             }, info);
 
             Tester.dicts({
                 src : { type: "string", full: true },
                 alt : { type: "string", full: true },
+                objectFit : { type: "string", full: true },
+                aspectRatio : { type: "string", full: true },
             }, info, `${element.name} Element: `);
 
             let e = element.generate(info, element);
             e.src = info.src;
             e.alt = info.alt;
+            e.style.objectFit = info.objectFit;
+            e.style.aspectRatio = info.aspectRatio;
 
             return e;
             
