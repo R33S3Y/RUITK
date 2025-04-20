@@ -121,7 +121,19 @@ export class TileWin {
                 p.appendChild(item);
             }
         }
+        let ids = [];
+        for (let tile of this.tiles) {
+            if (tile.status !== "unrendered") ids.push(`tile${tile.id}`);
+        }
 
+        for (let id of ids) {
+            let element = document.getElementById(id);
+            if (element) element.remove();
+        }
+
+        let scroll = document.getElementById("scrollGrid");
+        if (scroll) scroll.remove();
+        
         let parentList = this.generate();
 
         append(this.config.parent, parentList);
@@ -141,13 +153,28 @@ export class TileWin {
             tileLayoutLength[tile.xSnap][tile.ySnap]++;
         }
 
-        // [[x1,y1],[x2,y2]]
-        let snapResize = List2D.create(3,3,[[0,0],[1,1]]);
+        let snapResize = List2D.create(this.configStore.xMax,this.configStore.yMax,{x1 : 0, y1 : 0, x2 : 1, y2 : 1});
         snapResize = JSON.parse(JSON.stringify(snapResize));
+        /**
+         * snapResize is the the map of how much space each item should take up on the grid to make sure that 100% of the space is used.
+         * it follows the following template
+         * 
+         * snapResize[xSnap][ySnap].cord
+         * 
+         * x1, y1 is the top left corner
+         * x2, y2 is the bottem right corner
+         * 
+         * the Snaps are the same ones set with the createTile or move func
+         * 
+         * please note that empty locations (places with no tile at that xSnap,ySnap).
+         * Should still have correct info on the direction === this.configStore.tileOppositeDirection
+         * due to scroll tiles being hard wired to read this info from row 0,
+         * to allow the x or ySnap in the this.config.tileDirection direction (scroll direction) to exceed the set grid
+         */
         
         // Snaps
         function resizeRow(itemTotals = []) {
-            let itemSize = Array(itemTotals.length).fill([0,0]);
+            let itemSize = Array(itemTotals.length).fill({1 : 0, 2 : 0});
             itemSize = JSON.parse(JSON.stringify(itemSize));
             // default values
             let seenTrue = false;
@@ -155,16 +182,16 @@ export class TileWin {
             for (let i = 0; i < itemTotals.length; i++) {
                 if (itemTotals[i] === true) {
                     // set defaults
-                    itemSize[i][0] = i;
-                    itemSize[i][1] = i+1;
+                    itemSize[i][1] = i;
+                    itemSize[i][2] = i+1;
                     if (sinceTrue > 0) {
                         // last snap was false/empty/dead
                         if (seenTrue === true) {
                             //is other snap so must share dead snap
-                            itemSize[i-sinceTrue-1][1] = (i-sinceTrue)+(sinceTrue/2);
-                            itemSize[i][0] = i-(sinceTrue/2);
+                            itemSize[i-sinceTrue-1][2] = (i-sinceTrue)+(sinceTrue/2);
+                            itemSize[i][1] = i-(sinceTrue/2);
                         } else {
-                            itemSize[i][0] = i-sinceTrue;
+                            itemSize[i][1] = i-sinceTrue;
                         }
 
                     }
@@ -179,7 +206,7 @@ export class TileWin {
                 //last snap is empty/dead
                 if (seenTrue === true) {
                     // there is a live snap to grow
-                    itemSize[itemTotals.length-sinceTrue-1][1] = itemTotals.length;
+                    itemSize[itemTotals.length-sinceTrue-1][2] = itemTotals.length;
                 }
             }
 
@@ -190,8 +217,8 @@ export class TileWin {
             for (let x in tileLayout) {
                 let resizeValues = resizeRow(List2D.getListY(x, tileLayout));
                 for (let y in snapResize[x]) {
-                    snapResize[x][y][0][1] = resizeValues[y][0];
-                    snapResize[x][y][1][1] = resizeValues[y][1];
+                    snapResize[x][y].y1 = resizeValues[y][1];
+                    snapResize[x][y].y2 = resizeValues[y][2];
                 };
             }
 
@@ -205,8 +232,8 @@ export class TileWin {
             let resizeValues = resizeRow(xList);
             for (let x in snapResize) {
                 for (let i = 0; i < snapResize[x].length; i++) {
-                    snapResize[x][i][0][0] = resizeValues[x][0];
-                    snapResize[x][i][1][0] = resizeValues[x][1];
+                    snapResize[x][i].x1 = resizeValues[x][1];
+                    snapResize[x][i].x2 = resizeValues[x][2];
                 }
             }
         } else {// "x"
@@ -214,8 +241,8 @@ export class TileWin {
             for (let y in tileLayout[0]) {
                 let resizeValues = resizeRow(List2D.getListX(y, tileLayout));
                 for (let x in snapResize) {
-                    snapResize[x][y][0][0] = resizeValues[x][0];
-                    snapResize[x][y][1][0] = resizeValues[x][1];
+                    snapResize[x][y].x1 = resizeValues[x][1];
+                    snapResize[x][y].x2 = resizeValues[x][2];
                 };
             }
 
@@ -229,8 +256,8 @@ export class TileWin {
             let resizeValues = resizeRow(yList);
             for (let y in snapResize[0]) {
                 for (let i = 0; i < snapResize.length; i++) {
-                    snapResize[i][y][0][1] = resizeValues[y][0];
-                    snapResize[i][y][1][1] = resizeValues[y][1];
+                    snapResize[i][y].y1 = resizeValues[y][1];
+                    snapResize[i][y].y2 = resizeValues[y][2];
                 }
             }
         }
@@ -241,19 +268,6 @@ export class TileWin {
 
 
         // Make useful Vars
-
-
-        let gridStyles = {
-            transition : this.config.transition,
-            backgroundColor : "rgba(0, 0, 0, 0)",
-            borderColor : "rgba(0, 0, 0, 0)",
-            display : "grid",
-
-            left : "0%",
-            top : "0%",
-            width : "100%",
-            height : "100%",
-        };
 
         // distance from 0,0
         let tileDistanceX = [0];
@@ -267,7 +281,7 @@ export class TileWin {
         for (let i = 0; i < this.config.tilePercentageY.length; i++) {
             tileDistanceY.push(tileDistanceY[i] + this.config.tilePercentageY[i]);
         }
-        if (tileDistanceY[tileDistanceX.length - 1] !== 100) {
+        if (tileDistanceY[tileDistanceY.length - 1] !== 100) {
             console.warn("the total of tilePercentageY is not 100 meaning tileWin will ether overflow or underflow");
         }
 
@@ -293,13 +307,20 @@ export class TileWin {
 
         // Grid init
 
-
-        
-
         // make scroll
         let scrollGrid = document.createElement("div");
         scrollGrid.id = "scrollGrid";
-        Style.style(scrollGrid, gridStyles);
+        Style.style(scrollGrid, {
+            transition : this.config.transition,
+            backgroundColor : "rgba(0, 0, 0, 0)",
+            borderColor : "rgba(0, 0, 0, 0)",
+            display : "grid",
+
+            left : "0%",
+            top : "0%",
+            width : "100%",
+            height : "100%",
+        });
         scrollGrid.style.position = "absolute";
         parentList.push(scrollGrid);
         
@@ -325,15 +346,15 @@ export class TileWin {
             let tileElement;
 
             if (this.config.tileRowType[tile[`${this.configStore.tileOppositeDirection}Snap`]] === "fixed") { // make fixed
-                tile.x = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] +
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][0])] * (snapResize[tile.xSnap][tile.ySnap][0][0] % 1));
-                tile.y = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] +
-                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap][0][1])] * (snapResize[tile.xSnap][tile.ySnap][0][1] % 1));
+                tile.x = tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap].x1)] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap].x1)] * (snapResize[tile.xSnap][tile.ySnap].x1 % 1));
+                tile.y = tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap].y1)] +
+                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap].y1)] * (snapResize[tile.xSnap][tile.ySnap].y1 % 1));
 
-                tile.w = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] +
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][0])] * (snapResize[tile.xSnap][tile.ySnap][1][0] % 1))) - tile.x;
-                tile.h = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] +
-                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap][1][1])] * (snapResize[tile.xSnap][tile.ySnap][1][1] % 1))) - tile.y;
+                tile.w = (tileDistanceX[Math.floor(snapResize[tile.xSnap][tile.ySnap].x2)] +
+                (tilePercentageX[Math.floor(snapResize[tile.xSnap][tile.ySnap].x2)] * (snapResize[tile.xSnap][tile.ySnap].x2 % 1))) - tile.x;
+                tile.h = (tileDistanceY[Math.floor(snapResize[tile.xSnap][tile.ySnap].y2)] +
+                (tilePercentageY[Math.floor(snapResize[tile.xSnap][tile.ySnap].y2)] * (snapResize[tile.xSnap][tile.ySnap].y2 % 1))) - tile.y;
 
                 let x = `${tile.x}%`;
                 let y = `${tile.y}%`;
@@ -367,11 +388,20 @@ export class TileWin {
 
                 Style.style(tileElement, this.tileStyle);
 
-                tileElement.style.gridColumnStart = snapResize[tile.xSnap][tile.ySnap][0][0] * 2 + 1;
-                tileElement.style.gridColumnEnd = snapResize[tile.xSnap][tile.ySnap][1][0] * 2 + 1;
+                if (this.config.tileDirection === "y") {
+                    tileElement.style.gridColumnStart = snapResize[tile.xSnap][0].x1 * 2 + 1;
+                    tileElement.style.gridColumnEnd = snapResize[tile.xSnap][0].x2 * 2 + 1;
+    
+                    tileElement.style.gridRowStart = tile.ySnap * 2 + 1;
+                    tileElement.style.gridRowEnd = tile.ySnap * 2 + 2;
+                } else {
+                    tileElement.style.gridColumnStart = tile.xSnap * 2 + 1;
+                    tileElement.style.gridColumnEnd = tile.xSnap * 2 + 2;
 
-                tileElement.style.gridRowStart = snapResize[tile.xSnap][tile.ySnap][0][1] * 2 + 1;
-                tileElement.style.gridRowEnd = snapResize[tile.xSnap][tile.ySnap][1][1] * 2 + 1;
+                    tileElement.style.gridRowStart = snapResize[0][tile.ySnap].y1 * 2 + 1;
+                    tileElement.style.gridRowEnd = snapResize[0][tile.ySnap].y2 * 2 + 1;
+                }
+
 
                 scrollGrid.appendChild(tileElement);
             }
@@ -470,7 +500,6 @@ export class TileWin {
             return;
         }
     }
-
     info(name = "") {
         let getAllNames = () => {
             let names = [];

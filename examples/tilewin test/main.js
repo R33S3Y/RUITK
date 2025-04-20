@@ -22,17 +22,18 @@ elements.append("body", elements.makeElements(`
 `));
 
 tileWin.updateConfig({
-    tileRowType : ["scroll", "scroll", "scroll"], 
-    tilePercentageX : [40,20,40]
+    tileRowType : ["scroll"], 
+    tilePercentageX : [50,50],
+    tilePercentageY : [100],
 });
 
-tileWin.createTile("1", 1, 0, elements.makeElements(`
+tileWin.createTile("1", 0, 1, elements.makeElements(`
     <tile>{ 
         content :  <h1>{content : "test 1"}
     }
 `));
 
-tileWin.createTile("2", 2, 0, elements.makeElements(`
+tileWin.createTile("2", 0, 2, elements.makeElements(`
     <tile>{ 
         content :  <h1>{content : "test 2"}
     }
@@ -42,7 +43,6 @@ tileWin.update();
 
 let delay = ms => new Promise(res => setTimeout(res, ms));
 await delay(5000);
-
 
 tileWin.move("2", 0, 0);
 tileWin.update();
