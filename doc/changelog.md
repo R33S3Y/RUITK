@@ -1,3 +1,6 @@
+### 0.9.10.2
+#### support changes
+ - Fixed Bug in `merger.js` 
 
 ### 0.9.10.1
 #### Fallen Changes
