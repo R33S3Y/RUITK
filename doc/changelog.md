@@ -1,6 +1,6 @@
 ### 0.9.10.2
 #### support changes
- - Fixed Bug in `merger.js` 
+ - Fixed a bug in `merger.js` that was causing nested dicts to be improperly merged
 
 ### 0.9.10.1
 #### Fallen Changes
