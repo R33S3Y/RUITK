@@ -1,3 +1,9 @@
+
+## 0.9.11
+#### Fallen Changes
+ - Added new `markdown` element in `staging.js`
+ - Added some error checking to the `generate` function
+
 ### 0.9.10.2
 #### support changes
  - Fixed a bug in `merger.js` that was causing nested dicts to be improperly merged

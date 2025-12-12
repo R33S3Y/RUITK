@@ -7,7 +7,6 @@ import { FallenTileWin } from "../../ruitk/themes/fallen/tileWin.js";
 import { FallenInput } from "../../ruitk/themes/fallen/input.js";
 import { FallenStaging } from "../../ruitk/themes/fallen/staging.js";
 
-
 elements.addElements(FallenBase.getElements());
 elements.addElements(FallenTileWin.getElements());
 elements.addElements(FallenInput.getElements());
@@ -74,6 +73,12 @@ elements.append("body", elements.makeElements(`
                     
 
                 }
+        }, {    
+            "name" : "Markdown Test",
+            "x" : 1,
+            "y" : 3,
+            content : 
+                <markdown>{"str" : "${await fetch("../../ruitk/themes/fallen/Markdown edge cases.md").then(r => r.text())}"}
         }
     ]}
 `));

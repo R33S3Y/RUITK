@@ -149,7 +149,63 @@ let elements = [
         generate: "<base>",
         style_standard : "<base>",
         element: "img",
-    },
+    }, { // markdown
+        name: "markdown",
+        function: (info, element) => {
+            info = Merge.dicts({
+                str : "",
+            }, info);
+
+            let str = info.str;
+
+            let status = {
+                h1 : false,
+                h2 : false,
+                h3 : false,
+                h4 : false,
+                h5 : false,
+                h6 : false,
+                b : false, 
+                i : false,
+                u : false,
+                a : false
+            }
+            let ruitkStr = "";
+            for (let i = 0; i < str.length; i++) {
+                let char = str[i];
+                
+                switch(char) {
+                    case "\n":
+                        if (status.h1 === true || status.h2 === true || 
+                            status.h3 === true || status.h4 === true || 
+                            status.h5 === true || status.h6 === true) {
+                            ruitkStr += `"} "`
+                            ruitkStr += char;
+                            status = {
+                                h1 : false,
+                                h2 : false,
+                                h3 : false,
+                                h4 : false,
+                                h5 : false,
+                                h6 : false
+                            };
+                        }
+                        if (str.startsWith("# ", i + 1)) {
+                            status.h1 = true;
+                            ruitkStr += `\n" <h1>{"content" : "`
+                            i = i + 2;
+                        }
+                    default:
+                        ruitkStr += char;
+                }
+            }
+            console.log(ruitkStr);
+            return element.makeElements(`<p1>{"content" : "${ruitkStr}"}`);
+
+        },
+        handleStyle : true,
+
+    }
 ];
 
 export class FallenStaging {

@@ -3,7 +3,7 @@ Here is a list of all the keys:
 ### Required Keys
  - `name` - a string used as a unique ID.
  - `function` - a function meant to return a HTML element or a array of HTML elements it is given 2 inputs `info` & `element`.
- - `style` - a dict of styles that is applied to the all elements returned but not their children. The style Syntax is defined by [style.js](support/style.js.md) and there style function. Look there for up to date info.
+ - `style` - a dict of styles that is applied to the all elements returned but not their children. The style Syntax is defined by [style.js](support/style.js.md) and there style function. Look there for up to date info. 
 ### Optional Keys
  - `handleStyle` - Defaults to false - If you add `handleStyle : true` to your elements definition you are now responsible for applying your elements styles. Eg:
 ```js
@@ -44,7 +44,7 @@ info = {
 }
 ​
 ```
- - `style_*`  - If a dict key starts with `style_` it will be treated just like the style key this can be disabled by setting `strictStyles` to true.
+ - `style_*`  - If a dict key starts with `style_` it will be treated just like the style key this can be disabled by setting `strictStyles` to true. When their are conflicting style options the `style` key will take priority.
  - `strictStyles` - Defaults to false - is used to disable the `style_` functionality. 
 ### Function Args
 The function will have 2 args inputted: 

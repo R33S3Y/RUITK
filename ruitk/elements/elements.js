@@ -121,7 +121,7 @@ export class Elements {
                     }
                 }
                 if (elementInfo === undefined) {
-                    console.error(`could't find an element called "${name}" dumping elements to debug`);
+                    console.error(`renderElements Function: could't find an element called "${name}" dumping elements to debug`);
                     console.debug(JSON.parse(JSON.stringify(this.elements)));
                     return;
                 }
@@ -269,7 +269,7 @@ ${e.stack}`;
                     }
                 } else {
                     console.warn("parse Function: str type not found assuming type str");
-                    console.debug(`str : "${str}"`);
+                    console.debug(str);
                     str = `"${str}"`;
                     itemType = "str";
                     itemEnd = str.length;
@@ -553,11 +553,11 @@ function styleElement(element, elementInfo) {
     if (elementInfo.handleStyle === true) {
         return element;
     }
-    let styles = elementInfo.style;
+    let styles = [elementInfo.style];
 
     for(let key of Object.keys(elementInfo)) {
         if(key.startsWith("style_") && typeof elementInfo[key] === "object" && Object.keys(elementInfo[key]).length !== 0 && elementInfo.strictStyles === false) {
-            styles = Merge.dicts(elementInfo[key], styles, []);
+            styles.push(elementInfo[key]);
         }
     }
     Style.style(element, styles);

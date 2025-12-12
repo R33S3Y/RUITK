@@ -86,6 +86,9 @@ let elements = [
                         e.innerHTML += item; 
                     } else if (item instanceof HTMLElement) {
                         e.appendChild(item); 
+                    } else {
+                        console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
+                        console.debug(JSON.parse(JSON.stringify(item)));
                     }
                 }
             }
