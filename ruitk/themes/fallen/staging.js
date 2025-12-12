@@ -156,49 +156,41 @@ let elements = [
                 str : "",
             }, info);
 
-            let str = info.str;
+            let markdownStr = info.str;
 
             let status = {
-                h1 : false,
-                h2 : false,
-                h3 : false,
-                h4 : false,
-                h5 : false,
-                h6 : false,
+                h : false,
                 b : false, 
                 i : false,
                 u : false,
                 a : false
-            }
+            };
             let ruitkStr = "";
-            for (let i = 0; i < str.length; i++) {
-                let char = str[i];
+            for (let i = 0; i < markdownStr.length; i++) {
+                let result;
                 
-                switch(char) {
-                    case "\n":
-                        if (status.h1 === true || status.h2 === true || 
-                            status.h3 === true || status.h4 === true || 
-                            status.h5 === true || status.h6 === true) {
-                            ruitkStr += `"} "`
-                            ruitkStr += char;
-                            status = {
-                                h1 : false,
-                                h2 : false,
-                                h3 : false,
-                                h4 : false,
-                                h5 : false,
-                                h6 : false
-                            };
+                switch(markdownStr[i]) {
+                    case "\n": //headings
+                        if (status.h === true) {
+                            ruitkStr += `"} "`;
+                            status.h = false;
                         }
-                        if (str.startsWith("# ", i + 1)) {
-                            status.h1 = true;
-                            ruitkStr += `\n" <h1>{"content" : "`
-                            i = i + 2;
-                        }
+                        result = hashtagHeadings(markdownStr, i, status); // # H1, etc
+                        ruitkStr += result.str;
+                        i = result.i; 
+                        break;
+                    case "*":
+                        result = starFormating(markdownStr, i, status); // # bold and italic star formating
+                        ruitkStr += result.str;
+                        i = result.i; 
+                        break;
                     default:
-                        ruitkStr += char;
+                        ruitkStr += markdownStr[i];
+                        break;
                 }
             }
+
+            ruitkStr = ruitkStr.replaceAll(`\n`, "<br>");
             console.log(ruitkStr);
             return element.makeElements(`<p1>{"content" : "${ruitkStr}"}`);
 
@@ -212,4 +204,68 @@ export class FallenStaging {
     static getElements() {
         return elements;
     }
+}
+
+function hashtagHeadings(markdownStr, i, status) {
+    let ruitkStr = "";
+    if (markdownStr.startsWith("# ", i + 1)) {
+        status.h = true;
+        ruitkStr = `\n" <h1>{"content" : "`;
+        return { str : ruitkStr, i : i + 2 };
+    }
+    if (markdownStr.startsWith("## ", i + 1)) {
+        status.h = true;
+        ruitkStr = `\n" <h2>{"content" : "`;
+        return { str : ruitkStr, i : i + 3 };
+    }
+    if (markdownStr.startsWith("### ", i + 1)) {
+        status.h = true;
+        ruitkStr = `\n" <h3>{"content" : "`;
+        return { str : ruitkStr, i : i + 4 };
+    }
+    if (markdownStr.startsWith("#### ", i + 1)) {
+        status.h = true;
+        ruitkStr = `\n" <h3>{"content" : "`;
+        return { str : ruitkStr, i : i + 5 };
+    }
+    if (markdownStr.startsWith("##### ", i + 1)) {
+        status.h = true;
+        ruitkStr = `\n" <h3>{"content" : "`;
+        return { str : ruitkStr, i : i + 6 };
+    }
+    if (markdownStr.startsWith("###### ", i + 1)) {
+        status.h = true;
+        ruitkStr = `\n" <h3>{"content" : "`;
+        return { str : ruitkStr, i : i + 7 };
+    }
+    return { str : markdownStr[i], i : i };
+}
+function starFormating(markdownStr, i, status) {
+    let ruitkStr = "";
+    if (markdownStr.startsWith("**", i)) {
+        status.b = !status.b;
+        if (status.b === true) {
+            ruitkStr = `" <b>{"content" : "`;
+        } else {
+            ruitkStr += `"} "`;
+        }
+        return { str : ruitkStr, i : i + 1 };
+    } else {
+        status.i = !status.i;
+        if (status.i === true) {
+            ruitkStr = `" <i>{"content" : "`;
+        } else {
+            ruitkStr += `"} "`;
+        }
+        return { str : ruitkStr, i : i };
+    }
+}
+function safeClose(element) {
+
+}
+function safeOpen(element) {
+
+}
+function closeAll(element) {
+
 }
