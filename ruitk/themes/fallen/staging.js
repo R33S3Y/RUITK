@@ -156,31 +156,54 @@ let elements = [
                 str : "",
             }, info);
 
-            let markdownStr = info.str;
+            let markdownStr = "\n" + info.str + "\n";
 
             let status = {
-                h : false,
-                b : false, 
-                i : false,
-                u : false,
-                a : false
+                h : {enable : false, element : ""},
+                b : {enable : false, element : ""},
+                i : {enable : false, element : ""},
+                u : {enable : false, element : ""},
+                a : {enable : false, element : ""},
             };
             let ruitkStr = "";
+            let result;
             for (let i = 0; i < markdownStr.length; i++) {
-                let result;
-                
                 switch(markdownStr[i]) {
                     case "\n": //headings
-                        if (status.h === true) {
-                            ruitkStr += `"} "`;
-                            status.h = false;
+                        if (status.h.enable === true) {
+                            ruitkStr += close(status, "h");
                         }
-                        result = hashtagHeadings(markdownStr, i, status); // # H1, etc
-                        ruitkStr += result.str;
-                        i = result.i; 
+                        if (markdownStr.startsWith("\n\n", i)) {
+                            ruitkStr += closeAll(status);
+                        }
+                        switch(markdownStr[i + 1]) {
+                            case "#": //headings
+                                result = hashtagHeadings(markdownStr, i, status); // # H1, etc
+                                ruitkStr += result.str;
+                                i = result.i; 
+                                break;
+                            case "_":
+                                result = underscoreFormatingOpen(markdownStr, i, status); // # bold and italic underscore formating
+                                ruitkStr += result.str;
+                                i = result.i; 
+                                break;
+                            default:
+                                ruitkStr += markdownStr[i];
+                                break; 
+                        }
                         break;
                     case "*":
                         result = starFormating(markdownStr, i, status); // # bold and italic star formating
+                        ruitkStr += result.str;
+                        i = result.i; 
+                        break;
+                    case " ":
+                        result = underscoreFormatingOpen(markdownStr, i, status); // # bold and italic underscore formating
+                        ruitkStr += result.str;
+                        i = result.i; 
+                        break;
+                    case "_":
+                        result = underscoreFormatingClose(markdownStr, i, status); // # bold and italic underscore formating
                         ruitkStr += result.str;
                         i = result.i; 
                         break;
@@ -189,7 +212,8 @@ let elements = [
                         break;
                 }
             }
-
+            ruitkStr += closeAll(status);
+            ruitkStr = ruitkStr.trim();
             ruitkStr = ruitkStr.replaceAll(`\n`, "<br>");
             console.log(ruitkStr);
             return element.makeElements(`<p1>{"content" : "${ruitkStr}"}`);
@@ -206,66 +230,153 @@ export class FallenStaging {
     }
 }
 
-function hashtagHeadings(markdownStr, i, status) {
+
+function close(status, key) {
+    let ruitkStr = `" `;
+
+    ruitkStr += lazyCloseAll(status);
+    status[key].enable = false;
+    ruitkStr += lazyOpenAll(status);
+
+    ruitkStr += `"`;
+    return ruitkStr;
+}
+function open(status, key, element) {
+    let ruitkStr = `" `;
+
+    ruitkStr += lazyCloseAll(status);
+    status[key] = {
+        enable : true,
+        element : element
+    }
+    ruitkStr += lazyOpenAll(status);
+
+    ruitkStr += `"`;
+
+    return ruitkStr;
+}
+function toggle (status, key, element) {
+    if (status[key].enable === true) {
+        return close(status, key);
+    } else {
+        return open(status, key, element);
+    }
+
+}
+function closeAll(status) {
+    let ruitkStr = lazyCloseAll(status);
+
+    status = {
+        h : {enable : false, element : ""},
+        b : {enable : false, element : ""},
+        i : {enable : false, element : ""},
+        u : {enable : false, element : ""},
+        a : {enable : false, element : ""},
+    };
+
+    if (ruitkStr.length !== 0) {
+        ruitkStr = `" ` + ruitkStr + `"`;
+    }
+
+    return ruitkStr;
+}
+function lazyCloseAll(status) {
     let ruitkStr = "";
+    for (let key of Object.keys(status)) {
+        if (status[key].enable === true) {
+            ruitkStr += `} `;
+        }
+    }
+    
+    return ruitkStr;
+}
+function lazyOpenAll(status) {
+    let ruitkStr = "";
+    for (let key of Object.keys(status)) {
+        if (status[key].enable === true) {
+            ruitkStr += status[key].element;
+        }
+    }
+    
+    return ruitkStr;
+}
+
+
+function hashtagHeadings(markdownStr, i, status) {
+    let ruitkStr = "\n";
     if (markdownStr.startsWith("# ", i + 1)) {
-        status.h = true;
-        ruitkStr = `\n" <h1>{"content" : "`;
+        ruitkStr += open(status, "h", `<h1>{"content" : `);
         return { str : ruitkStr, i : i + 2 };
     }
     if (markdownStr.startsWith("## ", i + 1)) {
-        status.h = true;
-        ruitkStr = `\n" <h2>{"content" : "`;
+        ruitkStr += open(status, "h", `<h2>{"content" : `);
         return { str : ruitkStr, i : i + 3 };
     }
     if (markdownStr.startsWith("### ", i + 1)) {
-        status.h = true;
-        ruitkStr = `\n" <h3>{"content" : "`;
+        ruitkStr += open(status, "h", `<h3>{"content" : `);
         return { str : ruitkStr, i : i + 4 };
     }
     if (markdownStr.startsWith("#### ", i + 1)) {
-        status.h = true;
-        ruitkStr = `\n" <h3>{"content" : "`;
+        ruitkStr += open(status, "h", `<h3>{"content" : `);
         return { str : ruitkStr, i : i + 5 };
     }
     if (markdownStr.startsWith("##### ", i + 1)) {
-        status.h = true;
-        ruitkStr = `\n" <h3>{"content" : "`;
+        ruitkStr += open(status, "h", `<h3>{"content" : `);
         return { str : ruitkStr, i : i + 6 };
     }
     if (markdownStr.startsWith("###### ", i + 1)) {
-        status.h = true;
-        ruitkStr = `\n" <h3>{"content" : "`;
+        ruitkStr += open(status, "h", `<h3>{"content" : `);
         return { str : ruitkStr, i : i + 7 };
     }
     return { str : markdownStr[i], i : i };
 }
 function starFormating(markdownStr, i, status) {
-    let ruitkStr = "";
     if (markdownStr.startsWith("**", i)) {
-        status.b = !status.b;
-        if (status.b === true) {
-            ruitkStr = `" <b>{"content" : "`;
-        } else {
-            ruitkStr += `"} "`;
-        }
-        return { str : ruitkStr, i : i + 1 };
+        return { str : toggle(status, "b", `<b>{"content" : `), i : i + 1 };
     } else {
-        status.i = !status.i;
-        if (status.i === true) {
-            ruitkStr = `" <i>{"content" : "`;
-        } else {
-            ruitkStr += `"} "`;
-        }
-        return { str : ruitkStr, i : i };
+        return { str : toggle(status, "i", `<i>{"content" : `), i : i };
     }
 }
-function safeClose(element) {
+function underscoreFormatingOpen(markdownStr, i, status) {
+    let ruitkStr = markdownStr[i];
 
+    if (markdownStr.startsWith(" ___", i) || markdownStr.startsWith("\n___", i)) {
+        ruitkStr += open(status, "i", `<i>{"content" : `);
+        ruitkStr += open(status, "b", `<b>{"content" : `);
+        return { str : ruitkStr, i : i + 3 };
+    }
+
+    if (markdownStr.startsWith(" __", i) || markdownStr.startsWith("\n__", i)) {
+        ruitkStr += open(status, "b", `<b>{"content" : `);
+        return { str : ruitkStr, i : i + 2 };
+    }
+
+
+    if (markdownStr.startsWith(" _", i) || markdownStr.startsWith("\n_", i)) {
+        ruitkStr += open(status, "i", `<i>{"content" : `);
+        return { str : ruitkStr, i : i + 1 };
+    }
+
+    return { str : markdownStr[i], i : i };
 }
-function safeOpen(element) {
+function underscoreFormatingClose(markdownStr, i, status) {
+    let ruitkStr = "";
 
-}
-function closeAll(element) {
+    if (markdownStr.startsWith("___ ", i) || markdownStr.startsWith("___\n", i)) {
+        ruitkStr += close(status, "i");
+        ruitkStr += close(status, "b");
+        return { str : ruitkStr, i : i + 2 };
+    }
 
+    if (markdownStr.startsWith("__ ", i) || markdownStr.startsWith("__\n", i)) {
+        ruitkStr += close(status, "b");
+        return { str : ruitkStr, i : i + 1 };
+    }
+
+    if (markdownStr.startsWith("_ ", i) || markdownStr.startsWith("_\n", i)) {
+        ruitkStr += close(status, "i");
+        return { str : ruitkStr, i : i };
+    }
+
+    return { str : markdownStr[i], i : i };
 }
