@@ -30,10 +30,12 @@ ppp_ppp_ppp
 ppp *iii* ppp
 ppp _iii_ ppp
 
-***bibi***
-___bibi___
-_**bibi**_
-__*bibi*__
+***bbii1***
+___bbii2___
+_**bbii3**_
+__*bbii4*__
+**_bbii5_**
+*__bbii6__*
 
 **b
 b
