@@ -76,8 +76,8 @@ function isType(value, type) {
     if (type === "set") return value instanceof Set;
     if (type === "HTMLElement") return value instanceof HTMLElement;
     if (type === "function") return value instanceof Function;
-    if (type === "dict") return typeof value === "object" && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement);
-    return typeof value === type && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement) && !(value instanceof Function);
+    if (type === "dict") return typeof value === "object" && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement) && !(value instanceof Function) && value !== null;
+    return typeof value === type && !Array.isArray(value) && !(value instanceof Map) && !(value instanceof Set) && !(value instanceof HTMLElement) && !(value instanceof Function) && value !== null;
 }
 
 /**

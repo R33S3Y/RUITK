@@ -2,6 +2,8 @@
 ## 0.9.11
 #### documentation Changes
  - Added a documentation page for security issues
+#### support changes
+- Fixed bug with `null` type in `tester.js`
 #### Fallen Changes
  - Added new `markdown` element in `staging.js`
  - Added some error checking to the `generate` function

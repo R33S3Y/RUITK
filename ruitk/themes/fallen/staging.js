@@ -251,16 +251,14 @@ function toggle (status, key, element) {
 function closeAll(status) {
     let ruitkStr = lazyCloseAll(status);
 
-    status = {
-        h : {enable : false, element : ""},
-        b : {enable : false, element : ""},
-        i : {enable : false, element : ""},
-        u : {enable : false, element : ""},
-        a : {enable : false, element : ""},
-    };
+    for (let key of Object.keys(status)) {
+        if (status[key].enable === true) {
+            status[key].enable = false;
+        }
+    }
 
     if (ruitkStr.length !== 0) {
-        ruitkStr = `" ` + ruitkStr + `"`;
+        ruitkStr = `" ` + ruitkStr + `"\n`;
     }
 
     return ruitkStr;
@@ -287,14 +285,13 @@ function lazyOpenAll(status) {
 }
 
 function general(markdownStr, i, status) {
-    let ruitkStr = "";
-    if (status.h.enable === true && markdownStr[i] === "\n") {
-        ruitkStr += close(status, "h");
-    }
     if (markdownStr.startsWith("\n\n", i)) {
-        ruitkStr += closeAll(status);
+        return { str : closeAll(status), offset : 0 };
     }
-    return { str : ruitkStr, offset : 0 };
+    if (status.h.enable === true && markdownStr[i] === "\n") {
+        return { str : close(status, "h"), offset : 0 };
+    }
+    return { str : "", offset : 0 };
 }
 function headings(markdownStr, i, status) {
     let ruitkStr = "\n";
