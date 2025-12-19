@@ -173,6 +173,10 @@ let elements = [
                     case "*":
                     case " ":
                     case "_":
+                    case "[":
+                    case "]":
+                    case "(":
+                    case ")":
                     case "#":
                         let ref = ruitkStr.length;
 
@@ -185,6 +189,10 @@ let elements = [
                         i = i + result.offset; 
 
                         result = boldItalic(markdownStr, i, status); 
+                        ruitkStr += result.str;
+                        i = i + result.offset; 
+
+                        result = link(markdownStr, i, status, ruitkStr); 
                         ruitkStr += result.str;
                         i = i + result.offset; 
 
@@ -362,4 +370,41 @@ function boldItalic(markdownStr, i, status) {
 
 
     return { str : "", offset : 0 };
+}
+function link(markdownStr, i, status, ruitkStr) {
+    let outStr = "";
+    if (tokenRoughReduceStr(markdownStr.slice(i), ["[", "](", ")", "\n"]).startsWith("[]()") && markdownStr[i] === "[") {
+        outStr += open(status, "a", `<a>{"content" : `);
+        return { str : outStr, offset : 0 };
+    }
+    if (markdownStr.startsWith("](", i) && status.a.enable === true) {
+        if (ruitkStr[ ruitkStr.length - 1] === '"') outStr += "[]";
+        outStr += `", href : "`;
+        return { str : outStr, offset : 1 };
+    }
+    if (markdownStr.startsWith(")", i) && status.a.enable === true) {
+        outStr += close(status, "a");
+        return { str : outStr, offset : 0 };
+    }
+
+    return { str : "", offset : 0 };
+}
+
+function tokenRoughReduceStr(str = "", tokens) { // makes a list of 
+    tokens = tokens.sort((a, b) => b.length - a.length);
+    let strs = [];
+    for (let i = 0; i < tokens.length; i++) {
+        let j = str.indexOf(tokens[i]);
+        if (j === -1) {
+            continue;
+        }
+        strs.push({ str : str.slice(j, j + tokens[i].length), j : j });
+        str.replace(tokens[i], "");
+    }
+    strs = strs.sort((a, b) => a.j - b.j);
+    let out = "";
+    for (let i = 0; i < strs.length; i++) {
+        out += strs[i].str;
+    }
+    return out;
 }
