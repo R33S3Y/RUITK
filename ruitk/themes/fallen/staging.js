@@ -141,7 +141,6 @@ let elements = [
             e.style.aspectRatio = info.aspectRatio;
 
             return e;
-            
         },
         style: {
             
@@ -155,6 +154,10 @@ let elements = [
             info = Merge.dicts({
                 str : "",
             }, info);
+
+            Tester.dicts({
+                str : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
 
             let markdownStr = "\n" + info.str + "\n";
 

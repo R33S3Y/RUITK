@@ -16,7 +16,7 @@ let str = '<button>{"label": "Click me"} <input>{"placeholder": "Enter text"}';
    - Pass the string containing the custom elements to the `makeElements` function.
    - Example:
 ```javascript
-let HTMLelements = elements.makeElements(str);
+let HTMLelements = ruitk.makeElements(str);
 ```
 
 3. **Handle the Generated Elements**:
@@ -31,7 +31,7 @@ HTMLelements.forEach(element => {
  - It should be noted that the append function found in other parts of the RUITK project can accept lists like this. So these examples also work
 ```javascript
 // element.js
-elements.append("querySelector", HTMLelements);
+ruitk.append("querySelector", HTMLelements);
 // tileWin.js
 tileWin.append("exampleTileName", HTMLelements);
 ```
@@ -40,7 +40,7 @@ tileWin.append("exampleTileName", HTMLelements);
 - **Custom Elements**: Ensure that the custom element names and their corresponding JSON data match the predefined templates in your implementation.
 - **Nested Elements**: The function can handle multiple nested elements, allowing you to create complex structures from a single string input.  Eg:
 ```js
-elements.append("body", elements.makeElements(
+ruitk.append("body", elements.makeElements(
 	`<h1>{"content" : <b>{"content" : "Bold"} <i>{"content" : " italic"}}` 
 ));
 ```
@@ -87,17 +87,17 @@ let buttonElement = {
    - Pass an array of custom element definitions to the `addElements` function.
    - Example:
 ```javascript
-addElements([buttonElement]);
+ruitk.addElements([buttonElement]);
 ```
 #### Notes
 - **Array Handling**: If a single element object is passed instead of an array, it is wrapped in an array for processing. So this also works:
 ```javascript
-addElements(buttonElement);
+ruitk.addElements(buttonElement);
 ```
 - **Uniqueness Check**: Ensures each element name is unique in the collection, logging a warning and rejecting duplicates. Example:
 ```javascript
-addElements(buttonElement);
-addElements(buttonElement); // Logs a warning and rejects the duplicate
+ruitk.addElements(buttonElement);
+ruitk.addElements(buttonElement); // Logs a warning and rejects the duplicate
 ```
 - - -
 
@@ -108,6 +108,6 @@ The `append` function provides a quick and dirty way to handle get content on th
 
 #### Usage 
 ```js
-elements.append("body", HTMLelements);
+ruitk.append("body", HTMLelements);
 ```
 For more info on the `querySelector` argument go to: [Document: querySelector() method - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) 

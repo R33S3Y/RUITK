@@ -1,7 +1,11 @@
 
-## 0.9.11
+# 0.10
+#### element.js Changes
+ - Renamed the `Elements` class to `Ruitk`
+ - Renamed the `elements.js` class to `ruitk.js`
 #### documentation Changes
  - Added a documentation page for security issues
+ - Added documentation for the `markdown`
 #### support changes
 - Fixed bug with `null` type in `tester.js`
 #### Fallen Changes
@@ -102,7 +106,7 @@
 #### support changes
  - Fixed issue with error reporting in `tester.js` 
  - Added the ability to input multiple types in the type key in `tester.js` 
- - Added type "function" in `tester.js` 
+ - Added type `function` in `tester.js` 
 #### documentation Changes
  - Added documentation for `tester.js`
 

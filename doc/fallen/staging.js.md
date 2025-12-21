@@ -37,3 +37,21 @@ The `staging.js` module serves as a testing and preparation area for new UI elem
 	- Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 
 ---
+
+### Markdown
+
+ - **Purpose:** Parses and converts markdown to RUTIK components
+ - **Inputs:**
+	 - `str` (required): A string of markdown to parse
+- **Behaviour:**
+	-  Please note that this is not complete implementation of markdown currently and it only has support for:
+		- _Italic text_
+		- **Bold text**
+		- Hashtag Headings
+		- Links
+	- And it is missing support for
+		- Dash Headings
+		- Tables
+		- Code
+		- Bullet lists
+		- Checkboxs

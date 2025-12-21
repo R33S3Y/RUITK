@@ -1,18 +1,18 @@
 // tools
-import { Elements } from "../../ruitk/elements/elements.js";
-let elements = new Elements();
+import { Ruitk } from "../../ruitk/elements/elements.js";
+let ruitk = new (Ruitk);
 // elements
 import { FallenBase } from "../../ruitk/themes/fallen/base.js";
 import { FallenTileWin } from "../../ruitk/themes/fallen/tileWin.js";
 import { FallenInput } from "../../ruitk/themes/fallen/input.js";
 import { FallenStaging } from "../../ruitk/themes/fallen/staging.js";
 
-elements.addElements(FallenBase.getElements());
-elements.addElements(FallenTileWin.getElements());
-elements.addElements(FallenInput.getElements());
-elements.addElements(FallenStaging.getElements());
+ruitk.addElements(FallenBase.getElements());
+ruitk.addElements(FallenTileWin.getElements());
+ruitk.addElements(FallenInput.getElements());
+ruitk.addElements(FallenStaging.getElements());
 
-elements.append("body", elements.makeElements(`
+ruitk.append("body", ruitk.makeElements(`
     <backgroundImg>{}
     <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"], tilePercentageX : [30,30,40]}, "tiles" : [
         {    
@@ -49,7 +49,7 @@ elements.append("body", elements.makeElements(`
                     <submit>{content : "Submit", "c" : "1", "r" : "3", callback: (form) => {console.log(form)}}    
                 }
         }, {    
-            "name" : "Form Test",
+            "name" : "FormTest",
             "x" : 2,
             "y" : 1,
             content : 
@@ -74,11 +74,11 @@ elements.append("body", elements.makeElements(`
 
                 }
         }, {    
-            "name" : "Markdown Test",
+            "name" : "MarkdownTest",
             "x" : 1,
             "y" : 3,
             content : 
-                <markdown>{"str" : "${await fetch("../../ruitk/themes/fallen/Markdown edge cases.md").then(r => r.text())}"}
+                <markdown>{"str" : "${await fetch("../../doc/changelog.md").then(r => r.text())}"}
         }
     ]}
 `));
