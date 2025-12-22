@@ -1,0 +1,83 @@
+import { Ruitk } from "./core.js";
+import { Internal } from "./internal.js";
+
+import { Merge } from "../support/merger.js";
+
+Ruitk.prototype.addElements = function ( elements = [] ) {
+    /**
+     * Element example
+     * {
+     * name : "button1",
+     * function : (inputDict, element) => {
+     *      return document.createElement("button");
+     * },
+     * style : {
+     *  transition: "all 0.2s ease-in-out",
+     *  position : "absolute",
+     *  overflow : "hidden",
+     *  // background
+     *  backgroundColor : colors.inactiveB1,
+     *  backdropFilter: "blur(4px)",
+     *  hover_backgroundColor : colors.activeB1,
+     *  
+     *  // border
+     *  borderStyle : "solid",
+     *  borderWidth : "3px",
+     *  borderRadius : "15px",
+     *  borderColor : colors.inactiveH2,
+     *  boxShadow: "0 0 4px rgba(0, 0, 0, 1)",
+     *  hover_boxShadow: "0 0 5px 2px rgba(0, 0, 0, 1)",
+     *  hover_borderColor : colors.activeH2,
+     *  }
+     * }
+     */
+    if (Array.isArray(elements) === false) {
+        elements = [elements];
+    }
+    let failCount = 0;
+    for (let element of elements) {
+        for (let currentElement of this.elements) {
+            if (currentElement.name === element.name) {
+                console.warn(`${element.name} has already been used thus ${element} has been regected`);
+                failCount ++;
+                continue;
+            }
+        }
+        element = Merge.dicts({
+            name : "",
+            function : (info, element) => {
+                console.error(`${element.name} is missing a function. This is the default function`);
+                return document.createElement("div");
+            },
+            style : {},
+            handleStyle : false,
+            parseLevel : 2,
+            strictStyles : false,
+        }, element, []);
+        this.elements.push(element);
+    }
+    console.debug(`addElements Function: Added ${elements.length - failCount} out of ${elements.length} new elements`);
+    console.debug(`addElements Function: Starting dependency test`);
+
+    /**
+     * This could be set up as a minor preformance inprovement.
+     * 
+     * In witch you resolve and save the element once instead of resolving the element every time it is called at runtime.
+     * It may also increase the size and memory reqiurements of this.elements. IDK just a thought.
+     */
+    elements = JSON.parse(JSON.stringify(elements));
+    for (let element of elements) {
+        Internal.resolveElementObject(element, this.elements);
+    }
+
+    console.debug(`addElements Function: Finished dependency test`);
+
+    this.initFunctions();
+    return;
+}
+Ruitk.prototype.getElements = function () {
+    
+}
+Ruitk.prototype.removeElement = function () {
+    
+}

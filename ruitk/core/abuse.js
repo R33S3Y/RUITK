@@ -1,4 +1,4 @@
-import { Ruitk } from "./elements";
+import { Ruitk } from "./core.js";
 
 Ruitk.prototype.abuse = function () {
     

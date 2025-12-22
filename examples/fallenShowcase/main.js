@@ -1,6 +1,6 @@
 // tools
-import { Ruitk } from "../../ruitk/elements/elements.js";
-let ruitk = new (Ruitk);
+import { Ruitk } from "../../ruitk/core/ruitk.js";
+let ruitk = new Ruitk;
 // elements
 import { FallenBase } from "../../ruitk/themes/fallen/base.js";
 import { FallenTileWin } from "../../ruitk/themes/fallen/tileWin.js";

@@ -1,11 +1,12 @@
 
 # 0.10
 #### element.js Changes
+ - Renamed the `elements` folder to `core`
  - Renamed the `Elements` class to `Ruitk`
- - Renamed the `elements.js` class to `ruitk.js`
+ - Renamed the `elements.js` file to `ruitk.js`
 #### documentation Changes
  - Added a documentation page for security issues
- - Added documentation for the `markdown`
+ - Added documentation for the `markdown` element
 #### support changes
 - Fixed bug with `null` type in `tester.js`
 #### Fallen Changes
