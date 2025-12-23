@@ -181,7 +181,7 @@ export class Internal {
             return null;
         }
     };
-    static resolveElementObject(elementInfo, elements) {
+    static resolveElementObject(elementInfo, elements) { // resolves all dependacys using the [Referencing syntax](tileWin/doc/Making%20Elements.md#Other)
         let keys = Object.keys(elementInfo);
         for (let key of keys) {
             let regex = /^<[\w\d]+>$/;
@@ -211,5 +211,45 @@ export class Internal {
         }
         return elementInfo;
     };
+    static getElementDependencysList(elementInfo, elements) { // just gets a list of all elements that a element depends on
+        let dependencys = [];
+        for (let key of Object.keys(elementInfo)) {
+            if (typeof elementInfo[key] === "string" && /^<[\w\d]+>$/.test(elementInfo[key])) {
+
+                let elementName = elementInfo[key];
+
+                elementName = elementName.replace("<", "");
+                elementName = elementName.replace(">", "");
+
+                dependencys.push(elementName);
+            }
+        }
+        if (typeof elementInfo.dependencys === "string" && /^<[\w\d]+>$/.test(elementInfo.dependencys)) {
+            let elementName = elementInfo.dependencys;
+
+            elementName = elementName.replace("<", "");
+            elementName = elementName.replace(">", "");
+
+            let dependencyRef = this.getElementByName(elementName, elements);
+
+            if (dependencyRef === null) {
+                console.warn(`Dependency Error: cannot resolve/find element: "${elementName}". Returning incomplete list of dependacys`);
+                return [...new Set(dependencys)];
+            }
+            dependencys.concat(dependencyRef.dependencys);
+
+            return [...new Set(dependencys)];
+        }
+        dependencys.concat(elementInfo.dependencys);
+
+        return [...new Set(dependencys)];
+    }
+    static getElementByName(name, elements) {// gets a element by name. If element cant be found returns null
+        for (let element of elements) {
+            if (element.name === name) return element;
+        }
+        console.error(`getElementByName Function: Cannot find element: "${name}". Please provide the element or correct the name`);
+        return null;
+    }
 }
 

@@ -211,7 +211,7 @@ let elements = [
             ruitkStr += closeAll(status);
             ruitkStr = ruitkStr.trim();
             ruitkStr = ruitkStr.replaceAll(`\n`, "<br>");
-            console.log(ruitkStr);
+            
             return element.makeElements(`<p1>{"content" : "${ruitkStr}"}`);
 
         },

@@ -1,5 +1,6 @@
 // tools
 import { Ruitk } from "../../ruitk/core/ruitk.js";
+import "../../ruitk/core/abuse.js";
 let ruitk = new Ruitk;
 // elements
 import { FallenBase } from "../../ruitk/themes/fallen/base.js";
@@ -11,6 +12,8 @@ ruitk.addElements(FallenBase.getElements());
 ruitk.addElements(FallenTileWin.getElements());
 ruitk.addElements(FallenInput.getElements());
 ruitk.addElements(FallenStaging.getElements());
+
+ruitk.abuse();
 
 ruitk.append("body", ruitk.makeElements(`
     <backgroundImg>{}
@@ -66,7 +69,7 @@ ruitk.append("body", ruitk.makeElements(`
                 }
                 <grid>{"content" : 
                     <icon>{ c : "1", r : "1"}
-                    <img>{ src : "/examples/fallen showcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative", 
+                    <img>{ src : "/examples/fallenShowcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative", 
                     alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
 
                     <textbox>{name : "testinput", "placeholder" : "Test Input Area", onClick : () => {console.log("Input Area Logged click")}, onEnter : () => {console.log("Input Area Logged Enter")}, onAny : (e) => {console.log(e)}}
@@ -78,7 +81,7 @@ ruitk.append("body", ruitk.makeElements(`
             "x" : 1,
             "y" : 3,
             content : 
-                <markdown>{"str" : "${await fetch("../../doc/changelog.md").then(r => r.text())}"}
+                <markdown>{"str" : "${await fetch("../../ruitk/themes/fallen/Markdown edge cases.md").then(r => r.text())}"}
         }
     ]}
 `));

@@ -38,7 +38,7 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
     for (let element of elements) {
         for (let currentElement of this.elements) {
             if (currentElement.name === element.name) {
-                console.warn(`${element.name} has already been used thus ${element} has been regected`);
+                console.warn(`addElements Function: The name "${element.name}" is already in use. Due to this the new one has been regected`);
                 failCount ++;
                 continue;
             }
@@ -46,13 +46,14 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
         element = Merge.dicts({
             name : "",
             function : (info, element) => {
-                console.error(`${element.name} is missing a function. This is the default function`);
+                console.warn(`addElements Function: The element named: "${element.name}" is missing a function. This is the default function.`);
                 return document.createElement("div");
             },
             style : {},
             handleStyle : false,
             parseLevel : 2,
             strictStyles : false,
+            dependencys : [],
         }, element, []);
         this.elements.push(element);
     }
@@ -60,10 +61,14 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
     console.debug(`addElements Function: Starting dependency test`);
 
     /**
-     * This could be set up as a minor preformance inprovement.
+     * This below could be set up as a minor preformance inprovement.
      * 
-     * In witch you resolve and save the element once instead of resolving the element every time it is called at runtime.
+     * In witch you resolve and save the element once, ahead of time, 
+     * instead of resolving the element every time it is called at runtime.
      * It may also increase the size and memory reqiurements of this.elements. IDK just a thought.
+     * 
+     * 22/12/2025 - Reesey - The abuse function relies on this not being done for the Minimal dependency test.
+     * It wouldn't cause any errors however it would make the Minimal dependency test substantily less Minimal
      */
     elements = JSON.parse(JSON.stringify(elements));
     for (let element of elements) {
@@ -74,10 +79,4 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
 
     this.initFunctions();
     return;
-}
-Ruitk.prototype.getElements = function () {
-    
-}
-Ruitk.prototype.removeElement = function () {
-    
-}
+};
