@@ -236,19 +236,22 @@ export class Internal {
                 console.warn(`Dependency Error: cannot resolve/find element: "${elementName}". Returning incomplete list of dependacys`);
                 return [...new Set(dependencys)];
             }
-            dependencys.concat(dependencyRef.dependencys);
+            dependencys = dependencys.concat(dependencyRef.dependencys);
 
             return [...new Set(dependencys)];
         }
-        dependencys.concat(elementInfo.dependencys);
+        if (Array.isArray(elementInfo.dependencys)) {
+            dependencys = dependencys.concat(elementInfo.dependencys);
+        }
 
         return [...new Set(dependencys)];
     }
+    
     static getElementByName(name, elements) {// gets a element by name. If element cant be found returns null
         for (let element of elements) {
             if (element.name === name) return element;
         }
-        console.error(`getElementByName Function: Cannot find element: "${name}". Please provide the element or correct the name`);
+    
         return null;
     }
 }

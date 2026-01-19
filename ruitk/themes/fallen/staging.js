@@ -216,7 +216,7 @@ let elements = [
 
         },
         handleStyle : true,
-
+        dependencys : [ "test1", "test2" ],
     }
 ];
 

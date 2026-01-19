@@ -40,7 +40,7 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
             if (currentElement.name === element.name) {
                 console.warn(`addElements Function: The name "${element.name}" is already in use. Due to this the new one has been regected`);
                 failCount ++;
-                continue;
+                break;
             }
         }
         element = Merge.dicts({
@@ -61,7 +61,7 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
     console.debug(`addElements Function: Starting dependency test`);
 
     /**
-     * This below could be set up as a minor preformance inprovement.
+     * This func could be set up as a minor preformance inprovement.
      * 
      * In witch you resolve and save the element once, ahead of time, 
      * instead of resolving the element every time it is called at runtime.
@@ -72,7 +72,13 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
      */
     elements = JSON.parse(JSON.stringify(elements));
     for (let element of elements) {
-        Internal.resolveElementObject(element, this.elements);
+        let depenancyList = Internal.getElementDependencysList(element, this.elements);
+        for (let depenancy of depenancyList) {
+            let depenancyElement = Internal.getElementByName(depenancy, this.elements);
+            if ( depenancyElement === null ) {
+                console.error(`Dependency Error: Failed to find Element: "${depenancy}" which is needed as a dependancy for Element: "${element.name}"`);
+            }
+        }
     }
 
     console.debug(`addElements Function: Finished dependency test`);

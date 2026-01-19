@@ -1,9 +1,10 @@
 
 # 0.10
-#### element.js Changes
+#### Ruitk Changes
  - Renamed the `elements` folder to `core`
  - Renamed the `Elements` class to `Ruitk`
  - Renamed the `elements.js` file to `ruitk.js`
+ - Fixed a bug with `addElements` where it falsely said that it added negative elements. Eg: Added -55 out of 11 new elements
 #### documentation Changes
  - Added a documentation page for security issues
  - Added documentation for the `markdown` element
