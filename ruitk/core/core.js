@@ -27,10 +27,15 @@ export class Ruitk {
         this.initFunctions();
         console.info(logo);
     }
-
+    /**
+     * We have this function because we need to define makeElements as an arrow function so it can be passed through the elements while not changing the this context
+     */
     initFunctions () {
         /**
-         * We have this function because we need to define makeElements as an arrow function so it can be passed through the elements while not changing the this context
+         * INTERNAL ONLY!!! - (please use makeElements instead) 
+         * Handles the parsing and rendering of elements. 
+         * @param {str} str element str 
+         * @returns {array | HTMLElement } element
          */
         this.renderElements = (str) => {
 
@@ -121,15 +126,23 @@ ${e.stack}`;
             }
             return output;
         };
-
+        /**
+         * Parses the elements
+         * @param {string} str unparsed RUTIK JSON 
+         * @returns {*} parsed info
+         */
         this.makeElements = (str) => {
+            // This func used to do stuff but the parse function got several rounds of refactoring 
+            // and ended up just doing everything this func did better than this func itself, so yeah.
             return this.parse(str);
         };
-    
+        /**
+         * Parses pretty json
+         * @param {string} str unparsed pretty JSON 
+         * @param {boolean} softParse if this flag is true it will only parse the top level (like the parseLevel = 1 in [Optional Keys](../../doc/Making%20Elements.md#Optional%20Keys))
+         * @returns {*} parsed info
+         */
         this.parse = (str, softParse = false) => {
-            //if (str === undefined || str === null) {
-            //    return str; // all of these cases are caught by the following test but I think it's better for these case to be handed off smoothly
-            //}
             Tester.dicts({
                 str : "string",
                 softParse : "boolean",
@@ -284,6 +297,12 @@ ${e.stack}`;
 
         };
     }
+    /**
+     * Append the elements to the querySelector
+     * @param {string} querySelector follows the (querySelector)[https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector] syntax
+     * @param {array | HTMLElement} content  HTML element or array of HTML Elements
+     * @returns {void} Nothing
+     */
     append(querySelector, content) {
         if (!content) {
             console.error(`item (${content}) is falsely`);

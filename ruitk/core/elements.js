@@ -3,6 +3,11 @@ import { Internal } from "./internal.js";
 
 import { Merge } from "../support/merger.js";
 
+/**
+ * Imports elements into RUITK
+ * @param {Array | dicts} elements elements or array of elements
+ * @returns {void} Nothing 
+ */
 Ruitk.prototype.addElements = function ( elements = [] ) {
     /**
      * Element example

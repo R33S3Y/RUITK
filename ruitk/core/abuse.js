@@ -1,6 +1,10 @@
 import { Ruitk } from "./core.js";
 import { Internal } from "./internal.js";
 
+/**
+ * Runs some tests that may end up making a bit of a mess. 
+ * @returns {void}
+ */
 Ruitk.prototype.abuse = function () {
 
     console.debug("abuse Function: Starting tests...");

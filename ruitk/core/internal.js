@@ -1,11 +1,16 @@
 import { Style } from "../support/style.js";
 
 export class Internal {
+    /**
+     * Parses a dict at the top level (like the parseLevel = 1 in [Optional Keys](../../doc/Making%20Elements.md#Optional%20Keys))
+     * @param {string} str  
+     * @returns {array | dict}
+     */
     static softParseInfo(str) {
         /**
          * this function takes a stringify dict or array for input and parses that object but leaves all values inside as strings for futher processing
          * @param {string} str 
-         * @returns array or dict of strs
+         * @returns {array | dict} of strs
          */
 
 
@@ -77,6 +82,15 @@ export class Internal {
             return keyValuePairs;
         }
     };
+    /**
+     * finds the end of the unparsed str at the for the following type:
+     *  - arrowfunctions
+     *  - function
+     *  - element
+     * should also work for the dict and array but yeah
+     * @param {string} str 
+     * @returns {number} will return -1 on error
+     */
     static getItemWithCutEnd(str) {
         let dictStart = str.indexOf("{");
         if (dictStart === -1) {
@@ -85,6 +99,11 @@ export class Internal {
         }
         return Internal.getDictOrArrayEnd(str.slice(dictStart)) + dictStart;
     };
+    /**
+     * Gets the end of a array and dict
+     * @param {string} str Gets the end of a array or a dict from the unparsed str  
+     * @returns {number} 
+     */
     static getDictOrArrayEnd(str) {
         str = str.trim();
         let indentAmount = 0;
@@ -121,6 +140,12 @@ export class Internal {
         }
         return end + 1;
     };
+    /**
+     * Gets some basic info about the raw string. 
+     * The element has to be at the start of the string, However anything can go after the end of the string.
+     * @param {string} str The raw unparsed element string   
+     * @returns {nameStart : number, nameEnd : number, dictStart : number, dictEnd : number, str : number} info.
+     */
     static getElementStr(str) { // get some basic info about element from str
         str = str.trim();
 
@@ -141,6 +166,12 @@ export class Internal {
 
         return currentElement;
     };
+    /**
+     * Handles the style_ and .style and syntax and applys the style.
+     * @param {HTML} element The HTML element that needs to to be styled.
+     * @param {dict} elementInfo The element that contans the style element info.
+     * @returns {HTML} the styled HTML element.
+     */
     static styleElement(element, elementInfo) {
         if (elementInfo.handleStyle === true) {
             return element;
@@ -156,6 +187,11 @@ export class Internal {
 
         return element;
     };
+    /**
+     * Parses/destringifys a function 
+     * @param {string} funcString stringifyed function
+     * @returns {function} function
+     */
     static parseFunction(funcString) {
         try {
             // Match the arrow function syntax
@@ -181,13 +217,19 @@ export class Internal {
             return null;
         }
     };
-    static resolveElementObject(elementInfo, elements) { // resolves all dependacys using the [Referencing syntax](tileWin/doc/Making%20Elements.md#Other)
-        let keys = Object.keys(elementInfo);
+    /**
+     * Resolves all the [Referencing syntax](tileWin/doc/Making%20Elements.md#Other)
+     * @param {dict} element The element that you want to resolve
+     * @param {Array} elements The list of the elements that we resolve the element aganist
+     * @returns {dict} the resolved element.
+     */
+    static resolveElementObject(element, elements) {
+        let keys = Object.keys(element);
         for (let key of keys) {
             let regex = /^<[\w\d]+>$/;
-            if (typeof elementInfo[key] === "string" && regex.test(elementInfo[key])) {
+            if (typeof element[key] === "string" && regex.test(element[key])) {
 
-                let elementName = elementInfo[key];
+                let elementName = element[key];
 
                 elementName = elementName.replace("<", "");
                 elementName = elementName.replace(">", "");
@@ -197,26 +239,32 @@ export class Internal {
                     if (element.name === elementName) {
                         foundElement = true;
                         if (element[key] === undefined) {
-                            console.error(`Dependency Error: key: "${key}" is undefined in Element: "${element.name}". \n Key is used as a depenancy for Element: "${elementInfo.name}"`);
+                            console.error(`Dependency Error: key: "${key}" is undefined in Element: "${element.name}". \n Key is used as a depenancy for Element: "${element.name}"`);
                         }
-                        elementInfo[key] = element[key];
+                        element[key] = element[key];
                         break;
                     }
                 }
                 if (foundElement === false) {
-                    console.error(`Dependency Error: Failed to find Element: "${elementName}" which is needed as a dependancy for Element: "${elementInfo.name}"`);
-                    elementInfo[key] = undefined;
+                    console.error(`Dependency Error: Failed to find Element: "${elementName}" which is needed as a dependancy for Element: "${element.name}"`);
+                    element[key] = undefined;
                 }
             }
         }
-        return elementInfo;
+        return element;
     };
-    static getElementDependencysList(elementInfo, elements) { // just gets a list of all elements that a element depends on
+    /**
+     * Gets a list of all dependacys that a elements needs.
+     * @param {dict} element The element that you want to get the dependacys of.
+     * @param {Array} elements  A list of all elements that exist. (For when the element references a differnet element dependacy list) [Referencing syntax](../../doc/Making%20Elements.md#Other)
+     * @returns {string} Gets a list of all elements that the element depends on.
+     */
+    static getElementDependencysList(element, elements) {
         let dependencys = [];
-        for (let key of Object.keys(elementInfo)) {
-            if (typeof elementInfo[key] === "string" && /^<[\w\d]+>$/.test(elementInfo[key])) {
+        for (let key of Object.keys(element)) {
+            if (typeof element[key] === "string" && /^<[\w\d]+>$/.test(element[key])) {
 
-                let elementName = elementInfo[key];
+                let elementName = element[key];
 
                 elementName = elementName.replace("<", "");
                 elementName = elementName.replace(">", "");
@@ -224,8 +272,8 @@ export class Internal {
                 dependencys.push(elementName);
             }
         }
-        if (typeof elementInfo.dependencys === "string" && /^<[\w\d]+>$/.test(elementInfo.dependencys)) {
-            let elementName = elementInfo.dependencys;
+        if (typeof element.dependencys === "string" && /^<[\w\d]+>$/.test(element.dependencys)) {
+            let elementName = element.dependencys;
 
             elementName = elementName.replace("<", "");
             elementName = elementName.replace(">", "");
@@ -240,14 +288,19 @@ export class Internal {
 
             return [...new Set(dependencys)];
         }
-        if (Array.isArray(elementInfo.dependencys)) {
-            dependencys = dependencys.concat(elementInfo.dependencys);
+        if (Array.isArray(element.dependencys)) {
+            dependencys = dependencys.concat(element.dependencys);
         }
 
         return [...new Set(dependencys)];
     }
-    
-    static getElementByName(name, elements) {// gets a element by name. If element cant be found returns null
+    /**
+     * Gets the element by a name. This is really shouldnt exist.
+     * @param {string} name Name of element
+     * @param {Array} elements Array of elements
+     * @returns {(dict|null)} Element or null if no element was found
+     */
+    static getElementByName(name, elements) {
         for (let element of elements) {
             if (element.name === name) return element;
         }

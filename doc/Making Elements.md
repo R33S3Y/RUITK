@@ -22,7 +22,7 @@ let elements = [{ // tile
 	handleStyle : true,
 }];
 ```
- - `ParseLevel` - Defaults to 2 - This value changes how much prepossessing the info object is going through. By default this value is set to 2 meaning that is fully processed with all the child elements sorted and things like that, 0 means it's a string so have fun with that and 1 means that the first level of dicts and arrays are processed but nothing more. this means that all contents of the first array are stringifyed. Here some examples:
+ - `ParseLevel` - Defaults to 2 - This value changes how much prepossessing the info object is going through. By default this value is set to 2 meaning that is fully processed with all the child elements sorted and things like that, 0 means it's a string so have fun with that and 1 means that the first level of dicts and arrays are processed but nothing more. this means that all contents of the first array are stringifyed. Here some examples: 
 ```js
 // parseLevel 0
 info = {
