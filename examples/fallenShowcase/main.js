@@ -13,7 +13,7 @@ ruitk.addElements(FallenTileWin.getElements());
 ruitk.addElements(FallenInput.getElements());
 ruitk.addElements(FallenStaging.getElements());
 
-//ruitk.abuse();
+ruitk.abuse();
 
 ruitk.append("body", ruitk.makeElements(`
     <backgroundImg>{}
@@ -49,7 +49,7 @@ ruitk.append("body", ruitk.makeElements(`
                 <grid>{"cTemplate" : "auto", "rTemplate" : "auto auto auto" , "content" : 
                     <textbox>{name : "email", "placeholder" : "Email", "c" : "1", "r" : "1"}
                     <textbox>{name : "password", "placeholder" : "Password", "c" : "1", "r" : "2"}
-                    <submit>{content : "Submit", "c" : "1", "r" : "3", callback: (form) => {console.log(form)}}    
+                    <submit>{content : "Submit", "c" : "1", "r" : "3", onSubmit: (form) => {console.log(form)}}    
                 }
         }, {    
             "name" : "FormTest",
@@ -64,7 +64,7 @@ ruitk.append("body", ruitk.makeElements(`
                     <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2", w : "100%"}
                     <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
 
-                    <button>{content : "hello World", callback : () => {console.log("Hello World! I am button!")}}
+                    <button>{content : "hello World", onClick : () => {console.log("Hello World! I am button!")}}
                     <search>{name : "search"}
                 }
                 <grid>{"content" : 

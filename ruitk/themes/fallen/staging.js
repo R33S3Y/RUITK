@@ -9,7 +9,7 @@ let elements = [
         function: (info, element) => {
             info = Merge.dicts({
                 id : `"${element.name}-${element.elementCount}"`,
-                callback : `(value) => {console.warn("search Element: missing callback function")}`,
+                callback : `(value) => {console.warn("search Element: missing callback function")}`, // I think this needs a revision and a rename.
             }, info);
 
             Tester.dicts({

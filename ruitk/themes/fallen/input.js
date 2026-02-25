@@ -66,6 +66,7 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
+        dependencys : "<radio>",
         element : "input",
         handleStyle : true,
         parseLevel : 1,
@@ -245,7 +246,9 @@ let elements = [
         style_standard : "<base>",
         style_paddingMedium : "<base>",
         style_border : "<base>",
+        dependencys : [ "h3", "grid" ],
         handleStyle : true,
+        
         
     },
     {   // checkbox
@@ -255,6 +258,7 @@ let elements = [
         makeOneBox : "<radio>",
         inputTest : "<radio>",
         makeGridandTitle : "<radio>",
+        dependencys : "<radio>",
         parseLevel : 1,
 
         generate : "<base>",
@@ -287,6 +291,7 @@ let elements = [
         name : "dropdown",
         inputTest : "<radio>",
         makeGridandTitle : "<radio>",
+        dependencys : "<radio>",
         function : (info, element) => {
             info = element.inputTest(info, element);
 
@@ -339,6 +344,7 @@ let elements = [
         name : "combo",
         inputTest : "<radio>",
         makeGridandTitle : "<radio>",
+        dependencys : "<radio>",
         function : (info, element) => {
             info = element.inputTest(info, element);
 
@@ -397,12 +403,12 @@ let elements = [
         name : "button",
         function : (info, element) => {
             info = Merge.dicts({
-                callback : () => {console.warn("submit Element: missing callback function")},
+                onClick : () => {console.warn("submit Element: missing onClick function")},
                 content : "Submit",
             }, info);
 
             Tester.dicts({
-                callback : "function",
+                onClick : "function",
                 content : ["string", "HTMLElement"],
             }, info, `${element.name} Element: `);
 
@@ -419,8 +425,6 @@ let elements = [
             }
 
             let e = element.generate(info, element);
-            
-            e.addEventListener('click', info.callback);
 
             return e;
         },
@@ -429,19 +433,20 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
+        dependencys : [ "p1" ],
         element : "button"
     },
     {   // submit
         name : "submit",
         function : (info, element) => {
             info = Merge.dicts({
-                callback : () => {console.warn("submit Element: missing callback function")},
+                onSubmit : () => {console.warn("submit Element: missing onSubmit function")},
                 content : "Submit",
                 form : "default",
             }, info);
 
             Tester.dicts({
-                callback : "function",
+                onSubmit : "function",
                 content : ["string", "HTMLElement"],
                 form : "string",
             }, info, `${element.name} Element: `);
@@ -488,7 +493,7 @@ let elements = [
                             console.debug(formElement);
                     }
                 }
-                info.callback(output);
+                info.onSubmit(output);
             };
 
             if (info.content) {
@@ -524,6 +529,7 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
+        dependencys : [ "p1" ],
         element : "button"
     }
 ];
