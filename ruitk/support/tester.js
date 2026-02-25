@@ -1,13 +1,16 @@
 export class Tester {
+    /**
+     * Validates that all required keys in the template object exist in the actual object
+     * and checks if the values in the actual object match the specified types in the template.
+     * 
+     * @param {dict} template The template object with required keys and their expected types.
+     * @param {dict} actual The actual object to test against the template.
+     * @param {string} prefix message prefix
+     * @param {string} suffix message suffix
+     * @returns {dict} An object containing missing or type-mismatched keys (if any), or null if valid.
+     */
     static dicts(template, actual, prefix = "", suffix = "") {
-        /**
-         * Validates that all required keys in the template object exist in the actual object
-         * and checks if the values in the actual object match the specified types in the template.
-         *
-         * @param {Object} template - The template object with required keys and their expected types.
-         * @param {Object} actual - The actual object to test against the template.
-         * @returns {Object} - An object containing missing or type-mismatched keys (if any), or null if valid.
-         */
+
 
         let issues = {};
 
@@ -55,13 +58,18 @@ export class Tester {
     }
 }
 
+/**
+ * Checks if a value matches any type
+ * @param {any} value - The value to check
+ * @param {Array} types - Array if strings type.
+ * @returns {boolean} - True if matchs any type
+ */
 function isTypes (value, types) {
     for (let type of types) {
         if (isType(value, type) === true) return true;
     }
     return false;
 }
-
 
 /**
 * Checks if a value matches a specified type.

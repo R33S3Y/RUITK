@@ -2,6 +2,13 @@ import { Merge } from "./merger.js";
 import { Convert } from "./convert.js";
 
 export class Style {
+    /**
+     * Styles a element.
+     * @param {HTMLElement} element - The HTML element to style
+     * @param {dicts} style - The style options/sheet
+     * @param {array} forceOnFlags - Forcable enables a flag.
+     * @returns {HTMLElement} - The styled element.
+     */
     static style(element, style, forceOnFlags = "") {
     
         if (Array.isArray(style) === true) { // Allows us to pass in array of mutiple styles at once

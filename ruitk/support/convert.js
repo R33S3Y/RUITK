@@ -10,6 +10,12 @@ export class Convert {
      * 5 : single
      */
     
+    /**
+     * Convert string into a differnt case type Eg: snakeCase to camelCase
+     * @param {string} str - string to convert
+     * @param {string} type - type to convert to
+     * @returns {string} - Converted str
+     */
     static convert(str, type = "camelCase") {
         Tester.dicts({
             str : "string",

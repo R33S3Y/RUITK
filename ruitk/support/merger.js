@@ -1,4 +1,11 @@
 export class Merge {
+    /**
+     * Merges two dicts with the new dict taking priority unless its a default value. 
+     * @param {dict} oldDict - The old dict to merge
+     * @param {dict} newDict - The new dict to merge
+     * @param {array} defaults - Default option to ingore
+     * @returns {dict} - The merged dict
+     */
     static dicts(oldDict, newDict, defaults = [0, "", [], false, null]) {
         /**
          * Merges two dictionaries, preserving existing values from the old dictionary.
@@ -6,6 +13,7 @@ export class Merge {
          * @param {object} newDict - The dictionary containing new values to merge.
          * @returns {object} - The merged dictionary.
          */
+
         // Helper function to recursively merge dictionaries
         function mergeRecursive(oldObj, newObj) {
             /**
