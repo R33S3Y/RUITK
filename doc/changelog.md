@@ -8,6 +8,7 @@
 #### documentation Changes
  - Added a documentation page for security issues
  - Added documentation for the `markdown` element
+ - Added JSdoc to lots of functions
 #### support changes
 - Fixed bug with `null` type in `tester.js`
 #### Fallen Changes

@@ -234,14 +234,14 @@ export class Internal {
                 elementName = elementName.replace("<", "");
                 elementName = elementName.replace(">", "");
                 
-                let foundElement = false
-                for(let element of elements) {
-                    if (element.name === elementName) {
+                let foundElement = false;
+                for(let searchElement of elements) {
+                    if (searchElement.name === elementName) {
                         foundElement = true;
-                        if (element[key] === undefined) {
+                        if (searchElement[key] === undefined) {
                             console.error(`Dependency Error: key: "${key}" is undefined in Element: "${element.name}". \n Key is used as a depenancy for Element: "${element.name}"`);
                         }
-                        element[key] = element[key];
+                        element[key] = searchElement[key];
                         break;
                     }
                 }
