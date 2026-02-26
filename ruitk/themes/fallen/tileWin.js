@@ -65,7 +65,7 @@ let elements = [
                 }
                 for (let item of info.content) {
                     if (typeof item === "string" || item instanceof HTMLElement) {
-                        e.append(item); 
+                        innerTile.append(item); 
                     } else {
                         console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
                         console.debug(JSON.parse(JSON.stringify(item)));

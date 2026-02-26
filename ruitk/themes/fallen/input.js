@@ -94,9 +94,9 @@ let elements = [
                 if (Array.isArray(box) === false) {
                     box = [box];
                 }
-                for (let item of info.content) {
+                for (let item of box) {
                     if (typeof item === "string" || item instanceof HTMLElement) {
-                        e.append(item); 
+                        form.append(item); 
                     } else {
                         console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
                         console.debug(JSON.parse(JSON.stringify(item)));
@@ -213,9 +213,9 @@ let elements = [
             if (Array.isArray(info.question) === false) {
                 info.question = [info.question];
             }
-            for (let item of info.content) {
+            for (let item of info.question) {
                 if (typeof item === "string" || item instanceof HTMLElement) {
-                    e.append(item); 
+                    form.append(item); 
                 } else {
                     console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
                     console.debug(JSON.parse(JSON.stringify(item)));
