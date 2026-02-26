@@ -63,6 +63,7 @@ let elements = [
         
         },
         style_standard : "<base>",
+        dependencys : [ "textbox", "icon" ],
         parseLevel : 1, 
     }, { // markdown
         name: "markdown",
@@ -131,7 +132,7 @@ let elements = [
 
         },
         handleStyle : true,
-        dependencys : [ "test1", "test2" ],
+        dependencys : [ "h1", "h2", "h3", "p1", "a", "b", "i" ],
     }
 ];
 
