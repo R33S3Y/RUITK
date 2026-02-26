@@ -14,6 +14,7 @@
 #### Fallen Changes
  - Removed the `callback` option from the `button` element in `input.js`. You should use `onClick` instead
  - Renamed the `callback` option from the `submit` element in `input.js` to `onSubmit`
+ - Moved the `icon` and `img` element from `staging.js` to `base.js`
  - Added new `markdown` element in `staging.js`
  - Added some error checking to the `generate` function
 

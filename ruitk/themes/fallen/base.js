@@ -1,6 +1,7 @@
 import { Merge } from "../../support/merger.js";
 import { Style } from "../../support/style.js"; 
 import { Tester } from "../../support/tester.js";
+import { Convert } from "../../support/convert.js";
 
 let colors = {
     background0: "rgba(0, 0, 0, 1)", // Default Background
@@ -82,10 +83,8 @@ let elements = [
                     info.content = [info.content];
                 }
                 for (let item of info.content) {
-                    if (typeof item === "string") {
-                        e.innerHTML += item; 
-                    } else if (item instanceof HTMLElement) {
-                        e.appendChild(item); 
+                    if (typeof item === "string" || item instanceof HTMLElement) {
+                        e.append(item); 
                     } else {
                         console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
                         console.debug(JSON.parse(JSON.stringify(item)));
@@ -167,6 +166,7 @@ let elements = [
             position : "relative",
             overflow : "hidden",
             boxSizing : "border-box",
+            whiteSpace : "pre-line",
         },
         style_border : {
             border : "var(--borderWidth) solid var(--accent1)",
@@ -346,7 +346,89 @@ let elements = [
         style: {},
         style_standard : "<base>",
         element: "div"
-    }
+    }, { // icon
+        name: "icon",
+        function: (info, element) => {
+            info = Merge.dicts({
+                name: "globe", // Default icon name
+                size: "var(--fontSizeP1)",  // Default size
+                color: "var(--standout4)", // Default color
+            }, info);
+
+            info = Merge.dicts({
+                hoverColor : info.color,
+            }, info);
+
+            Tester.dicts({
+                name : { type: "string", full: true },
+                size : { type: "string", full: true },
+                color : { type: "string", full: true },
+                hoverColor : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
+            
+            Style.fontFace({
+                fontFamily : "icons",
+                src : `url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
+                    url("https://cdn.kde.org/breeze-icons/icons.tff") format("truetype");
+                    url("https://cdn.kde.org/breeze-icons/icons.svg") format("svg")`,
+                fontWeight : "normal",
+                fontStyle : "normal",
+            });
+    
+            let e = element.generate(info, element);
+            e.innerHTML = Convert.convert(info.name, "dashedCase")
+            e.style.fontSize = info.size;
+            e = Style.style(e, [{color : info.color, hover_color : info.hoverColor}, element.style, element.style_standard, element.style_paddingSmall]);
+    
+            return e;
+        },
+        generate: "<base>",
+        style: {
+            display: "inline-flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontFamily: "icons", // Uses the font provided by Breeze
+            fontWeight: "normal",
+            fontStyle: "normal",
+            textRendering: "auto",
+            lineHeight: "1",
+        },
+        style_standard : "<base>",
+        style_paddingSmall : "<base>",
+        element: "i",
+        handleStyle : true,
+    }, { // img
+        name: "img",
+        function: (info, element) => {
+            info = Merge.dicts({
+                src: "",
+                alt: "",
+                objectFit: "cover",
+                aspectRatio: "auto",
+            }, info);
+
+            Tester.dicts({
+                src : { type: "string", full: true },
+                alt : { type: "string", full: true },
+                objectFit : { type: "string", full: true },
+                aspectRatio : { type: "string", full: true },
+            }, info, `${element.name} Element: `);
+
+            let e = element.generate(info, element);
+            e.src = info.src;
+            e.alt = info.alt;
+            e.style.objectFit = info.objectFit;
+            e.style.aspectRatio = info.aspectRatio;
+
+            return e;
+        },
+        style: {
+            
+        },
+        generate: "<base>",
+        style_standard : "<base>",
+        element: "img",
+    }, 
 ];
 
 function init () {

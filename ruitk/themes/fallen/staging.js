@@ -1,6 +1,4 @@
 import { Merge } from "../../support/merger.js";
-import { Style } from "../../support/style.js";
-import { Convert } from "../../support/convert.js";
 import { Tester } from "../../support/tester.js";
 
 let elements = [
@@ -66,88 +64,6 @@ let elements = [
         },
         style_standard : "<base>",
         parseLevel : 1, 
-    }, { // icon
-        name: "icon",
-        function: (info, element) => {
-            info = Merge.dicts({
-                name: "globe", // Default icon name
-                size: "var(--fontSizeP1)",  // Default size
-                color: "var(--standout4)", // Default color
-            }, info);
-
-            info = Merge.dicts({
-                hoverColor : info.color,
-            }, info);
-
-            Tester.dicts({
-                name : { type: "string", full: true },
-                size : { type: "string", full: true },
-                color : { type: "string", full: true },
-                hoverColor : { type: "string", full: true },
-            }, info, `${element.name} Element: `);
-            
-            Style.fontFace({
-                fontFamily : "icons",
-                src : `url("https://cdn.kde.org/breeze-icons/icons.woff2") format("woff2");
-                    url("https://cdn.kde.org/breeze-icons/icons.tff") format("truetype");
-                    url("https://cdn.kde.org/breeze-icons/icons.svg") format("svg")`,
-                fontWeight : "normal",
-                fontStyle : "normal",
-            });
-    
-            let e = element.generate(info, element);
-            e.innerHTML = Convert.convert(info.name, "dashedCase")
-            e.style.fontSize = info.size;
-            e = Style.style(e, [{color : info.color, hover_color : info.hoverColor}, element.style, element.style_standard, element.style_paddingSmall]);
-    
-            return e;
-        },
-        generate: "<base>",
-        style: {
-            display: "inline-flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontFamily: "icons", // Uses the font provided by Breeze
-            fontWeight: "normal",
-            fontStyle: "normal",
-            textRendering: "auto",
-            lineHeight: "1",
-        },
-        style_standard : "<base>",
-        style_paddingSmall : "<base>",
-        element: "i",
-        handleStyle : true,
-    }, { // img
-        name: "img",
-        function: (info, element) => {
-            info = Merge.dicts({
-                src: "",
-                alt: "",
-                objectFit: "cover",
-                aspectRatio: "auto",
-            }, info);
-
-            Tester.dicts({
-                src : { type: "string", full: true },
-                alt : { type: "string", full: true },
-                objectFit : { type: "string", full: true },
-                aspectRatio : { type: "string", full: true },
-            }, info, `${element.name} Element: `);
-
-            let e = element.generate(info, element);
-            e.src = info.src;
-            e.alt = info.alt;
-            e.style.objectFit = info.objectFit;
-            e.style.aspectRatio = info.aspectRatio;
-
-            return e;
-        },
-        style: {
-            
-        },
-        generate: "<base>",
-        style_standard : "<base>",
-        element: "img",
     }, { // markdown
         name: "markdown",
         function: (info, element) => {
@@ -210,7 +126,6 @@ let elements = [
             }
             ruitkStr += closeAll(status);
             ruitkStr = ruitkStr.trim();
-            ruitkStr = ruitkStr.replaceAll(`\n`, "<br>");
             
             return element.makeElements(`<p1>{"content" : "${ruitkStr}"}`);
 

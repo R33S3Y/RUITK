@@ -118,7 +118,7 @@ export class TileWin {
                 return;
             }
             for (let item of content) {
-                p.appendChild(item);
+                p.append(item);
             }
         }
         let ids = [];
@@ -423,12 +423,11 @@ export class TileWin {
                     
                     if (content) {
                         for (let item of content) {
-                            if (typeof item === "string") {
-                                tile.innerHTML += item; 
-                            } else if (item instanceof HTMLElement) {
-                                tile.appendChild(item); 
+                            if (typeof item === "string" || item instanceof HTMLElement) {
+                                tile.append(item); 
                             } else {
-                                console.warn(`item (${item}) is not vaild`);
+                                console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
+                                console.debug(JSON.parse(JSON.stringify(item)));
                             }
                         }
                     }

@@ -33,7 +33,7 @@ The `staging.js` module serves as a testing and preparation area for new UI elem
 	 - `alt` (required): The alt text describing the image
 	 - `objectFit` (default: "cover"): Sets the [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) css property
 	 - `aspectRatio` (default: "auto"): Sets the [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio) css property
-- **Behaviour:**
+- **Behaviour:[README](tileWin/README.md)**
 	- Accepts the [Standard Inputs](Fallen%20Summary.md#Standard%20Inputs)
 
 ---

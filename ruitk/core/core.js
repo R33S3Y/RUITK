@@ -317,7 +317,7 @@ ${e.stack}`;
             return;
         }
         for (let item of content) {
-            p.appendChild(item);
+            p.append(item);
         }
     }
 }
