@@ -1,6 +1,6 @@
 // tools
 import { Ruitk } from "../../ruitk/core/ruitk.js";
-import "../../ruitk/core/abuse.js";
+import "../../ruitk/core/test.js";
 let ruitk = new Ruitk;
 // elements
 import { FallenBase } from "../../ruitk/themes/fallen/base.js";
@@ -13,7 +13,7 @@ ruitk.addElements(FallenTileWin.getElements());
 ruitk.addElements(FallenInput.getElements());
 ruitk.addElements(FallenStaging.getElements());
 
-ruitk.abuse();
+ruitk.isolationTest();
 
 ruitk.append("body", ruitk.makeElements(`
     <backgroundImg>{}

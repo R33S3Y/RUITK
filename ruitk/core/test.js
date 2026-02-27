@@ -1,11 +1,12 @@
 import { Ruitk } from "./core.js";
+import { Dependencies } from "./dependencies.js";
 import { Internal } from "./internal.js";
 
 /**
- * Runs some tests that may end up making a bit of a mess. 
- * @returns {boolean}
+ * Tests every element to see what happens when it is run with the minimum amount of dependancys
+ * @returns {true}
  */
-Ruitk.prototype.abuse = function () {
+Ruitk.prototype.isolationTest = function () {
 
     console.debug("abuse Function: Starting tests...");
     
@@ -30,7 +31,7 @@ Ruitk.prototype.abuse = function () {
             dependencyElements.push(temp);
         }
         for (let dependencyElement of dependencyElements) {
-            dependencyElement = Internal.resolveElementObject(dependencyElement, elements);
+            dependencyElement = Dependencies.resolveAll(dependencyElement, elements);
         }
 
         this.addElements(dependencyElements);

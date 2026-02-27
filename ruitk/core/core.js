@@ -1,4 +1,5 @@
 import { Tester } from "../support/tester.js";
+import { Dependencies } from "./dependencies.js";
 import { Internal } from "./internal.js";
 
 let logo = `      
@@ -58,7 +59,7 @@ export class Ruitk {
                     console.debug(JSON.parse(JSON.stringify(this.elements)));
                     return;
                 }
-                elementInfo = Internal.resolveElementObject(elementInfo, this.elements);
+                elementInfo = Dependencies.resolveAll(elementInfo, this.elements);
     
                 let dictStr = currentStr.slice(currentElement.dictStart, currentElement.dictEnd);
                 let dict;

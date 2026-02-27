@@ -218,42 +218,6 @@ export class Internal {
         }
     };
     /**
-     * Resolves all the [Referencing syntax](tileWin/doc/Making%20Elements.md#Other)
-     * @param {dict} element The element that you want to resolve
-     * @param {Array} elements The list of the elements that we resolve the element aganist
-     * @returns {dict} the resolved element.
-     */
-    static resolveElementObject(element, elements) {
-        let keys = Object.keys(element);
-        for (let key of keys) {
-            let regex = /^<[\w\d]+>$/;
-            if (typeof element[key] === "string" && regex.test(element[key])) {
-
-                let elementName = element[key];
-
-                elementName = elementName.replace("<", "");
-                elementName = elementName.replace(">", "");
-                
-                let foundElement = false;
-                for(let searchElement of elements) {
-                    if (searchElement.name === elementName) {
-                        foundElement = true;
-                        if (searchElement[key] === undefined) {
-                            console.error(`Dependency Error: key: "${key}" is undefined in Element: "${element.name}". \n Key is used as a depenancy for Element: "${element.name}"`);
-                        }
-                        element[key] = searchElement[key];
-                        break;
-                    }
-                }
-                if (foundElement === false) {
-                    console.error(`Dependency Error: Failed to find Element: "${elementName}" which is needed as a dependancy for Element: "${element.name}"`);
-                    element[key] = undefined;
-                }
-            }
-        }
-        return element;
-    };
-    /**
      * Gets a list of all dependacys that a elements needs.
      * @param {dict} element The element that you want to get the dependacys of.
      * @param {Array} elements  A list of all elements that exist. (For when the element references a differnet element dependacy list) [Referencing syntax](../../doc/Making%20Elements.md#Other)
