@@ -3,6 +3,7 @@ import { Internal } from "./internal.js";
 
 import { Merge } from "../support/merger.js";
 import { Dependencies } from "./dependencies.js";
+import { Tester } from "../support/tester.js";
 
 /**
  * Imports elements into RUITK
@@ -61,6 +62,16 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
             strictStyles : false,
             dependencies : [],
         }, element, []);
+
+        Tester.dicts({
+            name : { type: "string", full: true },
+            function : { type: ["string", "function"], full: true },
+            style : { type: ["string", "dict"], full: true },
+            handleStyle : { type: ["string", "boolean"], full: true },
+            parseLevel : { type: ["string", "number"], full: true },
+            strictStyles : { type: ["string", "boolean"], full: true },
+            dependencies : { type: ["string", "array"], full: true },
+        }, element, `addElements Function: `)
         this.elements.push(element);
     }
     console.debug(`addElements Function: Added ${elements.length - failCount} out of ${elements.length} new elements`);
@@ -78,7 +89,7 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
      */
     elements = JSON.parse(JSON.stringify(elements));
     for (let element of elements) {
-        Dependencies.getAll(element, Array.from( new Map(this.elements.concat(elements).map(dict => [dict.name, dict])).values()));
+        Dependencies.getAll(element, this.elements);
     }
 
     console.debug(`addElements Function: Finished dependency test`);

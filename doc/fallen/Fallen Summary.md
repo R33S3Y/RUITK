@@ -6,10 +6,10 @@
 	 - [Modules](Fallen%20Summary.md#Modules)
 
 # Project Goals
-Fallen is collection of premade configurable elements for [element.js](element.js.md) with a constant theme and assets.
+Fallen is collection of premade configurable elements for [ruitk.js](ruitk.js.md) with a constant theme and assets.
 Fallen has the following goals:
 1. To proved a constant theme that contains purple.
-2. To provide a pseudo standard for [element.js](element.js.md)
+2. To provide a pseudo standard for [ruitk.js](ruitk.js.md)
 3. To be easily expandable and rethemeable
 
 # Files
@@ -20,7 +20,7 @@ import { FallenBase } from "/ruitk/themes/fallen/base.js";
 import { FallenTileWin } from "/ruitk/themes/fallen/tileWin.js";
 import { FallenInput } from "/ruitk/themes/fallen/input.js";
 ```
- - The elements are returned by a function called `getElements` this function requires no args and can be feed straight into [element.js](../element.js.md). Eg:
+ - The elements are returned by a function called `getElements` this function requires no args and can be feed straight into [ruitk.js](ruitk.js.md). Eg:
 ```js
 elements.addElements(FallenBase.getElements());
 elements.addElements(FallenTileWin.getElements());
@@ -28,7 +28,7 @@ elements.addElements(FallenInput.getElements());
 ```
 # Elements
 ## Standard Inputs
-In Fallen there's a Element called `base` although if you do call it [element.js](element.js.md) will throw an error. So why does this exist? Well it's there to store the generate function of course! The generate function handles many of the default values built into most elements in Fallen. (think of it like a dependency) Here a list of them and there default values and what they do:
+In Fallen there's a Element called `base` although if you do call it [ruitk.js](ruitk.js.md) will throw an error. So why does this exist? Well it's there to store the generate function of course! The generate function handles many of the default values built into most elements in Fallen. (think of it like a dependency) Here a list of them and there default values and what they do:
  - `id` - Defaults to the Element name and the `element.elementCount` - sets `element.id`
  - `content` - Defaults to an empty string - anything you want appended including strings 
  - `x` - Defaults to an empty string - sets `element.style.left`

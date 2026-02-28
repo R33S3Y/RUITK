@@ -11,7 +11,6 @@ export class Tester {
      */
     static dicts(template, actual, prefix = "", suffix = "") {
 
-
         let issues = {};
 
         for (let key in template) {
@@ -33,15 +32,17 @@ export class Tester {
             if (!isTypes(actual[key], type)) {
                 issues[key] = `Key '${key}' is expected to be of type/s (${JSON.stringify(type).slice(1, -1)}), but got '${getType(actual[key])}'`;
             } else {
-                if (empty === false && !actual[key]) {
-                    issues[key] = `Key '${key}' cannot be empty`;
-                } else if (empty === true && actual[key]) {
-                    issues[key] = `Key '${key}' must be empty`;
-                }
-                if (full === false && actual[key]) {
-                    issues[key] = `Key '${key}' must not be full`;
-                } else if (full === true && !actual[key]) {
-                    issues[key] = `Key '${key}' must be full`;
+                if (isType(actual[key], "string")) {
+                    if (empty === false && !actual[key]) {
+                        issues[key] = `Key '${key}' cannot be empty`;
+                    } else if (empty === true && actual[key]) {
+                        issues[key] = `Key '${key}' must be empty`;
+                    }
+                    if (full === false && actual[key]) {
+                        issues[key] = `Key '${key}' must not be full`;
+                    } else if (full === true && !actual[key]) {
+                        issues[key] = `Key '${key}' must be full`;
+                    }
                 }
             }
         }

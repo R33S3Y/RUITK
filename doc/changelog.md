@@ -4,14 +4,19 @@
  - Renamed the `elements` folder to `core`
  - Renamed the `Elements` class to `Ruitk`
  - Renamed the `elements.js` file to `ruitk.js`
+ - Rewrote `dependencies` code 
+ - Added input filtering to `addElements`
  - Fixed a bug with `addElements` where it falsely said that it added negative elements. Eg: Added -55 out of 11 new elements
  - Added a option called `dependencies` to let RUITK any extra dependencies a element needs 
+ - Made a new file called `test.js` for testing Parts of RUITK
+ - Added a test called `isolationTest` to `test.js`
 #### documentation Changes
  - Added a documentation page for security issues
  - Added documentation for the `markdown` element
  - Added JSdoc to lots of functions
 #### support changes
 - Fixed bug with `null` type in `tester.js`
+- Fixed bug with `full` and `empty` in `tester.js`
 #### Fallen Changes
  - Removed the `callback` option from the `button` element in `input.js`. You should use `onClick` instead
  - Renamed the `callback` option from the `submit` element in `input.js` to `onSubmit`
@@ -180,7 +185,7 @@
  - Added Error Checking for element dependencies 
  - Added a new flag called `strictStyles` to control the `style_` feature
 #### documentation Changes
- - updated the documentation for [element.js](element.js.md)
+ - updated the documentation for [ruitk.js](ruitk.js.md)
  - added new file called [Making Elements](Making%20Elements.md) just for explaining the process of making elements
 # 0.8
 
@@ -197,7 +202,7 @@
 #### Fallen Changes
  - Added a tile called `tilewin` in the `tilewin.js` file 
 #### documentation Changes
- - updated the documentation for [element.js](element.js.md)
+ - updated the documentation for [ruitk.js](ruitk.js.md)
 #### Merger.js  Changes
  - Fixed a bug that was causing it to delete HTML elements
 ## 0.7.2
@@ -284,7 +289,7 @@
 - Changed fallen to use the `declare` function provided in [V0.5](changelog.md#0.5)
 #### element.js Changes
  - Rewrite of `makeElements` for better nesting handling
- - Added the a function called `append`  - [Documention](element.js.md#Append)
+ - Added the a function called `append`  - [Documention](ruitk.js.md#Append)
  - Added a error check of undefined names
 #### style.js changes
  - Fixed a issue with the `declare` not adding new lines afterward
@@ -359,12 +364,12 @@
 #### documentation Changes 
  - Added a new folder called support in doc to hold all support libs documentation
  - Added a guide on what makes a support library a support library in [support Library's Explanation](support%20Library's%20Explanation.md)
- - Added documentation about [MakeElements](element.js.md#MakeElements) and [AddElements](element.js.md#AddElements) from element.js
+ - Added documentation about [MakeElements](ruitk.js.md#MakeElements) and [AddElements](ruitk.js.md#AddElements) from element.js
 #### Fallen
  - Removed the `backgroundTile` element
  - Renamed the element `text1` to `p1`
 #### element.js Changes
- - Added the ability to in a element reference parts of other elements [documentation here](element.js.md####Notes)
+ - Added the ability to in a element reference parts of other elements [documentation here](ruitk.js.md####Notes)
 #### tile.js Changes
  - Changed the append function to be able to also accept lists of elements
 # 0.2
