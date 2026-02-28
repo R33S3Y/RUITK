@@ -66,7 +66,7 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        dependencys : "<radio>",
+        dependencies : "<radio>",
         element : "input",
         handleStyle : true,
         parseLevel : 1,
@@ -248,7 +248,7 @@ let elements = [
         style_standard : "<base>",
         style_paddingMedium : "<base>",
         style_border : "<base>",
-        dependencys : [ "h3", "grid" ],
+        dependencies : [ "h3", "grid" ],
         handleStyle : true,
         
         
@@ -260,7 +260,7 @@ let elements = [
         makeOneBox : "<radio>",
         inputTest : "<radio>",
         makeGridandTitle : "<radio>",
-        dependencys : "<radio>",
+        dependencies : "<radio>",
         parseLevel : 1,
 
         generate : "<base>",
@@ -293,7 +293,7 @@ let elements = [
         name : "dropdown",
         inputTest : "<radio>",
         makeGridandTitle : "<radio>",
-        dependencys : "<radio>",
+        dependencies : "<radio>",
         function : (info, element) => {
             info = element.inputTest(info, element);
 
@@ -346,7 +346,7 @@ let elements = [
         name : "combo",
         inputTest : "<radio>",
         makeGridandTitle : "<radio>",
-        dependencys : "<radio>",
+        dependencies : "<radio>",
         function : (info, element) => {
             info = element.inputTest(info, element);
 
@@ -435,7 +435,7 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        dependencys : [ "p1" ],
+        dependencies : [ "p1" ],
         element : "button"
     },
     {   // submit
@@ -531,7 +531,7 @@ let elements = [
         style_standard : "<base>",
         style_border : "<base>",
         style_paddingMedium : "<base>",
-        dependencys : [ "p1" ],
+        dependencies : [ "p1" ],
         element : "button"
     }
 ];

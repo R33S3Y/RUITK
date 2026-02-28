@@ -21,15 +21,7 @@ Ruitk.prototype.isolationTest = function () {
         let element = elements[i];
         console.debug(`abuse Function: Testing "${element.name}"`);
         
-        let dependencyNames = Internal.getElementDependencysList(element, elements);
-        let dependencyElements = [];
-        for (let dependencyName of dependencyNames) {
-            let temp = Internal.getElementByName(dependencyName, elements);
-            if (temp === null) {
-                continue;
-            }
-            dependencyElements.push(temp);
-        }
+        let dependencyElements = Dependencies.getAll(element, elements);
         for (let dependencyElement of dependencyElements) {
             dependencyElement = Dependencies.resolveAll(dependencyElement, elements);
         }

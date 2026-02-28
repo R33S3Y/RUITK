@@ -217,59 +217,5 @@ export class Internal {
             return null;
         }
     };
-    /**
-     * Gets a list of all dependacys that a elements needs.
-     * @param {dict} element The element that you want to get the dependacys of.
-     * @param {Array} elements  A list of all elements that exist. (For when the element references a differnet element dependacy list) [Referencing syntax](../../doc/Making%20Elements.md#Other)
-     * @returns {string} Gets a list of all elements that the element depends on.
-     */
-    static getElementDependencysList(element, elements) {
-        let dependencys = [];
-        for (let key of Object.keys(element)) {
-            if (typeof element[key] === "string" && /^<[\w\d]+>$/.test(element[key])) {
-
-                let elementName = element[key];
-
-                elementName = elementName.replace("<", "");
-                elementName = elementName.replace(">", "");
-
-                dependencys.push(elementName);
-            }
-        }
-        if (typeof element.dependencys === "string" && /^<[\w\d]+>$/.test(element.dependencys)) {
-            let elementName = element.dependencys;
-
-            elementName = elementName.replace("<", "");
-            elementName = elementName.replace(">", "");
-
-            let dependencyRef = this.getElementByName(elementName, elements);
-
-            if (dependencyRef === null) {
-                console.warn(`Dependency Error: cannot resolve/find element: "${elementName}". Returning incomplete list of dependacys`);
-                return [...new Set(dependencys)];
-            }
-            dependencys = dependencys.concat(dependencyRef.dependencys);
-
-            return [...new Set(dependencys)];
-        }
-        if (Array.isArray(element.dependencys)) {
-            dependencys = dependencys.concat(element.dependencys);
-        }
-
-        return [...new Set(dependencys)];
-    }
-    /**
-     * Gets the element by a name. This is really shouldnt exist.
-     * @param {string} name Name of element
-     * @param {Array} elements Array of elements
-     * @returns {(dict|null)} Element or null if no element was found
-     */
-    static getElementByName(name, elements) {
-        for (let element of elements) {
-            if (element.name === name) return element;
-        }
-    
-        return null;
-    }
 }
 

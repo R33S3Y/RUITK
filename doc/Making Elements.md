@@ -46,7 +46,7 @@ info = {
 ```
  - `style_*`  - If a dict key starts with `style_` it will be treated just like the style key this can be disabled by setting `strictStyles` to true. When their are conflicting style options the `style` key will take priority.
  - `strictStyles` - Defaults to false - is used to disable the `style_` functionality. 
- - `dependencys` - Defaults to a empty array. Lets RUITK know of any extra elements your element needs (Eg: anything made via the [MakeElements](element.js.md#MakeElements) function inside the element)
+ - `dependencies` - Defaults to a empty array. Lets RUITK know of any extra elements your element needs (Eg: anything made via the [MakeElements](element.js.md#MakeElements) function inside the element)
 ### Function Args
 The function will have 2 args inputted: 
 #### Info

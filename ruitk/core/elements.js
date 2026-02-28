@@ -2,6 +2,7 @@ import { Ruitk } from "./core.js";
 import { Internal } from "./internal.js";
 
 import { Merge } from "../support/merger.js";
+import { Dependencies } from "./dependencies.js";
 
 /**
  * Imports elements into RUITK
@@ -58,7 +59,7 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
             handleStyle : false,
             parseLevel : 2,
             strictStyles : false,
-            dependencys : [],
+            dependencies : [],
         }, element, []);
         this.elements.push(element);
     }
@@ -77,13 +78,7 @@ Ruitk.prototype.addElements = function ( elements = [] ) {
      */
     elements = JSON.parse(JSON.stringify(elements));
     for (let element of elements) {
-        let depenancyList = Internal.getElementDependencysList(element, this.elements);
-        for (let depenancy of depenancyList) {
-            let depenancyElement = Internal.getElementByName(depenancy, this.elements);
-            if ( depenancyElement === null ) {
-                console.error(`Dependency Error: Failed to find Element: "${depenancy}" which is needed as a dependancy for Element: "${element.name}"`);
-            }
-        }
+        Dependencies.getAll(element, Array.from( new Map(this.elements.concat(elements).map(dict => [dict.name, dict])).values()));
     }
 
     console.debug(`addElements Function: Finished dependency test`);
