@@ -55,7 +55,7 @@ export class Dependencies {
             if (searchElement.name === elementName) {
                 foundElement = true;
                 if (searchElement[key] === undefined) {
-                    console.error(`Dependencies.resolve function: key: "${key}" is undefined in Element: "${element.name}". \n Key is used as a depenancy for Element: "${element.name}"`);
+                    console.error(`Dependencies.resolve function: key: "${key}" is undefined in Element: "${element.name}". It is used as a depenancy for Element: "${element.name}"`);
                 }
                 element[key] = searchElement[key];
                 break;
@@ -118,7 +118,7 @@ export class Dependencies {
                     let loopStart = 0;
                     for (let i = 0; i < higherDependencies.length; i++) {
                         if (higherDependencies[i].name === depenancy.name) {
-                            loopStart = i;
+                            loopStart = i+1;
                             break;
                         }
                     }
@@ -169,7 +169,6 @@ export class Dependencies {
             dependencyNames.push(elementName);
         }
 
-
         if (Array.isArray(element.dependencies)) {
             dependencyNames = dependencyNames.concat(element.dependencies);
         }
@@ -179,6 +178,7 @@ export class Dependencies {
             return getElementByNames(dependencyNames, elements);
         }
         if (regex.test(element.dependencies) === false) {
+            dependencyNames.push(element.dependencies);
             return getElementByNames(dependencyNames, elements);
         }
 
@@ -189,9 +189,8 @@ export class Dependencies {
 
         let dependencyRef = getElementByName(elementName, elements);
 
-        if (dependencyRef === null) {
-            console.warn(`Dependencies.get function: cannot resolve/find element: "${elementName}". Returning incomplete list of dependencies`);
-            return getElementByNames(dependencyNames, elements);
+        if (dependencyRef === null) { 
+            return getElementByNames(dependencyNames, elements); // Logging will happen in this function
         }
         dependencyNames = dependencyNames.concat(dependencyRef.dependencies);
 
@@ -220,9 +219,9 @@ function getElementByName(name, elements) {
 
 /**
  * Gets a list of elements by a name.
- * @param {Array} names Name of element
+ * @param {Array} names Names of elements to searchs
  * @param {Array} elements Array of elements
- * @returns {(dict|null)} Element or null if no element was found
+ * @returns {dict} Element or null if no element was found
  */
 function getElementByNames(names, elements) {
     Tester.dicts({ 
@@ -238,7 +237,7 @@ function getElementByNames(names, elements) {
         let depenancy = getElementByName(searchDependency, elements);
 
         if (depenancy === null) {
-            console.warn(`Dependencies.get function: cannot resolve/find element: "${searchDependency}". Returning incomplete list of dependencies`);
+            console.error(`Dependencies.get function: cannot resolve/find element: "${searchDependency}". Returning incomplete list of dependencies`);
             continue;
         }
 

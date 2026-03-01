@@ -13,7 +13,8 @@ ruitk.addElements(FallenTileWin.getElements());
 ruitk.addElements(FallenInput.getElements());
 ruitk.addElements(FallenStaging.getElements());
 
-ruitk.isolationTest();
+ruitk.minimalDependacyTest();
+ruitk.dependencyHandlingTest();
 
 ruitk.append("body", ruitk.makeElements(`
     <backgroundImg>{}
