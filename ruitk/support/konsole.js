@@ -1,5 +1,5 @@
 
-export class Console {
+export class Konsole {
     static types = ["debug", "log", "info", "warn", "error"];
     static original = {};
     static store = {};
@@ -7,7 +7,7 @@ export class Console {
 
     static take() {
         if (Object.keys(this.original).length !== 0) {
-            console.error("Console.take function: Console is already taken. Please free console before taking again");
+            console.error("Konsole.take function: Konsole is already taken. Please free Konsole before taking again");
             return;
         }
         

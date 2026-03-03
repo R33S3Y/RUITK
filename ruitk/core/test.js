@@ -1,5 +1,6 @@
-import { Console } from "../support/console.js";
-import { Ruitk } from "./core.js";
+import { Konsole } from "../support/konsole.js";
+import { FallenBase } from "../themes/fallen/base.js";
+import { Ruitk } from "./ruitk.js";
 import { Dependencies } from "./dependencies.js";
 
 /**
@@ -62,11 +63,11 @@ Ruitk.prototype.dependencyHandlingTest = function () {
             if (condition) {
                 console.debug(`dependencyHandlingTest Function: ${testName} passed.`);
             } else {
-                Console.dump();
+                Konsole.dump();
                 console.error(`dependencyHandlingTest Function: ${testName} failed.`);
             }
         } catch {
-            Console.dump();
+            Konsole.dump();
             console.error(`dependencyHandlingTest Function: ${testName} failed.`);
         }
     }
@@ -104,12 +105,12 @@ Ruitk.prototype.dependencyHandlingTest = function () {
         name : "a",
         thing1 : "<b>",
     }];
-    Console.take();
-    Console.muted = true;
+    Konsole.take();
+    Konsole.muted = true;
     result = Dependencies.resolve(elements[0], "thing1", elements);
-    Console.free();
-    assert("resolve to missing element test", (Console.store.error[0].includes(`Failed to find Element: "b"`)));
-    Console.clear();
+    Konsole.free();
+    assert("resolve to missing element test", (Konsole.store.error[0].includes(`Failed to find Element: "b"`)));
+    Konsole.clear();
 
     elements = [{
         name : "a",
@@ -117,12 +118,12 @@ Ruitk.prototype.dependencyHandlingTest = function () {
     }, {
         name : "b",
     }];
-    Console.take();
-    Console.muted = true;
+    Konsole.take();
+    Konsole.muted = true;
     result = Dependencies.resolve(elements[0], "thing1", elements);
-    Console.free();
-    assert("resolve to undefined key test", (Console.store.error[0].includes(`key: "thing1" is undefined in Element: "a".`)));
-    Console.clear();
+    Konsole.free();
+    assert("resolve to undefined key test", (Konsole.store.error[0].includes(`key: "thing1" is undefined in Element: "a".`)));
+    Konsole.clear();
 
 
 
@@ -193,12 +194,12 @@ Ruitk.prototype.dependencyHandlingTest = function () {
         name : "b",
         dependencies : ["a"],
     }];
-    Console.take();
-    Console.muted = true;
+    Konsole.take();
+    Konsole.muted = true;
     result = Dependencies.getAll(elements[0], elements);
-    Console.free();
-    assert("direct circular dependencies test", (Console.store.warn[0].includes("circular")));
-    Console.clear();
+    Konsole.free();
+    assert("direct circular dependencies test", (Konsole.store.warn[0].includes("circular")));
+    Konsole.clear();
 
     elements = [{
         name : "a",
@@ -210,12 +211,12 @@ Ruitk.prototype.dependencyHandlingTest = function () {
         name : "c",
         dependencies : ["a"],
     }];
-    Console.take();
-    Console.muted = true;
+    Konsole.take();
+    Konsole.muted = true;
     result = Dependencies.getAll(elements[0], elements);
-    Console.free();
-    assert("indirect circular dependencies test", Console.store.warn[0].includes("circular"));
-    Console.clear();
+    Konsole.free();
+    assert("indirect circular dependencies test", Konsole.store.warn[0].includes("circular"));
+    Konsole.clear();
 
     elements = [{
         name : "a",
@@ -233,12 +234,58 @@ Ruitk.prototype.dependencyHandlingTest = function () {
         name : "a",
         dependencies : "<b>",
     }];
-    Console.take();
-    Console.muted = true;
+    Konsole.take();
+    Konsole.muted = true;
     result = Dependencies.getAll(elements[0], elements);
-    Console.free();
-    assert("referencing a missing element while getting dependencies test", Console.store.error[0].includes(`cannot resolve/find element: "b". Returning incomplete list of dependencies`));
-    Console.clear();
+    Konsole.free();
+    assert("referencing a missing element while getting dependencies test", Konsole.store.error[0].includes(`cannot resolve/find element: "b". Returning incomplete list of dependencies`));
+    Konsole.clear();
 
     console.debug("dependencyHandlingTest Function: Finshed tests");
 };
+
+Ruitk.prototype.xssTest = function () {
+    console.debug("xssTest Function: Starting tests...");
+
+    Konsole.take();
+    Konsole.muted = true;
+
+    let ruitk = new Ruitk;
+    ruitk.addElements(FallenBase.getElements());
+
+    Konsole.clear();
+    Konsole.free();
+
+    let injections = [
+        `<img src=x onerror=console.error('xssTest_Function:_XSS_attack_1_succeeded') ><img src=x onerror=alert('xssTest_Function:_XSS_attack_1_succeeded') >`,
+        `Hi :3", onAny : () => { console.error("xssTest Function: XSS attack 2 succeeded"); alert("xssTest Function: XSS attack 2 succeeded"); }, blank : "`,
+    ];
+    for (let i = 0; i < injections.length; i++) {
+        let injection = injections[i];
+        Konsole.take();
+        Konsole.muted = true;
+        let error = false;
+
+        try {
+            ruitk.append("body", ruitk.makeElements(`
+                <p1>{content : "${injection}"}
+            `));
+        } catch {
+            Konsole.dump();
+            console.error(`xssTest Function: Injection: ${i+1} of ${injections.length} "${injection}" Ruitk has errored out. Test failed`);
+            error = true;
+        }
+        for(let error of Konsole.store.error) {
+            if (error.includes("XSS")) {
+                error = true;
+                console.error(`xssTest Function: Injection: ${i+1} of ${injections.length} "${injection}" XSS injection has succeed. Test failed`);
+            }
+        }
+        Konsole.free();
+        Konsole.clear();
+        if (error === false) {
+            console.debug(`xssTest Function: Injection: ${i+1} of ${injections.length} "${injection}" XSS injection code has not run yet. Test Passed`);
+        }
+    }
+    console.debug("xssTest Function: Finshed tests");
+}

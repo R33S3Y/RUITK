@@ -4,17 +4,20 @@
  - Renamed the `elements` folder to `core`
  - Renamed the `Elements` class to `Ruitk`
  - Renamed the `elements.js` file to `ruitk.js`
+ -  Made a new file called `test.js` for testing Parts of RUITK
+ - Added a test called `xssTest` to `test.js`
+ - Added a test called `isolationTest` to `test.js`
  - Rewrote `dependencies` code 
  - Added input filtering to `addElements`
  - Fixed a bug with `addElements` where it falsely said that it added negative elements. Eg: Added -55 out of 11 new elements
  - Added a option called `dependencies` to let RUITK any extra dependencies a element needs 
- - Made a new file called `test.js` for testing Parts of RUITK
- - Added a test called `isolationTest` to `test.js`
+#### Security
+ - Fixed a XSS vulnerability relating to HTML injection 
 #### documentation Changes
- - Added a documentation page for security issues
  - Added documentation for the `markdown` element
  - Added JSdoc to lots of functions
 #### support changes
+ - Added a new support lib called `Konsole.js` for getting info from the console
 - Fixed bug with `null` type in `tester.js`
 - Fixed bug with `full` and `empty` in `tester.js`
 #### Fallen Changes
