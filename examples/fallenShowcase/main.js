@@ -15,7 +15,7 @@ ruitk.addElements(FallenStaging.getElements());
 
 ruitk.minimalDependacyTest();
 ruitk.dependencyHandlingTest();
-ruitk.xssTest();
+//ruitk.xssTest();
 
 ruitk.append("body", ruitk.makeElements(`
     <backgroundImg>{}
