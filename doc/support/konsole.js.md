@@ -21,7 +21,7 @@ Resets / clears all data in the store
 Dumps everything in the store to the console even if it is muted
 
 
-# Vararibles
+# Variables
 ### `Konsole.store`
 
 Where everything logged to the console get stored. 

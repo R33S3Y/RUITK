@@ -92,3 +92,8 @@ value = Type.squashType(value);
 Type.isType(value, "stringObject"); // False
 Type.isType(value, "stringPrimitive"); // True
 ```
+
+# Variables
+## `Type.supportedTypes`
+
+A list of all supported types

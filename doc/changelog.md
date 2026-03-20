@@ -17,7 +17,8 @@
  - Added documentation for the `markdown` element
  - Added JSdoc to lots of functions
 #### support changes
- - Added a new support lib called `Konsole.js` for getting info from the console
+ - Added a new support lib called `Konsole.js` for getting info from the console. ([docs](konsole.js.md))
+ - Added a new support lib called `type.js` for handling type. ([docs](type.js.md))
 - Fixed bug with `null` type in `tester.js`
 - Fixed bug with `full` and `empty` in `tester.js`
 #### Fallen Changes

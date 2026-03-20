@@ -1,5 +1,39 @@
 export class Type {
     /**
+     * List of all supported Types
+     */
+    static supportedTypes = [
+        "null",
+        "nullPrimitive",
+        "undefined",
+        "undefinedPrimitive",
+        "bigInt",
+        "bigIntPrimitive",
+        "symbol",
+        "symbolPrimitve",
+        "string",
+        "stringPrimitive",
+        "stringObject",
+        "number",
+        "numberPrimitive",
+        "numberObject",
+        "boolean",
+        "booleanPrimitive",
+        "booleanObject",
+        "array",
+        "arrayObject",
+        "map",
+        "mapObject",
+        "set",
+        "setObject",
+        "htmlelement",
+        "htmlElementObject",
+        "dict",
+        "dictObject",
+        "function",
+        "functionObject",
+    ];
+    /**
      * Gets the type of the value of the type you want
      * @param {*} value the Value you want to find the type of
      * @returns {string} the type of the value
@@ -47,14 +81,30 @@ export class Type {
         }
     }
     /**
-     * Tests if a vaulue is a type.
-     * @param {*} value The vaulue to test.
-     * @param {*} type The type to test agianest 
-     * @returns {boolean} If the vaulue is the type.
+     * Tests if the value is a type.
+     * @param {*} value The value to test.
+     * @param {String} type The type to test against 
+     * @returns {boolean} If the value is the type.
      */
     static isType(value, type) {
+        if (!Type.supportedTypes.includes(type)) {
+            console.error(`Type.istype Function: Type: "${type}" is not supported`);
+            return false;
+        }
         if (Type.getType(value).includes(type)) {
             return true;
+        }
+        return false;
+    }
+    /**
+     * Tests if the value is any type.
+     * @param {*} value the value you want to find the types from
+     * @param {Array} types a array of types to test against. If anyone passes then the whole function will pass
+     * @returns {boolean} 
+     */
+    static isTypes (value, types) {
+        for (let type of types) {
+            if (Type.isType(value, type) === true) return true;
         }
         return false;
     }
