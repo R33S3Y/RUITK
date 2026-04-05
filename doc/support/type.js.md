@@ -93,6 +93,31 @@ Type.isType(value, "stringObject"); // False
 Type.isType(value, "stringPrimitive"); // True
 ```
 
+
+## `Type.squashRecursively(value)`
+
+Searches an array or dict recursively and calling `Type.squashType` on everything.
+
+Inputs:
+ - `value` - `*` - The value to squash.
+
+Returns:
+`*` - The squashed value.
+
+Example: 
+```js
+let value = [ new String("Value") ];
+
+Type.isType(value[0], "stringObject"); // True
+Type.isType(value[0], "stringPrimitive"); // False
+
+value = Type.squashRecursively(value);
+
+Type.isType(value[0], "stringObject"); // False
+Type.isType(value[0], "stringPrimitive"); // True
+```
+
+
 # Variables
 ## `Type.supportedTypes`
 

@@ -122,4 +122,18 @@ export class Type {
         }
         return value.valueOf();
     }
+    static squashRecursively (value) {
+
+        value = Type.squashType(value);
+
+        if (!Type.isType(value, [ "array", "dict" ])) {
+            return value;
+        }
+        
+        for (let i in value) {
+            value[i] = Type.squashRecursively();
+        }
+
+        return value;
+    }
 }
