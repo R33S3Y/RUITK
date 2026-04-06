@@ -1,53 +1,44 @@
-`tester.js` is a utility class for validating object structures and types against a predefined template.
+`tester.js` is a utility class for validating input to a function. 
+
+**Note:** this file relies heavly on [type.js](./type.js.md) and its type defentions. 
 
 ---
 
 # Tester
 
-### `Tester.dicts(template, actual, prefix = "", suffix = "")`
+### `Tester.test(template, actual, prefix = "", suffix = "", testTemplate = true)`
 
-`template` is the object defining the required keys, their expected types, and additional constraints.  
-`actual` is the object to validate against the `template`.  
-`prefix` and `suffix` are optional strings that will be appended/prepended to error messages for custom formatting.
+Finds and then logs and returns, issues about actual.  
 
-**Features**:
+| Value/Input  | Type                        | Decription                                                                                                                                                                         |
+| ------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `template`   | `array` \| `dict`           | is the object defining the required keys, their expected types, and additional constraints.                                                                                        |
+| `actual`     | `array` \| `dict`           | is the object to validate against the `template`.                                                                                                                                  |
+| `prefix`     | Optional `string`           | A string that will be added as a prefix to issues found with actual - for custom formating.                                                                                        |
+| `suffix`     | Optional `string`           | A string that will be added as a suffix to issues found with actual - for custom forrmating.                                                                                       |
+| testTemplate | Optional `booleanPrimitive` | By default Tester.test will run a good amount of tests on template. If for whatever reason you what Tester.test to not do this (Most likely preformance), You can set it to false. |
+**Note:** that the prefix and suffix will not be added for issues where you used `Tester.test` wrong. As that is something you will need to fix. (not the user of your function)
 
-- Ensures all keys in the `template` exist in the `actual` object.
-- Validates that values in the `actual` object match the types specified in the `template`.
-- Supports additional constraints, such as:
-    - `empty`: Whether a value is allowed to be empty (`true`/`false`).
-    - `full`: Whether a value must be present (`true`/`false`).
-- Returns `null` if the `actual` object is valid, or an object detailing any issues.
-- Logs all errors found to console
+**Returns:** 
+`array` | `null` - Returns a array of all issues. if their are no issues it will return  `null`
 
-**Template Format**: The `template` object should define expected keys with their types and constraints. Example:
-```js
-const template = {
-	// key1 must be number
-	key1: "number",
-	// key 2 must be full str
-    key2: { type: "string", empty: false }, 
-    // key 3 must be full str or num
-    key3: { type: ["number", "string"], full: true }, };
-```
+**Template Format**: The `template` object should define  all expected values.  Each value in the template have the following options: 
+
+| Option        | Type                                                                  | Decription                                                                                                                                                        |
+| ------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`        | `array` \|  `stringprimative`                                         | the type/s of the value (all types in the array must be a  `stringprimative`) (See [Supported types - type.js](type.js.md#Supported%20types) for a list of types) |
+| `full`        | `booleanPrimitive` \|  `undefined` (AKA Optional)                     | if  true or false, it will make sure that the thing has at least got a length of one. (This only works on `array`, `dict` and `string` types for now )            |
+| `length`      | `number`  \|  `undefined` (AKA Optional)                              | if set to a number it will make sure that the thing is that length. (This  also only works on `array`, `dict` and `string` types for now )                        |
+| `template`    | `array` \| `dict` \| `stringprimative` \|  `undefined` (AKA Optional) | A nested template to be apply to the nested objects in the value (Only works on `arrays` or `dicts`)                                                              |
+| `templateAll` | `dict` \|  `stringprimative` \|  `undefined` (AKA Optional)           | The template to be apply to all nested objects in value (Only works on `arrays` or `dicts`)                                                                       |
+| `templateIf`  | `dict` \|  `stringprimative` \|  `undefined` (AKA Optional)           | If the value is a certen type test the value apply these extra rules                                                                                              |
 
 
-Supported Types:
- - "string"
- - "number"
- - "boolean"
- - "array"
- - "dict"
- - "map"
- - "set"
- - "HTMLElement"
- - "function"
- - "null"
 
 Example:
 ```js
 let template = {
-    name: { type: "string", empty: false },
+    name: { type: "string", full: true },
     age: "number",
     preferences: { type: ["array", "dict"], full: true },
 };
@@ -58,7 +49,7 @@ let actual = {
     preferences: ["reading", "gaming"],
 };
 
-let result = Tester.dicts(template, actual);
+let result = Tester.test(template, actual);
 
 console.log(result); // null (no issues)
 ```

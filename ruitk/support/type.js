@@ -26,7 +26,7 @@ export class Type {
         "mapObject",
         "set",
         "setObject",
-        "htmlelement",
+        "htmlElement",
         "htmlElementObject",
         "dict",
         "dictObject",
@@ -122,6 +122,11 @@ export class Type {
         }
         return value.valueOf();
     }
+    /**
+     * Searches an array or dict recursively and calling `Type.squashType` on everything.
+     * @param {*} value The value to squash
+     * @returns {*} The squashed value
+     */
     static squashRecursively (value) {
 
         value = Type.squashType(value);
