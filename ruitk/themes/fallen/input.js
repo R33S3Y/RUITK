@@ -4,540 +4,540 @@ import { Convert } from "../../support/convert.js";
 import { Tester } from "../../support/tester.js";
 
 let elements = [
-    {   // textbox
-        name : "textbox",
-        function : (info, element) => {
-            info = Merge.dicts({
-                id : `"${element.name}-${element.elementCount}"`,
-                idRoot : "''",
-                question : "''",
-                placeholder : "'Enter text'",
-                form : "'default'",
-                type : "'text'",
-                spellcheck : "false",
-            }, info);
-            
-            info = Merge.dicts({
-                name : `"${Convert.convert(element.parse(info.question), "camelCase")}"`,
-            }, info);
+  {   // textbox
+    name: "textbox",
+    function: (info, element) => {
+      info = Merge.dicts({
+        id: `"${element.name}-${element.elementCount}"`,
+        idRoot: "''",
+        question: "''",
+        placeholder: "'Enter text'",
+        form: "'default'",
+        type: "'text'",
+        spellcheck: "false",
+      }, info);
 
-            info.id = element.parse(info.id);
-            info.question = element.parse(info.question);
-            info.placeholder = element.parse(info.placeholder);
-            info.form = element.parse(info.form);
-            info.type = element.parse(info.type);
-            info.spellcheck = element.parse(info.spellcheck);
-            info.name = element.parse(info.name);
+      info = Merge.dicts({
+        name: `"${Convert.convert(element.parse(info.question), "camelCase")}"`,
+      }, info);
 
-            Tester.dicts({
-                id : { type: "string", full: true },
-                idRoot : "string",
-                form : { type: "string", full: true },
-                placeholder : "string",
-                type : "string",
-                spellcheck : "boolean",
-                question : "string",
-                name :  { type: "string", full: true },
-            }, info, `${element.name} Element: `);
+      info.id = element.parse(info.id);
+      info.question = element.parse(info.question);
+      info.placeholder = element.parse(info.placeholder);
+      info.form = element.parse(info.form);
+      info.type = element.parse(info.type);
+      info.spellcheck = element.parse(info.spellcheck);
+      info.name = element.parse(info.name);
 
-            let form = element.makeGridandTitle(info, element);
-            let e = element.generate({ id : info.id, w : "calc(100% - (var(--marginMedium) + var(--paddingMedium)))"}, element);
-            e.type = "text";
-            e.placeholder = info.placeholder;
-            e.name = info.name;
-            e.type = info.type;
-            e.style.gridRow = 2;
-            e.spellcheck = `${info.spellcheck}`;
-            e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+      Tester.dicts({
+        id: { type: "string", full: true },
+        idRoot: "string",
+        form: { type: "string", full: true },
+        placeholder: "string",
+        type: "string",
+        spellcheck: "boolean",
+        question: "string",
+        name: { type: "string", full: true },
+      }, info, `${element.name} Element: `);
 
-            e.dataset.form = info.form;
-            e.dataset.type = element.name;
-            form.appendChild(e);
-            return form;
-        },
-        makeGridandTitle : "<radio>",
-        generate : "<base>",
-        style : {
-            color : "var(--accent1)",
-            hover_color : "var(--accent2)",
-            backgroundColor : "var(--background2)",
-            fontSize : "var(--fontSizeP2)",
-        },
-        style_standard : "<base>",
-        style_border : "<base>",
-        style_paddingMedium : "<base>",
-        dependencies : "<radio>",
-        element : "input",
-        handleStyle : true,
-        parseLevel : 1,
+      let form = element.makeGridandTitle(info, element);
+      let e = element.generate({ id: info.id, w: "calc(100% - (var(--marginMedium) + var(--paddingMedium)))" }, element);
+      e.type = "text";
+      e.placeholder = info.placeholder;
+      e.name = info.name;
+      e.type = info.type;
+      e.style.gridRow = 2;
+      e.spellcheck = `${info.spellcheck}`;
+      e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+
+      e.dataset.form = info.form;
+      e.dataset.type = element.name;
+      form.appendChild(e);
+      return form;
     },
-    {   // radio
-        name : "radio",
-        function : (info, element) => {
-            // input testing
-            info = element.inputTest(info, element);
-
-            let form = element.makeGridandTitle(info, element);
-
-            // form
-            let i = 0;
-            for (let option of info.options) {
-                let fakeInfo = {};
-                fakeInfo.id = `box-${element.elementCount}-${i}`;
-                fakeInfo.content = option;
-                fakeInfo.name = info.name;
-                fakeInfo.value = info.values[i];
-                i ++;
-
-                let box = element.makeOneBox(fakeInfo, element, i+2);
-
-                if (Array.isArray(box) === false) {
-                    box = [box];
-                }
-                for (let item of box) {
-                    if (typeof item === "string" || item instanceof HTMLElement) {
-                        form.append(item); 
-                    } else {
-                        console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
-                        console.debug(JSON.parse(JSON.stringify(item)));
-                    }
-                }
-            }
-            form.dataset.form = info.form;
-            form.dataset.type = element.name;
-            return form;
-        },
-        makeOneBox : (info, element, r = 2) => {
-            info = Merge.dicts({
-                name : "",
-                value : "",
-                c : 1,
-                r : r,
-            }, info);
-
-            let checkbox = document.createElement("input");
-            checkbox.type = element.name; // yes I know this is a cheeky work around but this function is only going to be used for radio and checkbox
-            checkbox.name = info.name;
-            checkbox.value = info.value;
-            
-            checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
-
-            if (info.content) {
-                if (typeof info.content === "string") {
-                    info.content = element.makeElements(`<p1>{ content : "${info.content}"}`)
-                }
-                if (Array.isArray(info.content) === false) {
-                    info.content = [info.content];
-                } // no need for content handling other than orgnization as is handle in the generate function
-            } else {
-                info.content = [];
-            }
-            info.content.unshift(checkbox);
-
-
-            let e = element.generate(info, element);
-            e = Style.style(e, element.style.label);
-
-            return e;
-        },
-        inputTest : (info, element) => {
-            // input testing
-            info = Merge.dicts({
-                id : `"${element.name}-${element.elementCount}"`,
-                idRoot : "",
-                question : "",
-                form : '"default"',
-                options : "[]",
-            }, info);
-
-
-            info.question = element.parse(info.question);
-            info.form = element.parse(info.form);
-            info.options = element.parse(info.options);
-            if (info.name) {
-                info.name = element.parse(info.name);
-            }
-            if (info.values) {
-                info.values = element.parse(info.values);   
-            }
-
-            let values = [];
-            for (let option of info.options) {
-                values.push(Convert.convert(option, "camelCase"));
-            }
-            info = Merge.dicts({
-                name : Convert.convert(info.question, "camelCase"),
-                values : values,
-            }, info, []);
-
-            Tester.dicts({
-                id : { type: "string", full: true },
-                idRoot : "string",
-                question : "string",
-                options : { type: "array", full: true },
-                name :  { type: "string", full: true },
-                values : { type: "array", full: true },
-                form : { type: "string", full: true },
-            }, info, `${element.name} Element: `);
-
-            return info;
-        },
-        makeGridandTitle : (info, element) => {
-            let gridInfo = JSON.parse(JSON.stringify(info));
-            delete gridInfo.question;
-            delete gridInfo.options;
-            delete gridInfo.name;
-            delete gridInfo.values;
-            delete gridInfo.list;
-            delete gridInfo.form;
-            delete gridInfo.placeholder;
-            delete gridInfo.spellcheck;
-            delete gridInfo.type;
-
-            gridInfo.id = gridInfo.idRoot;
-            gridInfo = Merge.dicts({
-                justifyContent : "'flex-start'",
-                cTemplate : "'1fr auto'",
-            }, gridInfo, []);
-            
-            let gridInfoStr = "";
-            for (let key in gridInfo) {
-                gridInfoStr += `${key} : ${gridInfo[key]}, `;
-            }
-            let form = element.makeElements(`<grid>{ ${gridInfoStr} }`);
-
-            // question handling
-            if (typeof info.question === "string" && info.question !== "") {
-                info.question = element.makeElements(`<h3>{ content : "${info.question}", c : 1, r : 1 }`);
-            }
-            if (Array.isArray(info.question) === false) {
-                info.question = [info.question];
-            }
-            for (let item of info.question) {
-                if (typeof item === "string" || item instanceof HTMLElement) {
-                    form.append(item); 
-                } else {
-                    console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
-                    console.debug(JSON.parse(JSON.stringify(item)));
-                }
-            }
-            return form;
-        },
-        parseLevel : 1,
-
-        generate : "<base>",
-        element : "label",
-
-        style : {
-            box : {
-                appearance: "none",
-
-                cursor : "pointer",
-
-                background : "var(--background2)",
-                hover_background : "var(--background3)",
-                
-                checked_background : "var(--accent1)",
-                checked_hover_background : "var(--accent2)",
-            },
-            label : {
-                display : "inline-flex",
-                alignItems : "center",
-            },
-        },
-        style_standard : "<base>",
-        style_paddingMedium : "<base>",
-        style_border : "<base>",
-        dependencies : [ "h3", "grid" ],
-        handleStyle : true,
-        
-        
+    makeGridandTitle: "<radio>",
+    generate: "<base>",
+    style: {
+      color: "var(--accent1)",
+      hover_color: "var(--accent2)",
+      backgroundColor: "var(--background2)",
+      fontSize: "var(--fontSizeP2)",
     },
-    {   // checkbox
-        name : "checkbox",
+    style_standard: "<base>",
+    style_border: "<base>",
+    style_paddingMedium: "<base>",
+    dependencies: "<radio>",
+    element: "input",
+    handleStyle: true,
+    parseLevel: 1,
+  },
+  {   // radio
+    name: "radio",
+    function: (info, element) => {
+      // input testing
+      info = element.inputTest(info, element);
 
-        function : "<radio>",
-        makeOneBox : "<radio>",
-        inputTest : "<radio>",
-        makeGridandTitle : "<radio>",
-        dependencies : "<radio>",
-        parseLevel : 1,
+      let form = element.makeGridandTitle(info, element);
 
-        generate : "<base>",
-        element : "label",
-        
-        style : {
-            box : {
-                appearance: "none",
+      // form
+      let i = 0;
+      for (let option of info.options) {
+        let fakeInfo = {};
+        fakeInfo.id = `box-${element.elementCount}-${i}`;
+        fakeInfo.content = option;
+        fakeInfo.name = info.name;
+        fakeInfo.value = info.values[i];
+        i++;
 
-                cursor : "pointer",
-                borderRadius : "0",
+        let box = element.makeOneBox(fakeInfo, element, i + 2);
 
-                background : "var(--background2)",
-                hover_background : "var(--background3)",
-                
-                checked_background : "var(--accent1)",
-                checked_hover_background : "var(--accent2)",
-            },
-            label : {
-                display : "inline-flex",
-                alignItems : "center",
-            },
-        },
-        style_standard : "<base>",
-        style_paddingMedium : "<base>",
-        style_border : "<base>",
-        handleStyle : true,
+        if (Array.isArray(box) === false) {
+          box = [box];
+        }
+        for (let item of box) {
+          if (typeof item === "string" || item instanceof HTMLElement) {
+            form.append(item);
+          } else {
+            console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
+            console.debug(JSON.parse(JSON.stringify(item)));
+          }
+        }
+      }
+      form.dataset.form = info.form;
+      form.dataset.type = element.name;
+      return form;
     },
-    {   // dropdown
-        name : "dropdown",
-        inputTest : "<radio>",
-        makeGridandTitle : "<radio>",
-        dependencies : "<radio>",
-        function : (info, element) => {
-            info = element.inputTest(info, element);
+    makeOneBox: (info, element, r = 2) => {
+      info = Merge.dicts({
+        name: "",
+        value: "",
+        c: 1,
+        r: r,
+      }, info);
 
-            let form = element.makeGridandTitle(info, element);
+      let checkbox = document.createElement("input");
+      checkbox.type = element.name; // yes I know this is a cheeky work around but this function is only going to be used for radio and checkbox
+      checkbox.name = info.name;
+      checkbox.value = info.value;
 
-            let e = document.createElement("select");
-            e.id = `${element.name}-${element.elementCount}`;
-            e.name = info.name;
-            e.style.gridRow = 2;
-            e.dataset.form = info.form;
-            e.dataset.type = element.name;
-            e.style.width = "calc(100% - (var(--marginMedium) + var(--paddingMedium)))";
+      checkbox = Style.style(checkbox, [element.style.box, element.style_standard, element.style_paddingMedium, element.style_border]);
 
-            e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+      if (info.content) {
+        if (typeof info.content === "string") {
+          info.content = element.makeElements(`<p1>{ content : "${info.content}"}`)
+        }
+        if (Array.isArray(info.content) === false) {
+          info.content = [info.content];
+        } // no need for content handling other than orgnization as is handle in the generate function
+      } else {
+        info.content = [];
+      }
+      info.content.unshift(checkbox);
 
-            for (let i = 0; i < info.options.length; i++) {
-                let option = info.options[i];
-                let value = info.values[i];
-                
-                let optionElement = document.createElement("option");
-                optionElement.value = value;
-                optionElement.textContent = option;
-                optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
-                e.appendChild(optionElement);
-            }
-            
-            form.appendChild(e);
-            return form;
-        },
-        parseLevel : 1,
 
-        generate : "<base>",
-        element : "select",
+      let e = element.generate(info, element);
+      e = Style.style(e, element.style.label);
 
-        style : {
-            color : "var(--accent1)",
-            hover_color : "var(--accent2)",
-            backgroundColor : "var(--background2)",
-            fontSize : "var(--fontSizeP2)",
-        },
-        style_option : {
-            
-        },
-        style_standard : "<base>",
-        style_border : "<base>",
-        style_paddingMedium : "<base>",
-        handleStyle : true,
+      return e;
     },
-    {   // combo box
-        name : "combo",
-        inputTest : "<radio>",
-        makeGridandTitle : "<radio>",
-        dependencies : "<radio>",
-        function : (info, element) => {
-            info = element.inputTest(info, element);
+    inputTest: (info, element) => {
+      // input testing
+      info = Merge.dicts({
+        id: `"${element.name}-${element.elementCount}"`,
+        idRoot: "",
+        question: "",
+        form: '"default"',
+        options: "[]",
+      }, info);
 
-            info = Merge.dicts({
-                list : `"${element.name}-datalist-${element.elementCount}"`,
-            }, info);
-            info.list = element.parse(info.list);
-            Tester.dicts({
-                list : { type: "string", full: true },
-            }, info, `${element.name} Element: `);
 
-            let form = element.makeGridandTitle(info, element);
+      info.question = element.parse(info.question);
+      info.form = element.parse(info.form);
+      info.options = element.parse(info.options);
+      if (info.name) {
+        info.name = element.parse(info.name);
+      }
+      if (info.values) {
+        info.values = element.parse(info.values);
+      }
 
-            let e = element.generate({ id : info.id, w : "calc(100% - (var(--marginMedium) + var(--paddingMedium)))"}, element);
-            e.name = info.name;
-            e.style.gridRow = 2;
-            e.dataset.form = info.form;
-            e.dataset.type = element.name;
-            e.type = "text";
-            e.setAttribute("list", info.list);
+      let values = [];
+      for (let option of info.options) {
+        values.push(Convert.convert(option, "camelCase"));
+      }
+      info = Merge.dicts({
+        name: Convert.convert(info.question, "camelCase"),
+        values: values,
+      }, info, []);
 
-            e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+      Tester.dicts({
+        id: { type: "string", full: true },
+        idRoot: "string",
+        question: "string",
+        options: { type: "array", full: true },
+        name: { type: "string", full: true },
+        values: { type: "array", full: true },
+        form: { type: "string", full: true },
+      }, info, `${element.name} Element: `);
 
-            let dataList = document.createElement("datalist");
-            dataList.id = info.list;
-            for (let i = 0; i < info.options.length; i++) {
-                let option = info.options[i];
-                let value = info.values[i];
-                
-                let optionElement = document.createElement("option");
-                optionElement.value = value;
-                optionElement.textContent = option;
-                optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
-                dataList.appendChild(optionElement);
-            }
-            
-            e.appendChild(dataList);
-            
-            form.appendChild(e);
-
-            return form;
-        },
-        parseLevel : 1,
-        
-        generate : "<base>",
-        element : "input",
-
-        style : "<dropdown>",
-        style_option : "<dropdown>",
-        style_standard : "<base>",
-        style_border : "<base>",
-        style_paddingMedium : "<base>",
-        handleStyle : true,
+      return info;
     },
-    {   // button
-        name : "button",
-        function : (info, element) => {
-            info = Merge.dicts({
-                onClick : () => {console.warn("submit Element: missing onClick function")},
-                content : "Submit",
-            }, info);
+    makeGridandTitle: (info, element) => {
+      let gridInfo = JSON.parse(JSON.stringify(info));
+      delete gridInfo.question;
+      delete gridInfo.options;
+      delete gridInfo.name;
+      delete gridInfo.values;
+      delete gridInfo.list;
+      delete gridInfo.form;
+      delete gridInfo.placeholder;
+      delete gridInfo.spellcheck;
+      delete gridInfo.type;
 
-            Tester.dicts({
-                onClick : "function",
-                content : ["string", "HTMLElement"],
-            }, info, `${element.name} Element: `);
+      gridInfo.id = gridInfo.idRoot;
+      gridInfo = Merge.dicts({
+        justifyContent: "'flex-start'",
+        cTemplate: "'1fr auto'",
+      }, gridInfo, []);
+
+      let gridInfoStr = "";
+      for (let key in gridInfo) {
+        gridInfoStr += `${key} : ${gridInfo[key]}, `;
+      }
+      let form = element.makeElements(`<grid>{ ${gridInfoStr} }`);
+
+      // question handling
+      if (typeof info.question === "string" && info.question !== "") {
+        info.question = element.makeElements(`<h3>{ content : "${info.question}", c : 1, r : 1 }`);
+      }
+      if (Array.isArray(info.question) === false) {
+        info.question = [info.question];
+      }
+      for (let item of info.question) {
+        if (typeof item === "string" || item instanceof HTMLElement) {
+          form.append(item);
+        } else {
+          console.warn(`${element.name} Element: item in info.content is not str or HTML element. dumping item to debug`);
+          console.debug(JSON.parse(JSON.stringify(item)));
+        }
+      }
+      return form;
+    },
+    parseLevel: 1,
+
+    generate: "<base>",
+    element: "label",
+
+    style: {
+      box: {
+        appearance: "none",
+
+        cursor: "pointer",
+
+        background: "var(--background2)",
+        hover_background: "var(--background3)",
+
+        checked_background: "var(--accent1)",
+        checked_hover_background: "var(--accent2)",
+      },
+      label: {
+        display: "inline-flex",
+        alignItems: "center",
+      },
+    },
+    style_standard: "<base>",
+    style_paddingMedium: "<base>",
+    style_border: "<base>",
+    dependencies: ["h3", "grid"],
+    handleStyle: true,
 
 
-            if (info.content) {
-                if (typeof info.content === "string") {
-                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+  },
+  {   // checkbox
+    name: "checkbox",
+
+    function: "<radio>",
+    makeOneBox: "<radio>",
+    inputTest: "<radio>",
+    makeGridandTitle: "<radio>",
+    dependencies: "<radio>",
+    parseLevel: 1,
+
+    generate: "<base>",
+    element: "label",
+
+    style: {
+      box: {
+        appearance: "none",
+
+        cursor: "pointer",
+        borderRadius: "0",
+
+        background: "var(--background2)",
+        hover_background: "var(--background3)",
+
+        checked_background: "var(--accent1)",
+        checked_hover_background: "var(--accent2)",
+      },
+      label: {
+        display: "inline-flex",
+        alignItems: "center",
+      },
+    },
+    style_standard: "<base>",
+    style_paddingMedium: "<base>",
+    style_border: "<base>",
+    handleStyle: true,
+  },
+  {   // dropdown
+    name: "dropdown",
+    inputTest: "<radio>",
+    makeGridandTitle: "<radio>",
+    dependencies: "<radio>",
+    function: (info, element) => {
+      info = element.inputTest(info, element);
+
+      let form = element.makeGridandTitle(info, element);
+
+      let e = document.createElement("select");
+      e.id = `${element.name}-${element.elementCount}`;
+      e.name = info.name;
+      e.style.gridRow = 2;
+      e.dataset.form = info.form;
+      e.dataset.type = element.name;
+      e.style.width = "calc(100% - (var(--marginMedium) + var(--paddingMedium)))";
+
+      e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+
+      for (let i = 0; i < info.options.length; i++) {
+        let option = info.options[i];
+        let value = info.values[i];
+
+        let optionElement = document.createElement("option");
+        optionElement.value = value;
+        optionElement.textContent = option;
+        optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
+        e.appendChild(optionElement);
+      }
+
+      form.appendChild(e);
+      return form;
+    },
+    parseLevel: 1,
+
+    generate: "<base>",
+    element: "select",
+
+    style: {
+      color: "var(--accent1)",
+      hover_color: "var(--accent2)",
+      backgroundColor: "var(--background2)",
+      fontSize: "var(--fontSizeP2)",
+    },
+    style_option: {
+
+    },
+    style_standard: "<base>",
+    style_border: "<base>",
+    style_paddingMedium: "<base>",
+    handleStyle: true,
+  },
+  {   // combo box
+    name: "combo",
+    inputTest: "<radio>",
+    makeGridandTitle: "<radio>",
+    dependencies: "<radio>",
+    function: (info, element) => {
+      info = element.inputTest(info, element);
+
+      info = Merge.dicts({
+        list: `"${element.name}-datalist-${element.elementCount}"`,
+      }, info);
+      info.list = element.parse(info.list);
+      Tester.dicts({
+        list: { type: "string", full: true },
+      }, info, `${element.name} Element: `);
+
+      let form = element.makeGridandTitle(info, element);
+
+      let e = element.generate({ id: info.id, w: "calc(100% - (var(--marginMedium) + var(--paddingMedium)))" }, element);
+      e.name = info.name;
+      e.style.gridRow = 2;
+      e.dataset.form = info.form;
+      e.dataset.type = element.name;
+      e.type = "text";
+      e.setAttribute("list", info.list);
+
+      e = Style.style(e, [element.style, element.style_standard, element.style_border, element.style_paddingMedium]);
+
+      let dataList = document.createElement("datalist");
+      dataList.id = info.list;
+      for (let i = 0; i < info.options.length; i++) {
+        let option = info.options[i];
+        let value = info.values[i];
+
+        let optionElement = document.createElement("option");
+        optionElement.value = value;
+        optionElement.textContent = option;
+        optionElement = Style.style(optionElement, [element.style_option, element.style_standard]);
+        dataList.appendChild(optionElement);
+      }
+
+      e.appendChild(dataList);
+
+      form.appendChild(e);
+
+      return form;
+    },
+    parseLevel: 1,
+
+    generate: "<base>",
+    element: "input",
+
+    style: "<dropdown>",
+    style_option: "<dropdown>",
+    style_standard: "<base>",
+    style_border: "<base>",
+    style_paddingMedium: "<base>",
+    handleStyle: true,
+  },
+  {   // button
+    name: "button",
+    function: (info, element) => {
+      info = Merge.dicts({
+        onClick: () => { console.warn("submit Element: missing onClick function") },
+        content: "Submit",
+      }, info);
+
+      Tester.dicts({
+        onClick: "function",
+        content: ["string", "HTMLElement"],
+      }, info, `${element.name} Element: `);
+
+
+      if (info.content) {
+        if (typeof info.content === "string") {
+          info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+        }
+        if (Array.isArray(info.content) === false) {
+          info.content = [info.content];
+        } // no need for content handling other than orgnization as is handle in the generate function
+      } else {
+        info.content = [];
+      }
+
+      let e = element.generate(info, element);
+
+      return e;
+    },
+    generate: "<base>",
+    style: "<submit>",
+    style_standard: "<base>",
+    style_border: "<base>",
+    style_paddingMedium: "<base>",
+    dependencies: ["p1"],
+    element: "button"
+  },
+  {   // submit
+    name: "submit",
+    function: (info, element) => {
+      info = Merge.dicts({
+        onSubmit: () => { console.warn("submit Element: missing onSubmit function") },
+        content: "Submit",
+        form: "default",
+      }, info);
+
+      Tester.dicts({
+        onSubmit: "function",
+        content: ["string", "HTMLElement"],
+        form: "string",
+      }, info, `${element.name} Element: `);
+
+      let callback = () => {
+        let formElements = document.querySelectorAll(`[data-form="${info.form}"]`);
+        let output = {};
+        for (let formElement of formElements) {
+          switch (formElement.dataset.type) {
+            case "textbox":
+            case "dropdown":
+            case "combo":
+              if (output[formElement.name] !== undefined) {
+                console.error(`submit Element: "${formElement.name}" is not a unique name`);
+                break;
+              }
+              output[formElement.name] = formElement.value;
+              break;
+            case "radio":
+              let radioButtons = formElement.querySelectorAll('input[type="radio"]');
+              for (let radio of radioButtons) {
+                if (radio.checked) {
+                  output[radio.name] = radio.value;
+                  break;
                 }
-                if (Array.isArray(info.content) === false) {
-                    info.content = [info.content];
-                } // no need for content handling other than orgnization as is handle in the generate function
-            } else {
-                info.content = [];
-            }
+              }
+              break;
+            case "checkbox":
+              let checkboxName = "";
+              let checkboxValue = [];
+              let checkboxButtons = formElement.querySelectorAll('input[type="checkbox"]');
+              for (let checkbox of checkboxButtons) {
+                if (checkbox.checked) {
+                  checkboxName = checkbox.name;
+                  checkboxValue.push(checkbox.value);
+                }
+              }
+              output[checkboxName] = checkboxValue;
+              break;
+            case "submit":
+              break;
+            default:
+              console.error("submit Element: Could not find type of form element");
+              console.debug(formElement);
+          }
+        }
+        info.onSubmit(output);
+      };
 
-            let e = element.generate(info, element);
+      if (info.content) {
+        if (typeof info.content === "string") {
+          info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
+        }
+        if (Array.isArray(info.content) === false) {
+          info.content = [info.content];
+        } // no need for content handling other than orgnization as is handle in the generate function
+      } else {
+        info.content = [];
+      }
 
-            return e;
-        },
-        generate : "<base>",
-        style : "<submit>",
-        style_standard : "<base>",
-        style_border : "<base>",
-        style_paddingMedium : "<base>",
-        dependencies : [ "p1" ],
-        element : "button"
+      let e = element.generate(info, element);
+      e.dataset.form = info.form;
+      e.dataset.type = element.name;
+
+      e.addEventListener('click', callback);
+
+      return e;
     },
-    {   // submit
-        name : "submit",
-        function : (info, element) => {
-            info = Merge.dicts({
-                onSubmit : () => {console.warn("submit Element: missing onSubmit function")},
-                content : "Submit",
-                form : "default",
-            }, info);
+    generate: "<base>",
+    style: {
+      color: "var(--standout4)",
+      cursor: "pointer",
 
-            Tester.dicts({
-                onSubmit : "function",
-                content : ["string", "HTMLElement"],
-                form : "string",
-            }, info, `${element.name} Element: `);
+      backgroundColor: "var(--accent1)",
+      hover_backgroundColor: "var(--accent2)",
 
-            let callback = () => {
-                let formElements = document.querySelectorAll(`[data-form="${info.form}"]`);
-                let output = {};
-                for (let formElement of formElements) {
-                    switch (formElement.dataset.type) {
-                        case "textbox":
-                        case "dropdown":
-                        case "combo":
-                            if (output[formElement.name] !== undefined) {
-                                console.error(`submit Element: "${formElement.name}" is not a unique name`);
-                                break;
-                            }
-                            output[formElement.name] = formElement.value;
-                            break;
-                        case "radio":
-                            let radioButtons = formElement.querySelectorAll('input[type="radio"]');
-                            for (let radio of radioButtons) {
-                                if (radio.checked) {
-                                    output[radio.name] = radio.value;
-                                    break;
-                                }
-                            }
-                            break;
-                        case "checkbox":
-                            let checkboxName = "";
-                            let checkboxValue = [];
-                            let checkboxButtons = formElement.querySelectorAll('input[type="checkbox"]');
-                            for (let checkbox of checkboxButtons) {
-                                if (checkbox.checked) {
-                                    checkboxName = checkbox.name;
-                                    checkboxValue.push(checkbox.value);
-                                }
-                            }
-                            output[checkboxName] = checkboxValue;
-                            break;
-                        case "submit":
-                            break;
-                        default:
-                            console.error("submit Element: Could not find type of form element");
-                            console.debug(formElement);
-                    }
-                }
-                info.onSubmit(output);
-            };
-
-            if (info.content) {
-                if (typeof info.content === "string") {
-                    info.content = element.makeElements(`<p1>{ content : "${info.content}" }`)
-                }
-                if (Array.isArray(info.content) === false) {
-                    info.content = [info.content];
-                } // no need for content handling other than orgnization as is handle in the generate function
-            } else {
-                info.content = [];
-            }
-
-            let e = element.generate(info, element);
-            e.dataset.form = info.form;
-            e.dataset.type = element.name;
-            
-            e.addEventListener('click', callback);
-
-            return e;
-        },
-        generate : "<base>",
-        style : {
-            color : "var(--standout4)",
-            cursor : "pointer",
-
-            backgroundColor : "var(--accent1)",
-            hover_backgroundColor : "var(--accent2)",
-
-            paddingTop : "var(--paddingSmall)",
-            paddingBottom : "var(--paddingSmall)",
-        },
-        style_standard : "<base>",
-        style_border : "<base>",
-        style_paddingMedium : "<base>",
-        dependencies : [ "p1" ],
-        element : "button"
-    }
+      paddingTop: "var(--paddingSmall)",
+      paddingBottom: "var(--paddingSmall)",
+    },
+    style_standard: "<base>",
+    style_border: "<base>",
+    style_paddingMedium: "<base>",
+    dependencies: ["p1"],
+    element: "button"
+  }
 ];
 
 export class FallenInput {
-    static getElements() {
-        return elements;
-    }
+  static getElements() {
+    return elements;
+  }
 }

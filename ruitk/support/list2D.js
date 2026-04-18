@@ -1,23 +1,22 @@
 
 export class List2D {
-    static create(xLength, yLength, value) {
-        let list = [];
-        for (let x = 0; x < xLength; x++) {
-            list.push(Array(yLength).fill(value));
-        }
-        return JSON.parse(JSON.stringify(list));
+  static create(xLength, yLength, value) {
+    let list = [];
+    for (let x = 0; x < xLength; x++) {
+      list.push(Array(yLength).fill(value));
     }
+    return JSON.parse(JSON.stringify(list));
+  }
 
-    static getListY(x, list) {
-        return list[x];
-    }
+  static getListY(x, list) {
+    return list[x];
+  }
 
-    static getListX(y, list) {
-        let values = [];
-        for (let x in list) {
-            values.push(list[x][y]);
-        }
-        return values;
+  static getListX(y, list) {
+    let values = [];
+    for (let x in list) {
+      values.push(list[x][y]);
     }
+    return values;
+  }
 }
-
