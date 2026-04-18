@@ -7,6 +7,7 @@
 ### `Konsole.take()`
 
 Takes control of the console and starts storing things sent to the console.
+
 ### `Konsole.free()`
 
 Frees the console and puts things back to how they were,
@@ -20,18 +21,20 @@ Resets / clears all data in the store
 
 Dumps everything in the store to the console even if it is muted
 
-
 # Variables
+
 ### `Konsole.store`
 
-Where everything logged to the console get stored. 
+Where everything logged to the console get stored.
 
 Things in the store get split based on the type of logging . Eg: `Konsole.store.error`
 
 ### `Konsole.muted`
 
 Enable / disables the actual logging to console. Defaults to `false`.
+
 # Example
+
 ```js
 Konsole.take();
 

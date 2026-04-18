@@ -1,6 +1,6 @@
 `tileWin.js` is a tool for making "tiles" that a positioned like windows in tilling window managers (Eg: [Hyprland](https://hyprland.org/)).
 
-This functionally was/is presented in as a class full of functions as it predates [ruitk.js](ruitk.js.md) but has since been wrapped into the element as a part of the [Fallen Theme](fallen/Fallen%20Summary.md) and is stored in the  [tilewin.js](fallen/tilewin.js.md) module
+This functionally was/is presented in as a class full of functions as it predates [ruitk.js](ruitk.js.md) but has since been wrapped into the element as a part of the [Fallen Theme](fallen/Fallen%20Summary.md) and is stored in the [tilewin.js](fallen/tilewin.js.md) module
 
 # TileWin Class Documentation
 
@@ -10,24 +10,24 @@ The `TileWin` class creates and manages a flexible grid layout where tiles are d
 
 - [Constructor](#constructor)
 - [Methods](#methods)
-    - [updateConfig](#updateconfig)
-    - [updateStyle](#updatestyle)
-    - [createTile](#createtile)
-    - [update](#update)
-    - [generate](#generate)
-    - [append](#append)
-    - [remove](#remove)
-    - [destroy](#destroy)
-    - [destroyAll](#destroyall)
-    - [move](#`move(name,%20xSnap.%20ySnap)`)
-    - [info](#`info(name)`)
+  - [updateConfig](#updateconfig)
+  - [updateStyle](#updatestyle)
+  - [createTile](#createtile)
+  - [update](#update)
+  - [generate](#generate)
+  - [append](#append)
+  - [remove](#remove)
+  - [destroy](#destroy)
+  - [destroyAll](#destroyall)
+  - [move](<#`move(name,%20xSnap.%20ySnap)`>)
+  - [info](<#`info(name)`>)
 
 ---
 
 ## Constructor
 
 ```js
-constructor()
+constructor();
 ```
 
 The constructor initializes the `TileWin` instance and sets the default configuration and style. It prepares a set of default options, such as tile configuration, animation settings, and grid layout, and applies the default styles to the grid.
@@ -48,7 +48,7 @@ The constructor initializes the `TileWin` instance and sets the default configur
 ### `updateConfig(config)`
 
 ```js
-updateConfig(config = {})
+updateConfig((config = {}));
 ```
 
 Updates the configuration of the `TileWin` instance. It merges the new configuration with the default values and recalculates the necessary properties based on the updated configuration.
@@ -56,7 +56,7 @@ Updates the configuration of the `TileWin` instance. It merges the new configura
 #### Parameters:
 
 - `config`: Object containing the configuration to be updated.
-	- `tileRowType`: Array defining tile types ("fixed" or "scroll").
+  - `tileRowType`: Array defining tile types ("fixed" or "scroll").
     - `tilePercentageX`: Array defining the horizontal percentage distribution of tiles.
     - `tilePercentageY`: Array defining the vertical percentage distribution of tiles.
     - `tileDirection`: Direction of grid layout ("x" or "y").
@@ -68,12 +68,13 @@ Updates the configuration of the `TileWin` instance. It merges the new configura
 ### `updateStyle(style)`
 
 ```js
-updateStyle(style = {})
+updateStyle((style = {}));
 ```
 
 Updates the style properties of the grid and tiles, including scrollable and fixed tiles. It merges new style properties with the current ones and applies them to the elements.
 
 #### Parameters:
+
 - `style`: Object containing style properties to be updated. Follows the [Syntax of style.js](support/style.js.md#Syntax)
 
 ---
@@ -81,12 +82,13 @@ Updates the style properties of the grid and tiles, including scrollable and fix
 ### `createTile(name, xSnap, ySnap, content = null)`
 
 ```js
-createTile(name, xSnap, ySnap, content = null)
+createTile(name, xSnap, ySnap, (content = null));
 ```
 
 Creates a new tile with the specified properties and adds it to the grid. It validates the tile's name and position to ensure there are no conflicts.
 
 #### Parameters:
+
 - `name`: Unique identifier for the tile.
 - `xSnap`: X-axis position for the tile. (Must be int and 0 or greater)
 - `ySnap`: Y-axis position for the tile. (Must be int and 0 or greater)
@@ -97,7 +99,7 @@ Creates a new tile with the specified properties and adds it to the grid. It val
 ### `update()`
 
 ```js
-update()
+update();
 ```
 
 Updates the grid layout and appends the tiles to the parent element as specified in the configuration. It manages the rendering of the tiles based on their type (fixed or scrollable).
@@ -107,7 +109,7 @@ Updates the grid layout and appends the tiles to the parent element as specified
 ### `generate()`
 
 ```js
-generate()
+generate();
 ```
 
 Generates the layout and grid structure based on the configuration and the current tiles. It handles snapping, resizing, and positioning of tiles. The function supports both horizontal and vertical grid directions, calculating tile positions and sizes accordingly.
@@ -117,12 +119,13 @@ Generates the layout and grid structure based on the configuration and the curre
 ### `append(name, content)`
 
 ```js
-append(name, content)
+append(name, content);
 ```
 
 Appends new content to a tile specified by its name. If the tile already contains content, the new content is added to it.
 
 #### Parameters:
+
 - `name`: The name of the tile to append content to.
 - `content`: The content to be appended (can be a string or an array of elements).
 
@@ -131,7 +134,7 @@ Appends new content to a tile specified by its name. If the tile already contain
 ### `remove(name)`
 
 ```js
-remove(name)
+remove(name);
 ```
 
 Removes content from a tile specified by its name. It resets the tile's content to an empty state.
@@ -145,7 +148,7 @@ Removes content from a tile specified by its name. It resets the tile's content 
 ### `destroy(name)`
 
 ```js
-destroy(name)
+destroy(name);
 ```
 
 Marks a tile for destruction, causing it to be removed from the grid during the next update.
@@ -159,7 +162,7 @@ Marks a tile for destruction, causing it to be removed from the grid during the 
 ### `destroyAll()`
 
 ```js
-destroyAll()
+destroyAll();
 ```
 
 Marks all tiles for destruction, causing them to be removed from the grid during the next update.
@@ -169,27 +172,33 @@ Marks all tiles for destruction, causing them to be removed from the grid during
 ### `move(name, xSnap. ySnap)`
 
 ```js
-move(name, xSnap, ySnap)
+move(name, xSnap, ySnap);
 ```
 
 Moves a tile.
+
 #### Parameters:
+
 - `name`: The name of the tile to be moved.
 - `xSnap`: X-axis position for the tile. (Must be int and 0 or greater)
 - `ySnap`: Y-axis position for the tile. (Must be int and 0 or greater)
 
-- - -
+---
 
 ### `info(name)`
 
 ```js
-info(name = "")
+info((name = ""));
 ```
 
 Outputs info on a tile. If no tile name is inputted it will list all tile names
+
 #### Parameters:
+
 - `name`: The name of the tile to be moved. (optional)
+
 #### Output Examples:
+
 ```js
 
 console.log(tileWin.info());
@@ -217,6 +226,7 @@ console.log(tileWin.info("tile2"));
 
 
 ```
+
 ## Usage Example
 
 ```js
@@ -224,7 +234,7 @@ let tileWin = new TileWin();
 
 // Update configuration
 tileWin.updateConfig({
-  tileRowType : ["scroll", "scroll", "fixed"],
+  tileRowType: ["scroll", "scroll", "fixed"],
   tilePercentageX: [25, 25, 25, 25],
   tilePercentageY: [50, 50],
 });

@@ -18,72 +18,69 @@ ruitk.dependencyHandlingTest();
 //ruitk.xssTest();
 
 ruitk.append("body", ruitk.makeElements(`
-    <backgroundImg>{}
-    <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"], tilePercentageX : [30,30,40]}, "tiles" : [
-        {    
-            "name" : "TextWindow",
-            "x" : 1,
-            "y" : 1,
-            "content" : 
-                <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto auto auto auto" , "content" : 
-                    <h1>{"content" : "h1 h1 h1 h1 h1 h1 h1", "c" : "1", "r" : "1"}
-                    <h2>{"content" : "h2 h2 h2 h2 h2 h2 h2", "c" : "1", "r" : "2"}
-                    <h3>{"content" : "h3 h3 h3 h3 h3 h3 h3", "c" : "1", "r" : "3"}
+  <backgroundImg>{}
+  <tileWin>{"config" : {"tileRowType" : ["scroll", "scroll", "fixed"], tilePercentageX : [30,30,40]}, "tiles" : [
+    {
+      "name" : "TextWindow",
+      "x" : 1,
+      "y" : 1,
+      "content" :
+        <grid>{"cTemplate" : "auto auto", "rTemplate" : "auto auto auto auto auto auto" , "content" :
+          <h1>{"content" : "h1 h1 h1 h1 h1 h1 h1", "c" : "1", "r" : "1"}
+          <h2>{"content" : "h2 h2 h2 h2 h2 h2 h2", "c" : "1", "r" : "2"}
+          <h3>{"content" : "h3 h3 h3 h3 h3 h3 h3", "c" : "1", "r" : "3"}
 
-                    <p1>{"content" : "p1 p1 p1 p1 p1 p1 p1", "c" : "1", "r" : "4"}
-                    <p2>{"content" : "p2 p2 p2 p2 p2 p2 p2", "c" : "1", "r" : "5"}
-                    <p3>{"content" : "p3 p3 p3 p3 p3 p3 p3", "c" : "1", "r" : "6"}
-                    
-                    <h1>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "1"}
-                    <h2>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "2"}
-                    <h3>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "3"}
+          <p1>{"content" : "p1 p1 p1 p1 p1 p1 p1", "c" : "1", "r" : "4"}
+          <p2>{"content" : "p2 p2 p2 p2 p2 p2 p2", "c" : "1", "r" : "5"}
+          <p3>{"content" : "p3 p3 p3 p3 p3 p3 p3", "c" : "1", "r" : "6"}
 
-                    <p1>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "4"}
-                    <p2>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "5"}
-                    <p3>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "6"}
-                }
-        }, {    
-            "name" : "InputTest",
-            "x" : 1,
-            "y" : 2,
-            "content" :
-                <h1>{"content" : "Sign in", "textAlign" : "center"}
-                <grid>{"cTemplate" : "auto", "rTemplate" : "auto auto auto" , "content" : 
-                    <textbox>{name : "email", "placeholder" : "Email", "c" : "1", "r" : "1"}
-                    <textbox>{name : "password", "placeholder" : "Password", "c" : "1", "r" : "2"}
-                    <submit>{content : "Submit", "c" : "1", "r" : "3", onSubmit: (form) => {console.log(form)}}    
-                }
-        }, {    
-            "name" : "FormTest",
-            "x" : 2,
-            "y" : 1,
-            content : 
-                <grid>{cTemplate : "50% 50%", rTemplate : "auto auto auto" , "content" : 
-                    
-                    <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
-                    <checkbox>{question : "3. Test Question", options : ["JS", "CSS", "HTML"], "c" : "2", "r" : "1"}
-                    
-                    <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2", w : "100%"}
-                    <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}   
+          <h1>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "1"}
+          <h2>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "2"}
+          <h3>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "3"}
 
-                    <button>{content : "hello World", onClick : () => {console.log("Hello World! I am button!")}}
-                    <search>{name : "search"}
-                }
-                <grid>{"content" : 
-                    <icon>{ c : "1", r : "1"}
-                    <img>{ src : "/examples/fallenShowcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative", 
-                    alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
-
-                    <textbox>{name : "testinput", "placeholder" : "Test Input Area", onClick : () => {console.log("Input Area Logged click")}, onEnter : () => {console.log("Input Area Logged Enter")}, onAny : (e) => {console.log(e)}}
-                    
-
-                }
-        }, {    
-            "name" : "MarkdownTest",
-            "x" : 1,
-            "y" : 3,
-            content : 
-                <markdown>{"str" : "${await fetch("../../ruitk/themes/fallen/Markdown edge cases.md").then(r => r.text())}"}
+          <p1>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "4"}
+          <p2>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "5"}
+          <p3>{"content" : <a>{"content" : "Link", "href" : "https://www.example.com"} <b>{"content" : " Bold "} <u>{"content" : "UnderLine"} <i>{"content" : " italic "}, "textAlign" : "right", "c" : "2", "r" : "6"}
         }
-    ]}
+    }, {
+      "name" : "InputTest",
+      "x" : 1,
+      "y" : 2,
+      "content" :
+        <h1>{"content" : "Sign in", "textAlign" : "center"}
+        <grid>{"cTemplate" : "auto", "rTemplate" : "auto auto auto" , "content" :
+          <textbox>{name : "email", "placeholder" : "Email", "c" : "1", "r" : "1"}
+          <textbox>{name : "password", "placeholder" : "Password", "c" : "1", "r" : "2"}
+          <submit>{content : "Submit", "c" : "1", "r" : "3", onSubmit: (form) => {console.log(form)}}
+        }
+    }, {
+      "name" : "FormTest",
+      "x" : 2,
+      "y" : 1,
+      content :
+        <grid>{cTemplate : "50% 50%", rTemplate : "auto auto auto" , "content" :
+          <radio>{question : "1. Test Question", options : ["yes", "no", "maybe :3"], "c" : "1", "r" : "1"}
+          <checkbox>{question : "3. Test Question", options : ["JS", "CSS", "HTML"], "c" : "2", "r" : "1"}
+
+          <dropdown>{question : "2. Test Question", options : ["1", "2", "3"], "c" : "1", "r" : "2", w : "100%"}
+          <combo>{question : "4. Test Question", options : ["1", "2", "3"], "c" : "2", "r" : "2"}
+
+          <button>{content : "hello World", onClick : () => {console.log("Hello World! I am button!")}}
+          <search>{name : "search"}
+        }
+        <grid>{"content" :
+          <icon>{ c : "1", r : "1"}
+          <img>{ src : "/examples/fallenShowcase/testImg.jpg", c : "2", r : "1", w : "5vw", position : "relative",
+          alt : "The cover art for the song: I'm getting on the bus to the other world, see ya! by TUYU" }
+
+          <textbox>{name : "testinput", "placeholder" : "Test Input Area", onClick : () => {console.log("Input Area Logged click")}, onEnter : () => {console.log("Input Area Logged Enter")}, onAny : (e) => {console.log(e)}}
+        }
+    }, {
+      "name" : "MarkdownTest",
+      "x" : 1,
+      "y" : 3,
+      content :
+        <markdown>{"str" : "${await fetch("../../ruitk/themes/fallen/Markdown edge cases.md").then(r => r.text())}"}
+    }
+  ]}
 `));

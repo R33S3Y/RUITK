@@ -1,5 +1,4 @@
 import { Ruitk } from "./core.js";
-import { Internal } from "./internal.js";
 
 import { Merge } from "../support/merger.js";
 import { Dependencies } from "./dependencies.js";

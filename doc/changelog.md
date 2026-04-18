@@ -1,394 +1,618 @@
-
 # 0.10
+
 #### Ruitk Changes
- - Renamed the `elements` folder to `core`
- - Renamed the `Elements` class to `Ruitk`
- - Renamed the `elements.js` file to `ruitk.js`
- -  Made a new file called `test.js` for testing Parts of RUITK
- - Added a test called `xssTest` to `test.js`
- - Added a test called `isolationTest` to `test.js`
- - Rewrote `dependencies` code 
- - Added input filtering to `addElements`
- - Fixed a bug with `addElements` where it falsely said that it added negative elements. Eg: Added -55 out of 11 new elements
- - Added a option called `dependencies` to let RUITK any extra dependencies a element needs 
+
+- Renamed the `elements` folder to `core`
+- Renamed the `Elements` class to `Ruitk`
+- Renamed the `elements.js` file to `ruitk.js`
+- Made a new file called `test.js` for testing Parts of RUITK
+- Added a test called `xssTest` to `test.js`
+- Added a test called `isolationTest` to `test.js`
+- Rewrote `dependencies` code
+- Added input filtering to `addElements`
+- Fixed a bug with `addElements` where it falsely said that it added negative elements. Eg: Added -55 out of 11 new elements
+- Added a option called `dependencies` to let RUITK any extra dependencies a element needs
+
 #### Security
- - Fixed a XSS vulnerability relating to HTML injection 
+
+- Fixed a XSS vulnerability relating to HTML injection
+
 #### documentation Changes
- - Added documentation for the `markdown` element
- - Added JSdoc to lots of functions
+
+- Added documentation for the `markdown` element
+- Added JSdoc to lots of functions
+
 #### support changes
- - Added a new support lib called `Konsole.js` for getting info from the console. ([docs](konsole.js.md))
- - Added a new support lib called `type.js` for handling type. ([docs](type.js.md))
+
+- Added a new support lib called `Konsole.js` for getting info from the console. ([docs](konsole.js.md))
+- Added a new support lib called `type.js` for handling type. ([docs](type.js.md))
 - Fixed bug with `null` type in `tester.js`
 - Fixed bug with `full` and `empty` in `tester.js`
+
 #### Fallen Changes
- - Removed the `callback` option from the `button` element in `input.js`. You should use `onClick` instead
- - Renamed the `callback` option from the `submit` element in `input.js` to `onSubmit`
- - Moved the `icon` and `img` element from `staging.js` to `base.js`
- - Added new `markdown` element in `staging.js`
- - Added some error checking to the `generate` function
+
+- Removed the `callback` option from the `button` element in `input.js`. You should use `onClick` instead
+- Renamed the `callback` option from the `submit` element in `input.js` to `onSubmit`
+- Moved the `icon` and `img` element from `staging.js` to `base.js`
+- Added new `markdown` element in `staging.js`
+- Added some error checking to the `generate` function
 
 ### 0.9.10.2
+
 #### support changes
- - Fixed a bug in `merger.js` that was causing nested dicts to be improperly merged
+
+- Fixed a bug in `merger.js` that was causing nested dicts to be improperly merged
 
 ### 0.9.10.1
+
 #### Fallen Changes
- - Added `objectFit` and `aspectRatio` to the `img` element
+
+- Added `objectFit` and `aspectRatio` to the `img` element
+
 ## 0.9.10
+
 #### tilewin.js
- - Simplified the `snapResize` var in the `generate` function
- - Fixed a faulty if statement that caused a false error in the `generate` function
- - Added the ability for scroll tiles to exceed the grid in the scroll direction
+
+- Simplified the `snapResize` var in the `generate` function
+- Fixed a faulty if statement that caused a false error in the `generate` function
+- Added the ability for scroll tiles to exceed the grid in the scroll direction
+
 ## 0.9.9
+
 #### tilewin.js
- - Added a `move` function
- - Added a `info` function
+
+- Added a `move` function
+- Added a `info` function
+
 #### documentation Changes
- - Added documentation about `move` and `info` in [tileWin.js](tileWin.js.md)
+
+- Added documentation about `move` and `info` in [tileWin.js](tileWin.js.md)
+
 ## 0.9.8
+
 #### tilewin.js
- - Renamed `destory` to `destroy`
- - Renamed `destoryAll` to `destroyAll`
- - Renamed `genrate` to `generate`
- - Fixed a bug preventing `x` or `y` equally `0`
+
+- Renamed `destory` to `destroy`
+- Renamed `destoryAll` to `destroyAll`
+- Renamed `genrate` to `generate`
+- Fixed a bug preventing `x` or `y` equally `0`
+
 #### documentation Changes
- - Added documentation about [tileWin.js](tileWin.js.md) 
+
+- Added documentation about [tileWin.js](tileWin.js.md)
+
 ## 0.9.7
+
 #### element.js Changes
- - Added support for null, true and false
+
+- Added support for null, true and false
+
 #### Fallen Changes
- - Removed auto absolute position
- - Changed how `input.js` handles the [Standard Inputs](fallen/Fallen%20Summary.md#Standard%20Inputs) to be more consistent
- - Added some padding to icons
- - Fixed a bug causing empty `h3` many of the elements from `input.js`
+
+- Removed auto absolute position
+- Changed how `input.js` handles the [Standard Inputs](fallen/Fallen%20Summary.md#Standard%20Inputs) to be more consistent
+- Added some padding to icons
+- Fixed a bug causing empty `h3` many of the elements from `input.js`
+
 ## 0.9.6
+
 #### element.js Changes
- - **Bugfix:** In the parse that caused malformed strings split into a list instead of failing due to being malformed
- - **Bugfix:** Str's with comma's were getting malformed when in dict or array
- - Added some input filtering to prevent unneeded warnings from the parse function
+
+- **Bugfix:** In the parse that caused malformed strings split into a list instead of failing due to being malformed
+- **Bugfix:** Str's with comma's were getting malformed when in dict or array
+- Added some input filtering to prevent unneeded warnings from the parse function
+
 #### Fallen Changes
- - Added new `img` element in `staging.js`
- - Added the following new [Standard Inputs](fallen/Fallen%20Summary.md#Standard%20Inputs):
-	 - `onClick`
-	 - `onEnter`
-	 - `onAny`
+
+- Added new `img` element in `staging.js`
+- Added the following new [Standard Inputs](fallen/Fallen%20Summary.md#Standard%20Inputs):
+  - `onClick`
+  - `onEnter`
+  - `onAny`
+
 #### support changes
+
 - Added type `null` to `tester.js`
+
 #### documentation Changes
+
 - Added documentation for the `img` element
+
 ### 0.9.5.1
+
 #### Fallen Changes
- - Fixed bug in `search`
+
+- Fixed bug in `search`
+
 ## 0.9.5
+
 #### Fallen Changes
- - Changed font and font sizes
- - Changed text color for `input.js` 
- - Added option `hoverColor` to `icon` in `staging.js`
- - Added new `search` element in `staging.js`
+
+- Changed font and font sizes
+- Changed text color for `input.js`
+- Added option `hoverColor` to `icon` in `staging.js`
+- Added new `search` element in `staging.js`
+
 #### documentation Changes
+
 - Added documentation for the `search` element
 
 ## 0.9.4
+
 #### style.js changes
- - Added `fontFace` func
+
+- Added `fontFace` func
+
 #### Fallen Changes
- - Added new `icon` element in `staging.js`
- - Changed how id's are handled in `input.js` to be more consistent
- - Added an option called `idRoot` to most elements in `input.js`
+
+- Added new `icon` element in `staging.js`
+- Changed how id's are handled in `input.js` to be more consistent
+- Added an option called `idRoot` to most elements in `input.js`
+
 #### element.js Changes
- - Fixed a bug that caused the first and last chars to be removed when having to assume type str.
+
+- Fixed a bug that caused the first and last chars to be removed when having to assume type str.
+
 #### documentation Changes
- - Added documentation for `fontFace`
- - Added documentation for the `icon` element
+
+- Added documentation for `fontFace`
+- Added documentation for the `icon` element
 
 ## 0.9.3
+
 #### documentation Changes
- - Wrote documentation for elements in [staging.js](fallen/staging.js.md)
+
+- Wrote documentation for elements in [staging.js](fallen/staging.js.md)
+
 #### Fallen Changes
- - Moved all elements in staging to input
+
+- Moved all elements in staging to input
 
 ## 0.9.2
+
 #### Fallen Changes
- - Added more `tester.js` checks to staging
- - Finished the `textbox` element
+
+- Added more `tester.js` checks to staging
+- Finished the `textbox` element
+
 #### support changes
- - Dropped the requirement for a str to not be empty
+
+- Dropped the requirement for a str to not be empty
+
 ## 0.9.1
+
 #### documentation Changes
- - Removed docs section of [README](../README.md) due to it being out of date
+
+- Removed docs section of [README](../README.md) due to it being out of date
+
 #### element.js Changes
- - Fixed an issue breaking multi charter args
+
+- Fixed an issue breaking multi charter args
+
 #### support changes
- - Fixed issue with error reporting in `tester.js` 
- - Added the ability to input multiple types in the type key in `tester.js` 
- - Added type `function` in `tester.js` 
+
+- Fixed issue with error reporting in `tester.js`
+- Added the ability to input multiple types in the type key in `tester.js`
+- Added type `function` in `tester.js`
+
 #### documentation Changes
- - Added documentation for `tester.js`
+
+- Added documentation for `tester.js`
 
 # 0.9
+
 #### Fallen Changes
- - Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
- - Made it so zoom actually zooms
- - Completed the following elements in staging
-	 - `radio`
-	 - `checkbox`
-	 - `dropdown`
-	 - `combo`
-	 - `button`
-	 - `submit`
+
+- Renamed `xAline` and `yAline` to `xAlign` and `yAlign` to be more constant with `textAlign`
+- Made it so zoom actually zooms
+- Completed the following elements in staging
+  - `radio`
+  - `checkbox`
+  - `dropdown`
+  - `combo`
+  - `button`
+  - `submit`
+
 #### support changes
- - fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase` 
- - Added some input filtering to `convert.js`
- - Added a new dependency called `tester.js` for input validation
+
+- fixed some bugs in `convert.js` that was causing outputted strings to be incorrectly when converting to `camelCase`
+- Added some input filtering to `convert.js`
+- Added a new dependency called `tester.js` for input validation
+
 #### element.js Changes
- - Added error handling to for failed elements previously 1 failure would cause everything to fail to render
- - Added support for functions and arrow functions
- - Added some ASCII art to init
- - Added input filtering for the parse function
+
+- Added error handling to for failed elements previously 1 failure would cause everything to fail to render
+- Added support for functions and arrow functions
+- Added some ASCII art to init
+- Added input filtering for the parse function
+
 #### documentation Changes
- - Completed documentation the following fallen elements
-	 - `radio`
-	 - `checkbox`
+
+- Completed documentation the following fallen elements
+  - `radio`
+  - `checkbox`
+
 ## 0.8.5
+
 #### documentation Changes
+
 - made documentation for [convert.js](support/convert.js.md)
 - reorganized the documentation for [fallen](fallen/Fallen%20Summary.md)
+
 ## 0.8.4
+
 #### support changes
- - made a dependency called `convert.js` for converting strings between casing types eg: `camelCase` to `snake_case`
+
+- made a dependency called `convert.js` for converting strings between casing types eg: `camelCase` to `snake_case`
+
 #### style.js changes
- - rewrote how the style function to support multiple flags at the same time.
- - added support for all css Pseudo-Classes that dont take args
+
+- rewrote how the style function to support multiple flags at the same time.
+- added support for all css Pseudo-Classes that dont take args
+
 #### documentation Changes
- - updated the documentation for [style.js](support/style.js.md)
+
+- updated the documentation for [style.js](support/style.js.md)
+
 #### Fallen Changes
- - More small improvements in `staging.js`
+
+- More small improvements in `staging.js`
+
 ## 0.8.3
+
 #### Fallen Changes
- - Added a file called `staging.js` for tests and in development of elements
- - Moved all elements from `input.js` to `staging.js`
- - Fiddled around with checkbox and radio buttons
+
+- Added a file called `staging.js` for tests and in development of elements
+- Moved all elements from `input.js` to `staging.js`
+- Fiddled around with checkbox and radio buttons
+
 #### documentation Changes
- - Added documentation the following fallen elements:
-	 - [grid](fallen/Fallen%20Summary.md#grid)
-	 - [backgroundImg](fallen/Fallen%20Summary.md#backgroundImg)
- - Added a note about the `style.js` change into the documentation
+
+- Added documentation the following fallen elements:
+  - [grid](fallen/Fallen%20Summary.md#grid)
+  - [backgroundImg](fallen/Fallen%20Summary.md#backgroundImg)
+- Added a note about the `style.js` change into the documentation
+
 #### style.js changes
- - Add the ability to pass in a list into the style function
+
+- Add the ability to pass in a list into the style function
+
 ## 0.8.2
+
 #### element.js Changes
- - bug fixed the `style_` feature
- - Changed style handling so `style` overwrites `style_`
+
+- bug fixed the `style_` feature
+- Changed style handling so `style` overwrites `style_`
+
 #### Fallen Changes
- - Restructured most CSS
+
+- Restructured most CSS
+
 #### documentation Changes
- - Added a credit section to the [README](../README.md)
+
+- Added a credit section to the [README](../README.md)
+
 ## 0.8.1
+
 #### element.js Changes
- - Added Error Checking for element dependencies 
- - Added a new flag called `strictStyles` to control the `style_` feature
+
+- Added Error Checking for element dependencies
+- Added a new flag called `strictStyles` to control the `style_` feature
+
 #### documentation Changes
- - updated the documentation for [ruitk.js](ruitk.js.md)
- - added new file called [Making Elements](Making%20Elements.md) just for explaining the process of making elements
+
+- updated the documentation for [ruitk.js](ruitk.js.md)
+- added new file called [Making Elements](Making%20Elements.md) just for explaining the process of making elements
+
 # 0.8
 
 #### tileWin.js Changes
- - Added a function called generate
- - Removed the need for `tile.js`
- - Removed `tile.js`
+
+- Added a function called generate
+- Removed the need for `tile.js`
+- Removed `tile.js`
+
 #### element.js Changes
- - element.js will now pass through the `makeElements` function into the a elements function via the element object.
- - element.js pass will pass through the new `parse` in the same manor to `makeElements`
- - Added an extra option to an element called `parseLevel`
- - Rewrote large chunks of the the `makeElements` function to better handle object nesting
- - Added a fix to allow it to handle arrays with the last item ending with a unnecessary comma
+
+- element.js will now pass through the `makeElements` function into the a elements function via the element object.
+- element.js pass will pass through the new `parse` in the same manor to `makeElements`
+- Added an extra option to an element called `parseLevel`
+- Rewrote large chunks of the the `makeElements` function to better handle object nesting
+- Added a fix to allow it to handle arrays with the last item ending with a unnecessary comma
+
 #### Fallen Changes
- - Added a tile called `tilewin` in the `tilewin.js` file 
+
+- Added a tile called `tilewin` in the `tilewin.js` file
+
 #### documentation Changes
- - updated the documentation for [ruitk.js](ruitk.js.md)
-#### Merger.js  Changes
- - Fixed a bug that was causing it to delete HTML elements
+
+- updated the documentation for [ruitk.js](ruitk.js.md)
+
+#### Merger.js Changes
+
+- Fixed a bug that was causing it to delete HTML elements
+
 ## 0.7.2
+
 #### Fallen Changes
- - Fixed an issue with the `tile` not displaying properly when in a scroll tile
+
+- Fixed an issue with the `tile` not displaying properly when in a scroll tile
+
 ## 0.7.1
 
 #### element.js Changes
- - Fixed a bug that was causing anything other all items passed into as info objects to be wrapped in an array
+
+- Fixed a bug that was causing anything other all items passed into as info objects to be wrapped in an array
+
 #### style.js changes
- - Fixed a bugs with `jsHover`
+
+- Fixed a bugs with `jsHover`
+
 # 0.7
+
 #### Licence Changes
- - Changed licence from Apache License 2.0 to the GPL V3
+
+- Changed licence from Apache License 2.0 to the GPL V3
+
 #### tileWin.js Changes
- - Fixed an issue with hover not working in scroll tiles in `updateTest` 
- - Changed `updateTest` to use the old fixed tile rendering method
- - Replace `update` with `updateTest` as it is deemed stable enough 
- - Removed `xNudge` and `yNudge` from `createTile`
- - Removed `tileNudgeFirst` and `tileNudgeSwap` from `configStore`
- - Added a function called `destory` to destroy a tile
- - Added a function called `destoryAll` to destroy all tiles
+
+- Fixed an issue with hover not working in scroll tiles in `updateTest`
+- Changed `updateTest` to use the old fixed tile rendering method
+- Replace `update` with `updateTest` as it is deemed stable enough
+- Removed `xNudge` and `yNudge` from `createTile`
+- Removed `tileNudgeFirst` and `tileNudgeSwap` from `configStore`
+- Added a function called `destory` to destroy a tile
+- Added a function called `destoryAll` to destroy all tiles
+
 #### Fallen Changes
- - Fixed an issue with the `tile` element overflowing when using `updateTest`
- - Added an element to base called `u` for underline
- - Added an element to base called `a` for links
- - Changed wallpaper to a picture done by a friend of mine
- - Removed the `text` property from the base element
- - Removed the `init` function in `base.js`
- - Renamed all colors in fallen
+
+- Fixed an issue with the `tile` element overflowing when using `updateTest`
+- Added an element to base called `u` for underline
+- Added an element to base called `a` for links
+- Changed wallpaper to a picture done by a friend of mine
+- Removed the `text` property from the base element
+- Removed the `init` function in `base.js`
+- Renamed all colors in fallen
+
 #### style.js changes
- - Added a new flag called `jsHover`
+
+- Added a new flag called `jsHover`
+
 #### tile.js Changes
- - Better error handling in the `append` function
+
+- Better error handling in the `append` function
+
 #### documentation Changes
- - Made a full rundown on fallen at [Fallen Summary](fallen/Fallen%20Summary.md)
+
+- Made a full rundown on fallen at [Fallen Summary](fallen/Fallen%20Summary.md)
 
 ## 0.6.3
+
 #### Fallen Changes
- - Changed all elements to use `elementCount` in there ID
+
+- Changed all elements to use `elementCount` in there ID
+
 #### element.js Changes
- - Added `elementCount` 
+
+- Added `elementCount`
+
 #### tileWin.js Changes
- - Added a function called `updateTest` for test a rework of the update function and removal of nudge
+
+- Added a function called `updateTest` for test a rework of the update function and removal of nudge
+
 ## 0.6.2
+
 #### Fallen Changes
- - Made new file called `tilewin.js` for elements designed for `tileWin.js`
- - Moved element `backgroundImg` from `base` to `tileWin`
- - Removed the function `getTileWinStyle` from base
- - Added a element called `tile` to `tileWin` 
+
+- Made new file called `tilewin.js` for elements designed for `tileWin.js`
+- Moved element `backgroundImg` from `base` to `tileWin`
+- Removed the function `getTileWinStyle` from base
+- Added a element called `tile` to `tileWin`
+
 #### element.js Changes
- - Added an option called `handleStyle = false`
- - Swap the order of the inputs for the `append` function to be more consistent with other parts of the RUITK project
- - Fixed an issue with `makeElements` not properly handling arrays of elements
+
+- Added an option called `handleStyle = false`
+- Swap the order of the inputs for the `append` function to be more consistent with other parts of the RUITK project
+- Fixed an issue with `makeElements` not properly handling arrays of elements
+
 #### tileWin.js Changes
- - Changed the default style to be invisible making style optional.
-#### documentation Changes 
- - Added documentation for the append function
+
+- Changed the default style to be invisible making style optional.
+
+#### documentation Changes
+
+- Added documentation for the append function
+
 ## 0.6.1
+
 #### Fallen Changes
- - Added the following elements
-	 - `i`
-	 - `grid` (Documentation needed)
- - Made all based element accept the `c` and `r` as args (Documentation needed)
- - Renamed `textAline` to `textAlign`
+
+- Added the following elements
+  - `i`
+  - `grid` (Documentation needed)
+- Made all based element accept the `c` and `r` as args (Documentation needed)
+- Renamed `textAline` to `textAlign`
+
 #### element.js Changes
- - Added check to prevent [style.js](support/style.js.md) from throwing a warning
-#### documentation Changes 
- - Fixed a bunch of links
+
+- Added check to prevent [style.js](support/style.js.md) from throwing a warning
+
+#### documentation Changes
+
+- Fixed a bunch of links
+
 # 0.6
+
 #### Fallen Changes
- - Renamed `main.js` to `base.js`
- - Renamed class `Theme` to `FallenBase`
- - Change all functions in `FallenBase` to static functions
- - Added a new function called `init`
- - Added the following elements to `base.js`
-	 - `h1`
-	 - `h2`
-	 - `h3`
-	 - `p2`
-	 - `p3`
+
+- Renamed `main.js` to `base.js`
+- Renamed class `Theme` to `FallenBase`
+- Change all functions in `FallenBase` to static functions
+- Added a new function called `init`
+- Added the following elements to `base.js`
+  - `h1`
+  - `h2`
+  - `h3`
+  - `p2`
+  - `p3`
 - Added more config options to `base` element
 - Bug fixes to the Base elements
 - Changed fallen to use the `declare` function provided in [V0.5](changelog.md#0.5)
+
 #### element.js Changes
- - Rewrite of `makeElements` for better nesting handling
- - Added the a function called `append`  - [Documention](ruitk.js.md#Append)
- - Added a error check of undefined names
+
+- Rewrite of `makeElements` for better nesting handling
+- Added the a function called `append` - [Documention](ruitk.js.md#Append)
+- Added a error check of undefined names
+
 #### style.js changes
- - Fixed a issue with the `declare` not adding new lines afterward
-#### documentation Changes 
- - Added [Fallen Summary](fallen/Fallen%20Summary.md)
- - Added [The Base Element](fallen/The%20Base%20Element.md)
+
+- Fixed a issue with the `declare` not adding new lines afterward
+
+#### documentation Changes
+
+- Added [Fallen Summary](fallen/Fallen%20Summary.md)
+- Added [The Base Element](fallen/The%20Base%20Element.md)
 
 # 0.5
+
 #### style.js changes
- - Added a new function called `declare` - [Documentation Here](support/style.js.md#Declare)
-#### documentation Changes 
- - Added documentation changes for `query` and `declare` from `style.js`
+
+- Added a new function called `declare` - [Documentation Here](support/style.js.md#Declare)
+
+#### documentation Changes
+
+- Added documentation changes for `query` and `declare` from `style.js`
+
 #### tile.js Changes
- - Added a new function called `destory` to delete a tile
+
+- Added a new function called `destory` to delete a tile
+
 #### tileWin.js Changes
- - Scroll tiles will now take nudge into account when positioning thanks to a rewrite of how tile rendering and state handling work
- - Renamed `tileRowDirection` to `tileOppositeDirection` in `configStore`
- - Renamed `maxX` to `xMax` in `configStore`
- - Renamed `maxY` to `yMax` in `configStore`
+
+- Scroll tiles will now take nudge into account when positioning thanks to a rewrite of how tile rendering and state handling work
+- Renamed `tileRowDirection` to `tileOppositeDirection` in `configStore`
+- Renamed `maxX` to `xMax` in `configStore`
+- Renamed `maxY` to `yMax` in `configStore`
+
 ## 0.4.1
+
 #### tileWin.js Changes
- - Fixed a issue with scroll elements overlapping when there are multiple in the same row 
- - Remove the config option `createInnerTile` as it was made redundant in [V0.3](changelog.md#0.3)
- - Fixed a issue with scroll tiles that were animated not starting animation in center
- - Fixed a issue causing `tile.js`  to throw errors during expected behavior
- - Fixed a issue with scroll tiles ordering based off when they were made instead of there actual position (sorta)
+
+- Fixed a issue with scroll elements overlapping when there are multiple in the same row
+- Remove the config option `createInnerTile` as it was made redundant in [V0.3](changelog.md#0.3)
+- Fixed a issue with scroll tiles that were animated not starting animation in center
+- Fixed a issue causing `tile.js` to throw errors during expected behavior
+- Fixed a issue with scroll tiles ordering based off when they were made instead of there actual position (sorta)
+
 #### Fallen
- - Renamed `fallen.js` to `main.js` as it is where the main/base components for the fallen theme will be stored.
+
+- Renamed `fallen.js` to `main.js` as it is where the main/base components for the fallen theme will be stored.
 
 # 0.4
-#### tileWin.js Changes
- - Added a new function called `remove` that removes all content from a tile.
- - Changed the append function to only append things when update is called
-#### Fallen
- - Added a new function called `getTileWinStyle` to store style info for `tileWin.js`
-#### tile.js
- - Added a new function called `remove` that removes all content from a tile.
 
+#### tileWin.js Changes
+
+- Added a new function called `remove` that removes all content from a tile.
+- Changed the append function to only append things when update is called
+
+#### Fallen
+
+- Added a new function called `getTileWinStyle` to store style info for `tileWin.js`
+
+#### tile.js
+
+- Added a new function called `remove` that removes all content from a tile.
 
 ## 0.3.4
+
 #### Fallen
- - Moved `favicon.ico` into the fallen folder
+
+- Moved `favicon.ico` into the fallen folder
+
 #### style.js changes
- - Added 16 new flags to style.js - [Full list](support/style.js.md######All%20Flags)
-#### documentation Changes 
- - Fixed links in [README](../README.md)
+
+- Added 16 new flags to style.js - [Full list](support/style.js.md######All%20Flags)
+
+#### documentation Changes
+
+- Fixed links in [README](../README.md)
 
 ## 0.3.3
+
 #### style.js changes
- - Renamed the flag from `portrat` to `portrait` to fix a spelling mistake
+
+- Renamed the flag from `portrat` to `portrait` to fix a spelling mistake
+
 #### documentation Changes
- - Added documentation about [Syntax](support/style.js.md#Syntax) and the [Style](support/style.js.md#Style) function from style.js
+
+- Added documentation about [Syntax](support/style.js.md#Syntax) and the [Style](support/style.js.md#Style) function from style.js
 
 ## 0.3.2
+
 #### style.js changes
- - Added `forceOnFlags` to the style function as a optional argument
- - Added support for flags in the query function 
+
+- Added `forceOnFlags` to the style function as a optional argument
+- Added support for flags in the query function
+
 ## 0.3.1
+
 #### tileWin.js Changes
- - When making tiles tileWin.js will no longer make the tileP div element as it is no longer needed
- - Fixed issue with fixed tiles positions being absolute as apposed to fixed when `createInnerTile = true` in config
+
+- When making tiles tileWin.js will no longer make the tileP div element as it is no longer needed
+- Fixed issue with fixed tiles positions being absolute as apposed to fixed when `createInnerTile = true` in config
 
 # 0.3
+
 #### tileWin.js Changes
- - Renamed the `renderTiles` function to `update`
- - Removed the `tileGap` config option
- - Removed the `compensateForBorders` config option
- - Renamed the config option `tileRowtype` to `tileRowType`
- - Fixed inner tiles not working when `tileRowType = "scroll"`
- - Fixed issue with fixed tiles positions being absolute as apposed to fixed
- - Fixed issue with scroll tiles not updating or listing to there status
-#### documentation Changes 
- - Added a new folder called support in doc to hold all support libs documentation
- - Added a guide on what makes a support library a support library in [support Library's Explanation](support%20Library's%20Explanation.md)
- - Added documentation about [MakeElements](ruitk.js.md#MakeElements) and [AddElements](ruitk.js.md#AddElements) from element.js
+
+- Renamed the `renderTiles` function to `update`
+- Removed the `tileGap` config option
+- Removed the `compensateForBorders` config option
+- Renamed the config option `tileRowtype` to `tileRowType`
+- Fixed inner tiles not working when `tileRowType = "scroll"`
+- Fixed issue with fixed tiles positions being absolute as apposed to fixed
+- Fixed issue with scroll tiles not updating or listing to there status
+
+#### documentation Changes
+
+- Added a new folder called support in doc to hold all support libs documentation
+- Added a guide on what makes a support library a support library in [support Library's Explanation](support%20Library's%20Explanation.md)
+- Added documentation about [MakeElements](ruitk.js.md#MakeElements) and [AddElements](ruitk.js.md#AddElements) from element.js
+
 #### Fallen
- - Removed the `backgroundTile` element
- - Renamed the element `text1` to `p1`
+
+- Removed the `backgroundTile` element
+- Renamed the element `text1` to `p1`
+
 #### element.js Changes
- - Added the ability to in a element reference parts of other elements [documentation here](ruitk.js.md####Notes)
+
+- Added the ability to in a element reference parts of other elements [documentation here](ruitk.js.md####Notes)
+
 #### tile.js Changes
- - Changed the append function to be able to also accept lists of elements
+
+- Changed the append function to be able to also accept lists of elements
+
 # 0.2
- - Started new theme fallen
- - Added new example page
- - Added config option `createInnerTile = false` to tilewin.js
- - Added config option `transition : "all 0.2s ease-in-out"` to tilewin.js
- - Bugfixed element.js
- - Renamed the style element made my style.js to RUITKStyles
+
+- Started new theme fallen
+- Added new example page
+- Added config option `createInnerTile = false` to tilewin.js
+- Added config option `transition : "all 0.2s ease-in-out"` to tilewin.js
+- Bugfixed element.js
+- Renamed the style element made my style.js to RUITKStyles
+
 ## 0.1.7
- - Updated readme
- - Renamed Project to RUITK
+
+- Updated readme
+- Renamed Project to RUITK
+
 ## 0.1.6
- - completed element.js
+
+- completed element.js
+
 ## 0.1.5
- - created element.js
- - Started change log
- - hopefully fleshed out file structure
+
+- created element.js
+- Started change log
+- hopefully fleshed out file structure
